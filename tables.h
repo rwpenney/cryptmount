@@ -1,6 +1,6 @@
 /*
  *  Declarations for config-table & mount-table utilities for cryptmount
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */
 
 /*
@@ -71,5 +71,5 @@ int is_cmstatus_intact();
 #endif  /* _TABLES_H */
 
 /*
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */

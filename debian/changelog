@@ -1,3 +1,12 @@
+cryptmount (5.3.1-1) unstable; urgency=low
+
+  * New upstream release:
+    - fixed memory cleanup error on application exit
+
+  * Updated to Debian Standards Version 4.3.0
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 05 Jan 2019 16:20:00 +0000
+
 cryptmount (5.3-1) unstable; urgency=low
 
   * New upstream release:
@@ -309,4 +318,3 @@ cryptmount (1.0.2-1) unstable; urgency=low
   * Uploading closes: bug#375008
 
  -- RW Penney <rwpenney@users.sourceforge.net>  Tue, 18 Jul 2006 22:00:00 +0000
-

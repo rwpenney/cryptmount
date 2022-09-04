@@ -1,6 +1,6 @@
 /*
  *  Config-table and mount-table utilities for cryptmount
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */
 
 /*
@@ -1005,5 +1005,5 @@ int is_cmstatus_intact()
 }
 
 /*
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */

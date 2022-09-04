@@ -1,6 +1,6 @@
 /*
  *  Methods for encryption/security mechanisms for cryptmount
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */
 
 /*
@@ -689,9 +689,11 @@ int sycheck_directory(const char *dirname)
     /** Check that permissions on directory are suitably restrictive */
 {   struct stat sdir;
 
+    memset(&sdir, 0, sizeof(sdir));
+
     /* Get information about directory (if present): */
     errno = 0;
-    if (stat(dirname,&sdir) != 0) {
+    if (stat(dirname, &sdir) != 0) {
         if (errno == ENOENT) return ERR_NOERROR;
         fprintf(stderr, "Cannot open \"%s\"\n", dirname);
         return ERR_INSECURE;
@@ -860,5 +862,5 @@ int cm_mutex_unlock(void)
 /** @} */
 
 /*
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */

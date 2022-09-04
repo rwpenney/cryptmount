@@ -1,5 +1,7 @@
 ChangeLog for cryptmount (http://cryptmount.sourceforge.net)
 
+05Jan19	- Fixed memory cleanup error on closedown when using multiple targets
+
 17Mar18	- *** cryptmount-5.3 released
 
 27Jan18	- Improved handling of LUKS plain files for libcryptsetup-2.x.

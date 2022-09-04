@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cryptmount 4.2-1\n"
 "Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
-"POT-Creation-Date: 2018-01-30 07:45+0000\n"
+"POT-Creation-Date: 2019-01-05 14:15+0000\n"
 "PO-Revision-Date: 2011-06-12 12:07+0200\n"
 "Last-Translator: Kai Wasserbäch <curan@debian.org>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
@@ -40,7 +40,7 @@ msgstr "Schlüsseldatei für Ziel »%s« fehlt.\n"
 msgid "Missing output keyfile for target \"%s\"\n"
 msgstr "Schlüsselausgabedatei für Ziel »%s« fehlt.\n"
 
-#: armour.c:778
+#: armour.c:780
 #, c-format
 msgid "Specification for target \"%s\" contains non-absolute pathname\n"
 msgstr "Die Zielangabe für »%s« enthält eine nicht-absolute Pfadangabe.\n"

@@ -1,6 +1,6 @@
 /*
  *  cryptmount - a utility for user-level mounting of encrypted filesystems
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */
 
 /*
@@ -1572,9 +1572,9 @@ int main(int argc, char *argv[])
 
     /* Tidy-up: */
     while (eltlist != NULL) {
-        eltptr = &eltlist;
+        const targelt_t *elt_rm = eltlist;
         eltlist = eltlist->nx;
-        free((void*)*eltptr);
+        free((void*)elt_rm);
     }
     free_config(&tgttable);
     munlockall();
@@ -1585,5 +1585,5 @@ int main(int argc, char *argv[])
 }
 
 /*
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */

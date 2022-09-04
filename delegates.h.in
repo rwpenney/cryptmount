@@ -1,6 +1,6 @@
 /*
  *  Delegation-related declations for cryptmount
- *  (C)Copyright 2006-2018, RW Penney
+ *  (C)Copyright 2006-2019, RW Penney
  */
 
 /*
@@ -70,5 +70,5 @@
 #endif  /* _DELEGATES_H */
 
 /*
- *  (C)Copyright 2006-2017, RW Penney
+ *  (C)Copyright 2006-2019, RW Penney
  */

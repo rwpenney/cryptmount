@@ -1,6 +1,6 @@
 /*
  *  Methods for LUKS-related key-management for cryptmount
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */
 
 /*
@@ -522,5 +522,5 @@ keymanager_t *kmluks_gethandle()
 /**  @} */
 
 /*
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */

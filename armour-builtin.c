@@ -1,6 +1,6 @@
 /*
  *  Methods for encryption/security mechanisms for cryptmount
- *  (C)Copyright 2007-2018, RW Penney
+ *  (C)Copyright 2007-2019, RW Penney
  */
 
 /*
@@ -517,5 +517,5 @@ keymanager_t *kmblti_gethandle(void)
 /**  @} */
 
 /*
- *  (C)Copyright 2007-2018, RW Penney
+ *  (C)Copyright 2007-2019, RW Penney
  */

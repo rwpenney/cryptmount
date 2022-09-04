@@ -1,6 +1,6 @@
-		    Release notes for cryptmount-5.3
+		    Release notes for cryptmount-5.3.1
 
-			RW Penney, March 2018
+			RW Penney, January 2019
 
 Introduction
 ============
@@ -38,21 +38,21 @@ This (stable) release offers the following enhancements:
 
 It has been tested on the following systems:
 
-  * Arch Linux (mid-Mar-2018) (x86_64)
+  * Arch Linux (early-Jan-2019) (x86_64)
 
   * CentOS 7.4 (x86_64)
 
-  * Debian GNU/Linux 10.x ("buster"/"testing", mid-Mar-2018) (x86)
+  * Debian GNU/Linux 10.x ("buster"/"testing", early-Jan-2019) (x86)
 
-  * Debian GNU/Linux 9.4 ("stretch") (x86)
+  * Debian GNU/Linux 9.6 ("stretch") (x86)
 
   * Debian GNU/Linux 8.10 ("jessie") (x86)
 
   * Fedora 27 (x86_64)
 
-  * Gentoo (mid-Feb-2018) (x86)
+  * Gentoo (early-Jan-2019) (x86)
 
-  * Ubuntu 17.10 ("artful") (x86_64)
+  * Ubuntu 18.04 ("bionic") (x86_64)
 
 
 Summary of new features in cryptmount-5.2

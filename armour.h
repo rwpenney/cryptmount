@@ -1,6 +1,6 @@
 /*
  *  Declarations for encryption/security mechanisms for cryptmount
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */
 
 /*
@@ -139,5 +139,5 @@ int cm_mutex_unlock(void);
 #endif  /* _ARMOUR_H */
 
 /*
- *  (C)Copyright 2005-2018, RW Penney
+ *  (C)Copyright 2005-2019, RW Penney
  */
