@@ -33,10 +33,10 @@ o\[`u] le syst\[`e]me de fichiers est contenu, et comment il est chiffr\['e].
 Le format du cmtab est souple, et la description de chaque cible est d\['e]limit\['e]e
 par des accolades, les param\[`e]tres sont sp\['e]cifi\['e]s par les paires CLEF=VALEUR,
 et on peut mettre autant de caract\[`e]re blanc d'espacement que l'on veut.
-Les annotations commencent avec un caract\[`e]re `#',
+Les annotations commencent avec un caract\[`e]re \(aq#',
 qui peut \[^e]tre utilis\['e] \[`a] n'importe quel endroit dans une ligne,
 et continuent jusqu'\[`a] la fin de cette ligne.
-Le caract\[`e]re `\\' indique que
+Le caract\[`e]re \(aq\\' indique que
 si le caract\[`e]re suitvant a une signification sp\['e]ciale, celle-ci sera ignor\['e]e,
 comme par exemple si on veut incorporer un espace dans le nom d'un fichier.
 
@@ -65,8 +65,9 @@ comme par exemple si on veut incorporer un espace dans le nom d'un fichier.
     }
 .fi
 
-Ici, les param\[`e]tres `flags', `startsector', `numsectors', `loop',
-`ivoffset', `keyformat', `keymaxlen' et `passwdretries' sont optionnels.
+Ici, les param\[`e]tres \(aqflags', \(aqstartsector', \(aqnumsectors',
+\(aqloop', \(aqivoffset', \(aqkeyformat', \(aqkeymaxlen'
+et \(aqpasswdretries' sont optionnels.
 
 Les param\[`e]tres ont les sens suivants:
 
@@ -404,23 +405,23 @@ Il y en a aussi un cible qui represent une partition de pagination.
     # fin de cmtab
 .fi
 
-La cible `basic' utilise le fichier ordinaire "/home/secretiveuser/crypt.fs"
+La cible \(aqbasic' utilise le fichier ordinaire "/home/secretiveuser/crypt.fs"
 pour ranger le syst\[`e]me de fichiers chiffr\['e].
 Un p\['e]riph\['e]rique loop sera configur\['e] automatiquement par
 .B cryptmount
 (\[`a] cause du "loop=auto").
 
-La cible `partition' utilise une partition enti\[`e]re du disque dur pour ranger le syst\[`e]me de fichiers chiffr\['e].
+La cible \(aqpartition' utilise une partition enti\[`e]re du disque dur pour ranger le syst\[`e]me de fichiers chiffr\['e].
 La clef de d\['e]chiffrage est contenue dans le r\['e]pertoire principal de
 .B cryptmount.
 
-La cible `subset' est semblable \[`a] la cible `partition' sauf qu'elle n'utilise pas une partition enti\[`e]re.
+La cible \(aqsubset' est semblable \[`a] la cible \(aqpartition' sauf qu'elle n'utilise pas une partition enti\[`e]re.
 De cette mani\[`e]re, on peut utiliser des autres groupes de blocs de la partition pour des autres syst\[`e]mes de fichiers dirig\['e]s par
 .B cryptmount
 ou
 .B dmsetup.
 
-La cible `encswap' utilise une partie d'une partition du disque dur pour proviser la pagination chiffr\['e]e.
+La cible \(aqencswap' utilise une partie d'une partition du disque dur pour proviser la pagination chiffr\['e]e.
 Une nouvelle clef de d\['e]chiffrage sera lu du /dev/random chaque fois la cible est utilis\['e]e.
 
 .\" --------------------------------
@@ -447,6 +448,6 @@ dans le paquet source de cryptmount.
 
 .\" --------------------------------
 .SH TRADUCTION
-RW Penney, 2006-2014, avec beaucoup d'assistance de FP.
+RW Penney, 2006-2020, avec beaucoup d'assistance de FP.
 
 .\" vim: set ts=4 sw=4 et:

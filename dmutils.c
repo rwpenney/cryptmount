@@ -1,6 +1,6 @@
 /*
  *  Device-mapper utilities for cryptmount
- *  (C)Copyright 2005-2019, RW Penney
+ *  (C)Copyright 2005-2021, RW Penney
  */
 
 /*
@@ -275,7 +275,7 @@ int udev_settle()
 
 #if HAVE_LIBUDEV
     udev_ctx = udev_new();
-    udev_selinux_init(udev_ctx);
+    //udev_selinux_init(udev_ctx);
     udev_qu = udev_queue_new(udev_ctx);
 #endif
 
@@ -319,7 +319,7 @@ int udev_settle()
 
 #if HAVE_LIBUDEV
     udev_queue_unref(udev_qu);
-    udev_selinux_exit(udev_ctx);
+    //udev_selinux_exit(udev_ctx);
     udev_unref(udev_ctx);
 #endif
 
@@ -377,5 +377,5 @@ int udev_active_dir(const char *path, time_t starttime, double timeout)
 }
 
 /*
- *  (C)Copyright 2005-2019, RW Penney
+ *  (C)Copyright 2005-2021, RW Penney
  */

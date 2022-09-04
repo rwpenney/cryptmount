@@ -1,6 +1,6 @@
 /*
  *  Methods for encryption/security mechanisms for cryptmount
- *  (C)Copyright 2005-2019, RW Penney
+ *  (C)Copyright 2005-2021, RW Penney
  */
 
 /*
@@ -864,5 +864,5 @@ keymanager_t *kmgcry_gethandle()
 /**  @} */
 
 /*
- *  (C)Copyright 2005-2019, RW Penney
+ *  (C)Copyright 2005-2021, RW Penney
  */

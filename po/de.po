@@ -1,14 +1,15 @@
 # German translation of the cryptmount language file resulting in de.po
 # Copyright © 2008-2014 Kai Wasserbäch <curan@debian.org>
+#             2020 Helge Kreutzmann <debian@helgefjell.de>
 # This file is distributed under the same license as the cryptmount package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: cryptmount 4.2-1\n"
+"Project-Id-Version: cryptmount 5.3.2-1\n"
 "Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
 "POT-Creation-Date: 2019-10-19 08:27+0100\n"
-"PO-Revision-Date: 2011-06-12 12:07+0200\n"
-"Last-Translator: Kai Wasserbäch <curan@debian.org>\n"
+"PO-Revision-Date: 2020-12-26 08:33+0100\n"
+"Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -89,16 +90,14 @@ msgstr ""
 "%u, idx=%u).\n"
 
 #: armour-luks.c:217
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to acquire privileges for LUKS container"
-msgstr ""
-"Erstellen eines neuen Loop-Gerätes für LUKS-Schlüsseldatei schlug fehl.\n"
+msgstr "Erlangen von Privilegien für LUKS-Container schlug fehl."
 
 #: armour-luks.c:310 armour-luks.c:394
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize device for LUKS keyfile\n"
-msgstr ""
-"Erstellen eines neuen Loop-Gerätes für LUKS-Schlüsseldatei schlug fehl.\n"
+msgstr "Initialisieren eines Gerätes für LUKS-Schlüsseldatei schlug fehl.\n"
 
 #: armour-luks.c:320
 #, c-format
@@ -127,7 +126,6 @@ msgid "Setting password on LUKS keyslot-%u\n"
 msgstr "Setze Passwort für den LUKS-Schlüsselplatz »%u«\n"
 
 #: cryptmount.c:127
-#, fuzzy
 msgid ""
 "usage: cryptmount [OPTION [target ...]]\n"
 "\n"
@@ -153,7 +151,7 @@ msgid ""
 "\n"
 "  please report bugs to <cryptmount@rwpenney.uk>\n"
 msgstr ""
-"Aufruf: cryptmount [OPTION [Ziel ...]]\n"
+"Aufruf: cryptmount [OPTION [Ziel …]]\n"
 "\n"
 "  Die folgenden Optionen sind verfügbar:\n"
 "\n"
@@ -162,6 +160,7 @@ msgstr ""
 "    -c | --change-password <Ziel>\n"
 "    -k | --key-managers\n"
 "    -l | --list\n"
+"    -S | --status\n"
 "    -m | --mount <Ziel>\n"
 "    -u | --unmount <Ziel>\n"
 "    --generate-key <Schlüsselgröße> <Ziel>\n"
@@ -249,9 +248,9 @@ msgid "Only user-%lu can unmount \"%s\"\n"
 msgstr "Nur der Benutzer mit der ID »%lu« kann »%s« aushängen.\n"
 
 #: cryptmount.c:663
-#, fuzzy, c-format
+#, c-format
 msgid "Target \"%s\" is already configured\n"
-msgstr "Ziel »%s« ist bereits eingehängt.\n"
+msgstr "Ziel »%s« ist bereits konfiguriert.\n"
 
 #: cryptmount.c:686 cryptmount.c:742
 #, c-format
@@ -302,7 +301,7 @@ msgstr "Schlüsseldatei »%s« existiert für das Ziel »%s« bereits.\n"
 #: cryptmount.c:898
 #, c-format
 msgid "Generating random key; please be patient...\n"
-msgstr "Erstelle zufälligen Schlüssel; bitte warten Sie ...\n"
+msgstr "Erstelle zufälligen Schlüssel; bitte warten Sie …\n"
 
 #: cryptmount.c:902
 #, c-format
@@ -332,12 +331,12 @@ msgstr "Kann keinen für das Ziel »%s« passenden Schlüsselmanager finden.\n"
 #: cryptmount.c:1415
 #, c-format
 msgid "Multiple operating modes not supported\n"
-msgstr ""
+msgstr "Mehrere Betriebsmodi werden nicht unterstützt\n"
 
 #: cryptmount.c:1470
 #, c-format
 msgid "Memory-locking failed...\n"
-msgstr "Sperren des Arbeitsspeichers schlug fehl ...\n"
+msgstr "Sperren des Arbeitsspeichers schlug fehl …\n"
 
 #: cryptmount.c:1498
 #, c-format
@@ -353,7 +352,7 @@ msgstr "Sicherheitsfehler\n"
 #, c-format
 msgid "Trailing command-line arguments given with '--all' option\n"
 msgstr ""
-"Abschließende Kommandozeilen-Argumente; wurden zusammen mit der Option »--"
+"Abschließende Befehlszeilen-Argumente; wurden zusammen mit der Option »--"
 "all« angegeben.\n"
 
 #: cryptmount.c:1559
@@ -418,9 +417,9 @@ msgid "Unable to allocate memory\n"
 msgstr "Konnte keinen Speicher reservieren.\n"
 
 #: utils.c:425
-#, fuzzy, c-format
+#, c-format
 msgid "Too few random-number sources found\n"
-msgstr "Kein Zufallszahlengenerator gefunden.\n"
+msgstr "Zu wenige Zufallszahlenquellen gefunden.\n"
 
 #: utils.c:484
 #, c-format
@@ -470,7 +469,7 @@ msgstr "Kann nicht von der Standardeingabe lesen.\n"
 #: sysinit/setupscript.sh.in:41
 #, sh-format
 msgid "Abandoning $ProgName ..."
-msgstr "Beende $ProgName ..."
+msgstr "Beende $ProgName …"
 
 #: sysinit/setupscript.sh.in:49
 #, sh-format
@@ -684,29 +683,29 @@ msgstr "erledigt"
 #: sysinit/setupscript.sh.in:229
 #, sh-format
 msgid "Making mount-point (${mount_dir})..."
-msgstr "Erstelle Einhängepunkt »${mount_dir}« ..."
+msgstr "Erstelle Einhängepunkt »${mount_dir}« …"
 
 #: sysinit/setupscript.sh.in:232
 #, sh-format
 msgid "Creating filesystem container (${crypto_dev})..."
-msgstr "Erstelle Dateisystemcontainer »${crypto_dev}« ..."
+msgstr "Erstelle Dateisystemcontainer »${crypto_dev}« …"
 
 #: sysinit/setupscript.sh.in:237
 #, sh-format
 msgid "Taking backup of cryptmount master config-file (${bckp_cmtab})..."
 msgstr ""
 "Erstelle Sicherheitskopie der Haupt-Cryptmount-Konfigurationsdatei "
-"»${bckp_cmtab}« ..."
+"»${bckp_cmtab}« …"
 
 #: sysinit/setupscript.sh.in:254
 #, sh-format
 msgid "Generating filesystem access key (${key_file})..."
-msgstr "Erstelle Zugriffsschlüssel (${key_file}) für das Dateisystem ..."
+msgstr "Erstelle Zugriffsschlüssel (${key_file}) für das Dateisystem …"
 
 #: sysinit/setupscript.sh.in:262
 #, sh-format
 msgid "Formatting encrypted filesystem..."
-msgstr "Formatiere das verschlüsselte Dateisystem ..."
+msgstr "Formatiere das verschlüsselte Dateisystem …"
 
 #: sysinit/setupscript.sh.in:291
 #, sh-format

@@ -1,6 +1,6 @@
 /*
  *  General declarations for cryptmount
- *  (C)Copyright 2005-2019, RW Penney
+ *  (C)Copyright 2005-2021, RW Penney
  */
 
 /*
@@ -35,7 +35,7 @@
 #  if HAVE_STDINT_H
 #    include <stdint.h>
 #  else
-     typedef unsigned short         uint8_t;
+     typedef unsigned char          uint8_t;
      typedef long                   int32_t;
      typedef unsigned long          uint32_t;
      typedef long long              int64_t;
@@ -173,5 +173,5 @@ typedef struct tgtdefn
 #endif  /* _CRYPTMOUNT_H */
 
 /*
- *  (C)Copyright 2005-2019, RW Penney
+ *  (C)Copyright 2005-2021, RW Penney
  */

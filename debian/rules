@@ -20,7 +20,7 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 # main packaging script based on dh7 syntax
 %:
-	dh $@  --with autoreconf,systemd
+	dh $@
 
 .PHONY:	override_dh_auto_configure override_dh_fixperms
 

@@ -1,5 +1,5 @@
 .\" cmtab (cryptmount) manual page
-.\" Copyright (c) 2005-2019 RW Penney
+.\" Copyright (c) 2005-2021 RW Penney
 .\"
 
 .\" ---- macro definitions ----
@@ -31,9 +31,9 @@ describing where that filesystem is stored, and how it is encrypted.
 The format of the cmtab is flexible, with the description of each target
 being delimited by braces, parameters being specified by KEY=VALUE pairs,
 and white-space being freely usable.
-Comments are prefixed by a `#' character, and can start at any point in a line,
+Comments are prefixed by a \(aq#' character, and can start at any point in a line,
 lasting to the end of the line.
-The backslash character `\\' can be used to ignore any special significance
+The backslash character \(aq\\' can be used to ignore any special significance
 of the following character, for example to include a space in a filename.
 
 @CM_SYSCONF_DIR@/cmtab contains entries of the following form:
@@ -62,13 +62,13 @@ of the following character, for example to include a space in a filename.
     }
 .fi
 
-Some fields, such as `dev' and `fstype' are mandatory,
+Some fields, such as \(aqdev' and \(aqfstype' are mandatory,
 although many fields have sensible default values.
 Depending on the choice of KEYMANAGER, fields such as
-`keyhash', `keycipher', `keymaxlen' may need to be set explicitly.
+\(aqkeyhash', \(aqkeycipher', \(aqkeymaxlen' may need to be set explicitly.
 
 Any field which contains non-numerical values
-(e.g. not `startsector', `ivoffset' etc.)
+(e.g. not \(aqstartsector', \(aqivoffset' etc.)
 can contain references to environmental variables of the form $(HOME).
 The following variables are recognized,
 all based on the characteristics of the user currently running
@@ -538,7 +538,7 @@ but various advanced LUKS features must be accessed through
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-is Copyright 2005-2019 RW Penney
+is Copyright 2005-2021 RW Penney
 .br
 and is supplied with NO WARRANTY.
 Licencing terms are as described in the file "COPYING"

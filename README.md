@@ -30,6 +30,7 @@ to the protected filesystems:
 
  *  libcryptsetup (version 1.6 or later)
  *  libgcrypt (e.g. version 1.6.0 or later)
+ *  pkg-config
 
 You will also need to ensure that your system has support for the
 loopback and device-mapper devices, which may require loading

@@ -24,6 +24,7 @@ very helpful in testing and improving cryptmount:
     Rennie deGraaf      (tracing pathname canonicalization issues)
     Daniel Grund        (tracing cmstatus-corruption vulnerability)
     Jens Guenther       (improving compatibility with cryptsetup-2.x)
+    Helge Kreutzmann    (updating German translations)
     Holger Müller       (RH spec-file, Makefile.in patches, LARGEFILE testing)
     Björn Nilsson       (suggestions for /dev/disk/by-id in documentation)
     Dan O'Huiginn       (patch for Debian examples directory)

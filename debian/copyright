@@ -4,7 +4,7 @@ Source: https://www.sourceforge.net/projects/cryptmount
 License: GPL-2+
 
 Files: *
-Copyright: (C) 2005 - 2019 RW Penney <rwpenney@users.sourceforge.net>
+Copyright: (C) 2005 - 2021 RW Penney <rwpenney@users.sourceforge.net>
 License: GPL-2+
 
 Files: blowfish.c blowfish.h

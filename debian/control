@@ -3,10 +3,10 @@ Section: admin
 Priority: optional
 Maintainer: RW Penney <rwpenney@users.sourceforge.net>
 Homepage: http://cryptmount.sourceforge.net
-Build-Depends: automake, debhelper (>= 10), libcryptsetup-dev (>= 1.6),
+Build-Depends: automake, debhelper (>= 12), libcryptsetup-dev (>= 1.6),
             libdevmapper-dev, libgcrypt20-dev (>= 1.5), pkg-config
 Rules-Requires-Root: binary-targets
-Standards-Version: 4.4.1
+Standards-Version: 4.5.1
 
 Package: cryptmount
 Architecture: linux-any

@@ -1,6 +1,6 @@
 /*
  *  cryptmount - a utility for user-level mounting of encrypted filesystems
- *  (C)Copyright 2005-2019, RW Penney
+ *  (C)Copyright 2005-2021, RW Penney
  */
 
 /*
@@ -169,7 +169,7 @@ int fs_test_blkgetsz()
         "/dev/hdb", "/dev/hdb1", "/dev/hdb2", "/dev/hdb3",
         "/dev/sda", "/dev/sda1", "/dev/sda2", "/dev/sda3",
         "/dev/sdb", "/dev/sdb1", "/dev/sdb2", "/dev/sdb3",
-        "/dev/xvda", "/dev/xvda1",
+        "/dev/vda", "/dev/vda1", "/dev/xvda", "/dev/xvda1",
         "/dev/sr0", "/dev/sr1",
         NULL };
 #endif
@@ -1587,5 +1587,5 @@ int main(int argc, char *argv[])
 }
 
 /*
- *  (C)Copyright 2005-2019, RW Penney
+ *  (C)Copyright 2005-2021, RW Penney
  */

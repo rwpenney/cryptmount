@@ -1,6 +1,6 @@
 /*
  *  Doxygen introductory sections for cryptmount
- *  (C)Copyright 2012-2014, RW Penney
+ *  (C)Copyright 2012-2020, RW Penney
  */
 
 /*! \mainpage Cryptmount source documentation

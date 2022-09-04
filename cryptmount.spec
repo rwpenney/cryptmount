@@ -1,10 +1,10 @@
 #
 # rpm spec-file for cryptmount
-# Copyright 2006-2019, Holger Mueller, Eriks Zelenka & RW Penney
+# Copyright 2006-2021, Holger Mueller, Eriks Zelenka & RW Penney
 #
 Summary:	Let ordinary users mount an encrypted file system
 Name:		cryptmount
-Version: 	5.3.2
+Version: 	5.3.3
 Release:	1%{?dist}
 License:	GPL
 URL:		http://cryptmount.sourceforge.net

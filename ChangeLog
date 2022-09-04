@@ -1,5 +1,9 @@
 ChangeLog for cryptmount (http://cryptmount.sourceforge.net)
 
+27Dec20	- Incorporated updated German translations from Helge Kreutzmann
+
+06Sep20	- Refreshed cipher-mode and loop-device selection in "mudslinger" testing script
+
 16Nov19	- Refined handling of passwords in "mudslinger" testing script
 
 06Oct19	- Improved documentation of default values in cmtab manual page

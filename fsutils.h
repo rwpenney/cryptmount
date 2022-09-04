@@ -1,6 +1,6 @@
 /*
  *  Declarations for filesytem-related utilities for cryptmount
- *  (C)Copyright 2005-2019, RW Penney
+ *  (C)Copyright 2005-2021, RW Penney
  */
 
 /*
@@ -44,5 +44,5 @@ double fs_entropy(const char *dev, const size_t blklen);
 #endif  /* _FSUTILS_H */
 
 /*
- *  (C)Copyright 2005-2019, RW Penney
+ *  (C)Copyright 2005-2021, RW Penney
  */
