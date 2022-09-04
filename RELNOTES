@@ -1,0 +1,738 @@
+		    Release notes for cryptmount-5.3
+
+			RW Penney, March 2018
+
+Introduction
+============
+cryptmount is a utility for GNU/Linux operating systems which allows
+an ordinary user to mount an encrypted filing system without requiring
+superuser privileges, and which assists the system-administrator in
+creating and managing encrypted filesystems & swap-partitions.
+
+cryptmount was written to address differences between the capabilities of
+the loopback device of the 2.4/2.6 kernel series and the newer, preferred,
+device-mapper mechanisms of kernels since linux-2.6.
+cryptmount automatically performs the various stages of configuring
+any supporting loopback and device-mapper targets needed to access
+an encrypted filing system before actually mounting it, but
+without requiring the user to be explicitly granted root privileges
+through either knowing the root password or through tools such as sudo.
+Filesystems managed by cryptmount can also be designated so that only
+the superuser can (un)mount them.
+
+By allowing user-level, on-demand, mounting of encrypted filing systems,
+cryptmount allows filesystems that are only used intermittently to be
+left in a more secure state than if they have to be made available by
+the system administrator whenever the system is booted.
+cryptmount also provides an aid to the system manager in allowing easier
+control over the configuration and mounting of encrypted filesystems,
+especially within system start-up scripts.
+
+
+Summary of new features in cryptmount-5.3
+=========================================
+
+This (stable) release offers the following enhancements:
+
+  * Improved compatability with libcryptsetup-2.x
+
+It has been tested on the following systems:
+
+  * Arch Linux (mid-Mar-2018) (x86_64)
+
+  * CentOS 7.4 (x86_64)
+
+  * Debian GNU/Linux 10.x ("buster"/"testing", mid-Mar-2018) (x86)
+
+  * Debian GNU/Linux 9.4 ("stretch") (x86)
+
+  * Debian GNU/Linux 8.10 ("jessie") (x86)
+
+  * Fedora 27 (x86_64)
+
+  * Gentoo (mid-Feb-2018) (x86)
+
+  * Ubuntu 17.10 ("artful") (x86_64)
+
+
+Summary of new features in cryptmount-5.2
+=========================================
+
+This (stable) release offers the following enhancements:
+
+  * Fixes to filesystem-check (fsck) PATH setup
+
+  * Allowing multiple password attempts within setup script
+
+  * Various code cleanups
+
+It has been tested on the following systems:
+
+  * Arch Linux (mid-Jan-2018) (x86_64)
+
+  * CentOS 7.4 (x86_64)
+
+  * Debian GNU/Linux 10.x ("buster"/"testing", mid-Jan-2018) (x86)
+
+  * Debian GNU/Linux 9.3 ("stretch") (amd64)
+
+  * Debian GNU/Linux 8.10 ("jessie") (x86)
+
+  * Gentoo (mid-Dec-2017) (x86)
+
+  * Ubuntu 17.10 ("artful") (x86_64)
+
+
+Summary of new features in cryptmount-5.1
+=========================================
+
+This (stable) release offers the following enhancements:
+
+  * Improved portability of RPM build scripts
+
+It has been tested on the following systems:
+
+  * Arch Linux (early-May-2015) (x86)
+
+  * CentOS 7.1 (x86_64)
+
+  * Debian GNU/Linux 8.0 ("jessie") (x86, amd64)
+
+  * Debian GNU/Linux 7.3 ("wheezy") (x86)
+
+  * Fedora 21 (x86_64)
+
+  * OpenSuSE 13.2 ("harlequin") (x86)
+
+  * Ubuntu 15.04 ("vivid") (x86_64)
+
+
+Summary of new features in cryptmount-5.0
+=========================================
+
+This (stable) release offers the following enhancements:
+
+  * Delegation of all LUKS functionality to libcryptsetup
+
+  * Addition of '--status' option to query filesystem mounting status
+
+It has been tested on the following systems:
+
+  * Arch Linux (late-Apr-2014) (x86)
+
+  * Gentoo (late-Apr-2014) (x86)
+
+  * Debian GNU/Linux 7.x ("jessie"/"testing", late-Apr-2014) (x86)
+
+  * Debian GNU/Linux 7.3 ("wheezy") (x86, amd64)
+
+  * Mageia 4 (x86)
+
+  * OpenSuSE 12.3 ("dartmouth") (x86_64)
+
+  * Ubuntu 14.04 ("trusty") (x86_64)
+
+
+Summary of new features in cryptmount-4.5
+=========================================
+
+This (stable) release offers the following enhancements:
+
+  * Support for TRIM/allow_discards options suitable for solid-state disks
+
+  * Moving run-time state information from /etc into /run
+
+  * Updating of loop-device management to use /dev/loop-control interface
+
+It has been tested on the following systems:
+
+  * Arch Linux (early-Jan-2014) (x86)
+
+  * CentOS 6.5 (x86_64)
+
+  * Debian GNU/Linux 7.x ("jessie"/"testing", early-Jan-2014) (x86)
+
+  * Debian GNU/Linux 7.3 ("wheezy") (x86, amd64)
+
+  * Debian GNU/Linux 6.0 ("squeeze") (x86)
+
+  * Debian GNU/Linux 5.0 ("lenny") (x86)
+
+  * Fedora 20 ("heisenbug") (x86_64)
+
+  * Gentoo (early-Jan-2014) (x86)
+
+  * Mageia 3 (x86)
+
+  * OpenSuSE 12.3 ("dartmouth") (x86_64)
+
+  * Ubuntu 13.10 ("saucy") (x86_64)
+
+
+Summary of new features in cryptmount-4.4
+=========================================
+
+This (stable) release offers the following enhancements:
+
+  * Support for systemd
+
+  * Unified support for automatic filesystem setup on system boot
+
+  * Improved handling of kernel module loading on initial setup
+
+  * Improved support for management of LUKS partitions to mirror cryptsetup-1.6
+
+It has been tested on the following systems:
+
+  * Arch Linux (mid-May-2013) (x86)
+
+  * CentOS 6.4 (x86_64)
+
+  * Debian GNU/Linux 7.x ("jessie"/"testing", mid-May-2013) (x86)
+
+  * Debian GNU/Linux 7.0 ("wheezy") (x86, amd64)
+
+  * Debian GNU/Linux 6.0 ("squeeze") (x86)
+
+  * Debian GNU/Linux 5.0 ("lenny") (x86)
+
+  * Fedora 18 ("spherical cow") (x86_64)
+
+  * Gentoo (x86, mid-May-2013)
+
+  * OpenSuSE 12.2 ("mantis") (x86_64)
+
+  * Ubuntu 13.04 ("raring ringtail") (x86_64)
+
+
+Summary of new features in cryptmount-4.3
+=========================================
+
+This (stable) release offers the following enhancements:
+
+  * Support for environmental variables within target definitions
+
+  * Improved support for management of LUKS partitions to mirror cryptsetup-1.4
+
+It has been tested on the following systems:
+
+  * CentOS 5.7 (x86)
+
+  * Debian GNU/Linux 6.1 ("wheezy"/"testing", mid-March-2012) (x86)
+
+  * Debian GNU/Linux 6.0 ("squeeze") (x86, amd64)
+
+  * Fedora 16 (x86_64)
+
+  * Gentoo (x86, mid-February-2012)
+
+  * Linux Mint 11 ("kataya")
+
+  * OpenSuSE 11.4 (x86)
+
+  * Ubuntu 10.04 ("lucid lynx") (x86_64)
+
+
+Summary of new features in cryptmount-4.2
+=========================================
+
+This (stable) release offers the following enhancements:
+
+  * Improved protection against accidental formatting of swap partitions
+
+  * Improved support for management of LUKS partitions to mirror cryptsetup-1.2
+
+It has been tested on the following systems:
+
+  * CentOS 5.6 (x86)
+
+  * Debian GNU/Linux 6.1 ("wheezy"/"testing", mid-June-2011) (x86)
+
+  * Debian GNU/Linux 6.0 ("squeeze") (x86, amd64)
+
+  * Debian GNU/Linux 5.0 ("lenny") (x86)
+
+  * Fedora 13 (x86_64)
+
+  * Gentoo (x86, early-June-2011)
+
+  * OpenSuSE 11.4 (x86)
+
+  * Ubuntu 10.04 ("lucid lynx") (x86_64)
+
+  * Ubuntu 8.04 ("hardy heron") (x86)
+
+
+Summary of new features in cryptmount-4.1
+=========================================
+
+This (stable) release focuses on compatibility improvements including:
+
+  * Facilities for user-supplied options to 'fsck' for automatic checking
+    of filesystems on mounting
+
+  * Improved support for management of LUKS partitions to mirror cryptsetup-1.1
+    including user-selected hashing functions and code-cleanup
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 5.1 ("squeeze"/"testing", mid-May-2010) (x86)
+
+  * Debian GNU/Linux 5.0 ("lenny") (x86, amd64, ppc)
+
+  * Fedora 12 (x86)
+
+  * FedoraCore-7 (x86)
+
+  * Gentoo (x86, late-May-2010)
+
+  * OpenSuSE 11.1 (x86)
+
+  * Slackware 12.2 (x86)
+
+  * Ubuntu 10.04 ("lucid lynx") (amd64)
+
+  * Ubuntu 8.04 ("hardy heron") (x86)
+
+
+Summary of new features in cryptmount-4.0
+=========================================
+
+This (stable) release focuses on security & functionality
+improvements including:
+
+  * Support for encrypted filesystems protected by password,
+    without the need for a separate keyfile or partition header
+
+  * Enhanced protection against password attacks in the builtin key-manager
+    through additional hash-based password strengthening
+
+  * Improved support for selecting different encryption schemes
+    when creating LUKS partitions
+
+  * Substantial tidying of internal interfaces & removal of legacy code
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 5.1 ("squeeze"/"testing", late-Apr09) (x86)
+
+  * Debian GNU/Linux 5.0 ("lenny") (x86, ppc)
+
+  * Debian GNU/Linux 4.0 ("etch") (x86, amd64)
+
+  * Fedora 9 (x86)
+
+  * FedoraCore-7 (x86)
+
+  * OpenSuSE 11.1 (x86)
+
+  * Slackware 12.2 (x86)
+
+  * Ubuntu 8.04 ("hardy heron") (x86)
+
+  * Ubuntu 7.10 ("gutsy gibbon") (x86)
+
+
+Summary of new features in cryptmount-3.1
+=========================================
+
+This (stable) release focuses on adding support for LUKS partitions
+
+  * Support for mounting of existing LUKS partitions was added
+
+  * Support for basic formatting of LUKS partitions was added
+
+  * Support for changing passwords on LUKS partitions was added
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 4.1 ("lenny"/testing, mid-Sep08) (x86)
+
+  * Debian GNU/Linux 4.0 ("etch") (x86, amd64)
+
+  * Fedora 9 (x86)
+
+  * FedoraCore-7 (x86)
+
+  * OpenSuSE Linux 10.2 OSS (x86)
+
+  * Ubuntu 8.04 ("hardy heron") (x86)
+
+  * Ubuntu 7.10 ("gutsy gibbon") (x86)
+
+
+Summary of new features in cryptmount-3.0
+=========================================
+
+This (stable) release focuses on code-tidying and usability improvements
+
+  * Support for default settings within filesystem configuration file
+
+  * Support for multiple password attempts when interactively
+    mounting encrypted filesystems
+
+  * Improved internationalization infrastructure in filesystem setup-script,
+    including French localization
+
+  * German localization of message in main application
+
+  * Removed dependence on OpenSSL library for OpenSSL-compatible access-keys
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 4.1 ("lenny"/testing, mid-May08) (x86)
+
+  * Debian GNU/Linux 4.0 ("etch") (x86, amd64)
+
+  * FedoraCore-7 (x86)
+
+  * FedoraCore-5 (x86)
+
+  * OpenSuSE Linux 10.2 OSS (x86)
+
+  * Ubuntu 8.04 ("hardy heron") (x86)
+
+  * Ubuntu 7.10 ("gutsy gibbon") (x86)
+
+
+Summary of new features in cryptmount-2.2
+=========================================
+
+This (stable) release focuses on code-tidying and usability improvements
+
+  * Support for reading passwords from streams,
+    to allow integration with scripts or GUI wrappers
+
+  * Prioritization of libgcrypt (with OpenSSL compatibility layer) over libssl
+    for access-key security
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 4.0 ("etch") (x86, amd64)
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86)
+  
+  * FedoraCore-7 (x86)
+
+  * FedoraCore-5 (x86)
+
+  * OpenSuSE Linux 10.2 OSS (x86)
+
+  * Ubuntu 7.10 ("gutsy gibbon") (x86)
+
+
+Summary of new features in cryptmount-2.1
+=========================================
+
+This (stable) release focuses on extended functionality and consolidation
+
+  * Setup script added for basic configuration of new encrypted filesystems
+
+  * Support for OpenSSL key-files via the libgcrypt library
+
+  * Facilities for translating between access-keys stored in different formats
+
+  * Improved handling of system shutdown while loopback filesystems are active
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 4.0 ("etch") (x86, amd64)
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86)
+  
+  * FedoraCore-7 (x86)
+
+  * FedoraCore-5 (x86)
+
+  * OpenSuSE Linux 10.2 OSS (x86)
+
+  * Ubuntu 7.04 ("feisty fawn") (x86)
+  	(may need 'modprobe dm-crypt' and creation of extra /dev/loop? nodes)
+
+
+Summary of new features in cryptmount-2.0
+=========================================
+
+This (stable) release focuses on extended functionality and improved internal structure, including:
+
+  * Built-in key management based on SHA1 + Blowfish crypto-algorithms,
+    which can be used when OpenSSL or libgcrypt are not available
+    (e.g. during system boot-up, or if not installed at all)
+
+  * OpenSSL & libgcrypt key-management now available through
+    dynamically loadable modules
+
+  * Improved support for very large (64bit) filing systems
+
+  * Improved support for setup of encrypted devices at system boot
+
+  * Various improvements to error-trapping and portability
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 4.0 ("etch") (x86, amd64)
+  
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+  
+  * OpenSuSE Linux 10.2 OSS (x86)
+
+  * FedoraCore-5 (x86)
+
+
+Summary of new features in cryptmount-1.2
+=========================================
+
+This (stable) release focuses on extensions in functionality, including:
+
+  * support for reading configuration data via the command-line
+
+  * support for priority-setting on crypto-swap
+
+  * improved robustness to pathological (un)mount operations
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+  
+  * Ubuntu 6.06.1 ("dapper drake") (x86)
+  	(may need patching of 'dd' and creation of extra /dev/loop? nodes)
+
+  * SuSE Linux 10.0 OSS (x86)
+
+  * Mandriva Linux 2005 (x86)
+
+  * FedoraCore-5 (x86)
+
+  * FedoraCore-4 (x86)
+
+
+Summary of new features in cryptmount-1.1
+=========================================
+
+This (stable) release focuses on extensions in functionality, including:
+
+  * support for encrypted swap partitions
+
+  * multiple formats for key-files, currently either OpenSSL or libgcrypt
+
+  * addition of a script for mounting filesystems/swap partitions at boot
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+
+  * SuSE Linux 10.0 OSS (x86)
+
+  * Mandriva Linux 2005 (x86)
+
+  * FedoraCore-5 (x86)
+
+  * FedoraCore-4 (x86)
+
+
+Summary of new features in cryptmount-1.0
+=========================================
+
+This (stable) release focuses on extensions in robustness, user-friendliness
+and internationalization, including:
+
+  * addition of options for changing the access password for each target
+
+  * addition of mechanisms for generating
+    random decryption keys for new filesystems
+
+  * addition of compile-time option for responding to invocation via
+    linked executables named "cryptumount", "cryptunmount" etc.
+
+  * added support for GNU gettext, including French translations of
+    manual pages and common messages
+
+  * improved mechanisms for preventing unauthorized unmounting of filesystems
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+
+  * SuSE Linux 10.0 OSS (x86)
+
+  * Mandriva Linux 2005 (x86)
+
+  * FedoraCore-4 (x86) (may need extra configuration of
+            security policies governing losetup, mke2fs etc)
+
+
+Summary of new features in cryptmount-0.4
+=========================================
+
+This (beta) release focuses on extensions in functionality and robustness,
+including:
+
+  * addition of switches allowing filesystem mounting to be restricted
+    only to superuser
+
+  * addition of automatic filesystem checking (via fsck) prior to mounting
+
+  * compile-time choice between in-built mount, or /bin/mount etc
+
+  * addition of facility for unencrypted filesystem key
+    (e.g. stored on removable device such as a USB key)
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+
+  * FedoraCore-4 (x86) (may need extra configuration of
+            security policies governing losetup, mke2fs etc)
+
+  * Mandriva Linux 2005 (x86)
+
+  * SuSE Linux 10.0 OSS (x86)
+
+
+Summary of new features in cryptmount-0.3
+=========================================
+
+This (beta) release focuses on extensions in functionality and robustness,
+including:
+
+  * addition of '--all' command-line option, for example to allow easier
+    unmounting of all encrypted filing systems via 'cryptmount --unmount --all'
+
+  * multiple targets can be specified on the command-line, for example
+    for mounting multiple filing systems at the same time
+
+  * support for loopback filingsystems >2GB has been improved
+
+  * all mounting/unmounting activity is now recorded via syslog
+
+  * security checks on the configuration file have been extended
+
+  * improved documentation of password-changing & fsck tasks
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+
+  * FedoraCore-4 (x86) (may need extra configuration of
+            security policies governing losetup, mke2fs etc)
+
+  * Mandriva Linux 2005 (x86)
+
+  * SuSE Linux 10.0 OSS (x86)
+
+
+Summary of new features in cryptmount-0.2
+=========================================
+
+This (beta) release focuses on extensions in functionality, including:
+
+  * addition of optional configuration-file parameters for selecting
+    a subset of blocks within a device for hosting the filing system
+
+  * addition of optional configuration-file parameter for selecting
+    a particular loopback device rather than having one chosen automatically
+
+  * addition of optional cipher-IV parameter to configuration-file
+
+  * improved detection of errors in the configuration-file
+
+  * basic security checks performed on configuration-file and
+    target-description before any privileged action is taken
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+
+  * FedoraCore-4 (x86) (may need extra configuration of
+            security policies governing losetup, mke2fs etc)
+
+  * Mandriva Linux 2005 (x86)
+
+  * SuSE Linux 10.0 OSS (x86)
+
+
+Summary of new features in cryptmount-0.1
+=========================================
+
+This (beta) release focuses on improvements in robustness, portability
+and documentation, including:
+
+  * improved support for systems with glibc built against kernel-2.4 headers
+  
+  * addition of mechanisms for updating /etc/mtab on (un)mounting filing
+    systems, so the programs such as df can operate normally on filesystems
+    controlled by cryptmount
+
+  * clearer examples on usage within README & the cryptmount man-page
+    (avoiding ambiguities about whether 'aes256', rather than 'aes',
+    is a valid kernel-module name)
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+
+  * FedoraCore-4 (x86) (may need extra configuration of
+            security policies governing losetup, mke2fs etc)
+
+  * Mandriva Linux 2005 (x86)
+
+  * SuSE Linux 10.0 OSS (x86)
+
+
+Summary of new features in cryptmount-0.0.3
+===========================================
+
+This (alpha) release further improves robustness, and portability including:
+
+  * a bug which restricted protection of cipher-key to the Blowfish and
+    md5 algorithms has been fixed, thereby allowing any cipher/hash
+    supported by the openssl library to be used
+
+  * differences in behaviour of libdevmapper which may or may not create
+    device-nodes below /dev/mapper, have been allowed for
+
+  * an automatic testing script has been written
+
+  * improved detection of failure to decrypt the cipher-key has been added
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+
+  * SuSE Linux 10.0 OSS (x86)
+
+
+Summary of new features in cryptmount-0.0.2
+===========================================
+
+This (alpha) release of cryptmount improves general robustness and documentation as follows:
+
+  * a basic manual-page has been written
+  
+  * a locking mechanism has been added, to ensure that only the
+    (non-root) user that mounted a filing system can unmount it
+
+  * tidying-up of devices occurs if mounting fails
+
+It has been tested on the following system:
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+
+
+Summary of features in cryptmount-0.0.1
+=======================================
+
+This initial (pre-alpha) release of cryptmount offers the following features:
+
+  * support for all encryption algorithms supported by the kernel
+
+  * encryption of cipher-key by Blowfish algorithm & md5 message-digest
+
+It has been tested on the following system:
+
+  * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
+
+
+Acknowledgements
+================
+Please see the file 'AUTHORS' in the source package for a list of contributors.

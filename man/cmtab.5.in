@@ -1,0 +1,541 @@
+.\" cmtab (cryptmount) manual page
+.\" Copyright (c) 2005-2018 RW Penney
+.\"
+
+.\" ---- macro definitions ----
+.de Sh \" Subsection heading
+.br
+.ne 5
+.PP
+\fB\\$1\fR
+.PP
+..
+
+
+.TH CMTAB 5 "2015-10-03" "@PACKAGE_VERSION@" "User commands"
+.SH NAME
+cmtab \- static information about filesystems managed by cryptmount
+
+
+.\" --------------------------------
+.SH DESCRIPTION
+
+Information about the encrypted filesystems managed by
+.B cryptmount
+is contained in the file @CM_SYSCONF_DIR@/cmtab.
+Each filesystem is labelled by a target name which can be used as an argument to
+.B cryptmount
+and which appears in @CM_SYSCONF_DIR@/cmtab in front of a list of parameters describing where that filesystem is stored, and how it is encrypted.
+
+The format of the cmtab is flexible, with the description of each target being delimited by braces, parameters being specified by KEY=VALUE pairs, and white-space being freely usable.
+Comments are prefixed by a `#' character, and can start at any point in a line, lasting to the end of the line.
+The backslash character `\\' can be used to ignore any special significance of the following character, for example to include a space in a filename.
+
+@CM_SYSCONF_DIR@/cmtab contains entries of the following form:
+
+.nf
+    TARGET_NAME {
+        dev=DEVICE                      # REQUIRED
+        flags=FLAG,FLAG,...
+        startsector=STARTSECTOR
+        numsectors=NUMSECTORS
+        loop=LOOPDEV
+        dir=MOUNT_POINT
+        fstype=TYPE                     # REQUIRED
+        mountoptions=MOPT,MOPT,...
+        fsckoptions=FOPT;FOPT;...
+        supath=SUPATH
+        bootaction=BOOTACTION
+        cipher=CIPHER
+        ivoffset=IVOFFSET
+        keyformat=KEYMANAGER
+        keyfile=KEYFILE                 # REQUIRED
+        keyhash=KEYHASH
+        keycipher=KEYCIPHER
+        keymaxlen=KEYMAXLEN
+        passwdretries=NUMATTEMPTS
+    }
+.fi
+
+Some fields, such as `dev' and `fstype' are mandatory,
+although many fields have sensible default values.
+Depending on the choice of KEYMANAGER, fields such as
+`keyhash', `keycipher', `keymaxlen' may need to be set explicitly.
+
+Any field which contains non-numerical values
+(e.g. not `startsector', `ivoffset' etc.)
+can contain references to environmental variables of the form $(HOME).
+The following variables are recognized,
+all based on the characteristics of the user currently running
+.B cryptmount :
+.nf
+  * $(HOME) - the home directory, as obtained from /etc/passwd
+  * $(UID) - the numerical identifier of the user
+  * $(USERNAME) - the printable name of the user
+  * $(GID) - the numerical identifier of the user's current group
+  * $(GROUPNAME) - the printable name of the user's current group
+.fi
+
+
+.\" --------------------------------
+.SH TARGET DEFINITIONS
+
+The components in each target definition have the following meaning:
+
+.TP
+.B TARGET_NAME { ... }
+specifies the name that cryptmount uses to refer to a particular filesystem,
+with configuration options for that filesystem contained within
+the matching braces.
+The special name "_DEFAULTS_" may be used to set default values
+in subsequent targets for various parameters such as 'flags', 'fstype', 'mountoptions', 'cipher', 'keyformat', 'keyhash', 'keycipher', 'keymaxlen', 'passwdretries'.
+Note that if the "_DEFAULTS_" target appears more than once,
+each will undo the effects of previous default values -
+i.e. this pseudo-target does not operate incrementally.
+.\" ----
+.TP
+.B dev=DEVICE
+sets the name of the raw device (e.g. /dev/hdb63)
+or ordinary file (e.g. /home/secretiveuser/private.fs)
+that contains the encrypted filesystem.
+Note that it may be useful to use a symbolic name based on
+an entry beneath /dev/disk/by-id, /dev/disk/by-path,
+to reduce the risk of device nodes being renamed when new disks
+are added to the system, etc.
+.\" ----
+.TP
+.B flags=FLAG,FLAG,...
+sets configuration switches, such as
+.nf
+  * "user" (any user can mount),
+  * "nouser" (only root can mount),
+  * "fsck" (automatically check filesystem before mounting),
+  * "nofsck" (don't check filesystem before mounting),
+  * "mkswap" (format swap partition before use),
+  * "nomkswap" (don't format swap partition)
+  * "trim" (enable TRIM/discard support on solid-state disks),
+  * "notrim" (disable SSD TRIM/discard support)
+.fi
+This parameter is optional and defaults to "user,fsck,nomkswap,notrim".
+.\" ----
+.TP
+.B startsector=STARTSECTOR
+gives the number of sectors (512-byte blocks) into
+.B DEVICE
+at which the filesystem is to start.
+This parameter is optional, and defaults to zero.
+.\" ----
+.TP
+.B numsectors=NUMSECTORS
+gives the total length of the filesystem in sectors (512-byte blocks).
+This parameter is optional, and defaults to \-1 which is shorthand for the total available length of
+.BR DEVICE .
+.\" ----
+.TP
+.B loop=LOOPDEV
+can be used to specify a particular loopback device (e.g. /dev/loop0)
+to be used when DEVICE is an ordinary file.
+This parameter is optional and defaults to "auto".
+.TP
+.B dir=MOUNT_POINT
+specifies the directory onto which the encrypted filesystem will be mounted.
+.\" ----
+.TP
+.B fstype=TYPE
+sets the filesystem type (as used by
+.B mount
+(8)).
+This must be set to "swap" if the device is to be used as an encrypted swap partition.
+.\" ----
+.TP
+.B mountoptions=MOPT,MOPT,...
+sets filesystem mounting options, as used by
+.B mount
+(8). MOPT can typically be "default", "noatime", "noexec", "nosuid", "ro", "sync" etc.
+.\" ----
+.TP
+.B fsckoptions=FOPT;FOPT;...
+sets filesystem-checking options understood by
+.B fsck
+(8). FOPT can typically be "\-C", "\-V" etc.
+Note that the list of fsck options uses semicolons as a separator to allow
+passing options that themselves contain commas.
+.\" ----
+.TP
+.B supath=SUPATH
+sets the PATH environment variable when running subprocesses as the super-user.
+This may be necessary when commands such as
+.B fsck
+and
+.B mount
+need to run subcommands (e.g. fsck.ext4).
+By default, this PATH is set to @CM_DEFAULT_SUPATH@.
+.\" ----
+.TP
+.B bootaction=BOOTACTION
+indicates what action, if any, should be taken
+for this target on system bootup.
+BOOTACTION can be one of "none", "mount", "swap" or "prepare".
+.TP
+.B cipher=CIPHER
+sets the encryption algorithm used on the
+.BR DEVICE .
+The available algorithms are determined by the system kernel.
+This parameter is optional and defaults to "@CM_DEFAULT_CIPHER@".
+.\" ----
+.TP
+.B keyformat=KEYMANAGER
+specifies the key management scheme used to interact with the
+.BR KEYFILE ,
+as discussed in the
+.B CHOICE OF KEYMANAGER
+section below.
+The set of available key management schemes is determined when
+.B cryptmount
+is built, but may include "libgcrypt", "luks", and "openssl-compat",
+in addition to "builtin" and "raw".
+This parameter is optional:
+if absent, "builtin" will be used on first generating the key,
+with an automatic choice being made when reading a pre-existing key.
+.\" ----
+.TP
+.B keyfile=KEYFILE
+gives the name of an ordinary file that contains the key used by the
+.B CIPHER
+algorithm to decrypt the filesystem. This key is itself encrypted in a way specified by the
+.B KEYHASH
+and
+.B KEYCIPHER
+\.
+.TP
+.B ivoffset=IVOFFSET
+sets the offset added to the sector-number used in constructing
+the cipher algorithm's initialization vector.
+This parameter is optional, and defaults to 0.
+.\" ----
+.TP
+.B keyhash=KEYHASH
+is the hashing algorithm used to turn the user's password into the decryption key used by the
+.B KEYCIPHER
+algorithm.
+The available hashing algorithms are determined by the chosen key-encryption engine specified by
+.BR KEYMANAGER .
+This parameter is optional and the default depends on the value of
+.BR KEYMANAGER .
+.\" ----
+.TP
+.B keycipher=KEYCIPHER
+is the encryption algorithm used to secure the decryption key of the filesystem itself.
+The available key-encryption algorithms are determined by the chosen key-encryption engine specified by
+.BR KEYMANAGER .
+This parameter is optional and the default depends on the value of
+.BR KEYMANAGER .
+.\" ----
+.TP
+.B keymaxlen=KEYMAXLEN
+is the maximum number of bytes of the decryption key that will be read from
+.BR KEYFILE .
+This parameter is optional, and defaults to 0, indicating that the full length of
+.B KEYFILE
+should be read.
+.\" ----
+.TP
+.B passwdretries=NUMATTEMPTS
+is the number of password-entry attempts that can be made
+before cryptmount will exit with an error-code
+when trying to mount or configure the target.
+
+
+.\" --------------------------------
+.SH CHOICE OF KEYMANAGER
+
+.B cryptmount
+supports a variety of different ways of protecting
+the access key associated with each encrypted filesystem.
+For most users, the default \*(lqbuiltin\*(rq keymanager
+will provide a good level of security and flexibility.
+Alternative keymanagers offer a wider choice
+of different password-hashing schemes
+and compatibility with other encryption tools.
+The strengths and weaknesses of the different keymanagers are discussed below.
+
+.Sh builtin
+This keymanager is supported by cryptmount-2.0 or later,
+and uses a separate key-file.
+A password-based key derivation function (PBKDF) using
+the SHA1 hashing algorithm, together with blowfish-cbc encryption
+is used to protect the filesystem key.
+That key-derivation function was changed in cryptmount-4.0
+to improve the security of new keyfiles,
+while preserving compatibility with existing keyfiles.
+If you need to write keyfiles in the previous format,
+you can specify \*(lqkeyformat=builtin:0\*(rq.
+The KEYHASH and KEYCIPHER parameters are ignored.
+
+.Sh libgcrypt
+This keymanager is supported by cryptmount-1.1 or later,
+and uses a separate key-file.
+A password-based key derivation function (PBKDF)
+is used to protect the filesystem key,
+with any hashing or cipher algorithm supported by the installed version of
+the libgcrypt library being available.
+
+.Sh luks
+This keymanager is supported by cryptmount-3.1 or later,
+and provided compatibility with the Linux Unified Key Setup (LUKS) disk-format.
+Instead of a separate keyfile, LUKS uses a header
+within the encrypted filesystem itself.
+It is advisable to choose the same value for both the 'dev'
+and 'keyfile' parameters, or leave 'keyfile' unspecified.
+As with all cryptmount filesystems, the 'dev' parameter may point
+to either a raw disk partition or an ordinary file.
+However, because of the filesystem structure assumed by LUKS,
+it is strongly recommended that you do not use either
+the 'startsector' or 'numsector' parameters.
+
+.Sh openssl/openssl-compat
+This keymanager has been supported since the earliest release of cryptmount,
+and uses a separate keyfile which is compatible with the format
+used by the 'openssl' command-line encryption tool.
+Since cryptmount-3.0 this file-format has been provided
+via the libgcrypt library, and is preferably specified by
+\*(lqkeyformat=openssl-compat\*(rq.
+A password-based key derivation function (PBKDF)
+is used to protect the filesystem key,
+with a choice of hashing or cipher algorithms being available.
+Most algorithms supported by the 'openssl' command-line tool
+should be available, provided the underlying algorithms
+are available within libgcrypt.
+
+
+.Sh password
+This keymanager is supported by cryptmount\-4.0 or later,
+and does not require any separate keyfile,
+but instead derives the filesystem key directly from the user's password.
+This means that it is not possible to change the access password
+without re-encrypting the entire filesystem.
+The 'keyhash' and 'keycipher' parameters are ignored.
+
+.Sh raw
+This keymanager is supported by cryptmount\-1.1 or later,
+and uses a separate keyfile where the access key is stored directly and
+.IR "without any encryption" .
+This keymanager is most useful for managing encrypted swap partitions,
+where the keyfile can be chosen as /dev/random,
+and hence where the access key will be different every time it is read.
+If the keyfile is an ordinary file, it offers minimal security,
+and should preferably be stored separately from the disk containing
+the encrypted filesystem, e.g. on a USB flash disk.
+
+
+
+.\" --------------------------------
+.SH SECURITY
+
+Because
+.B cryptmount
+needs to operate with setuid privileges, it is very important that
+its configuration file is kept secure.
+Ideally @CM_SYSCONF_DIR@/cmtab should be managed only by the system administrator, and all key-files should be readable only by their owner.
+
+.B cryptmount
+makes basic checks on the security of @CM_SYSCONF_DIR@/cmtab
+each time it runs, and will refuse to operate
+unless the following conditions are met:
+.nf
+  * cmtab must be owned by root
+  * cmtab must be a regular file
+  * cmtab must not be globally writable
+  * the directory containing cmtab must be owned by root
+  * the directory containing cmtab must not be globally writable
+.fi
+In addition, for each target within @CM_SYSCONFDIR@/cmtab,
+all paths must be absolute (i.e. starting with '/').
+
+When using unencrypted keyfiles (i.e. when
+.B KEYMANAGER
+is "raw"), it is recommended that the
+.B KEYFILE
+is stored with access permissions no less restrictive than 0600,
+or on a removable device such as a USB flash-disk.
+(With recent versions of
+.B cryptmount
+the "builtin" key-format should be portable between different installations
+and vastly more secure than "raw" keyfiles.)
+
+It is very important that you do not lose or damage the
+.B KEYFILE
+as this file is essential to providing access to your encrypted filesystem.
+You are strongly advised to consider keeping a backup of your
+.B KEYFILE
+in some form.
+
+
+.\" --------------------------------
+.SH ENCRYPTED SWAP PARTITIONS & AUTO-FORMATTING
+
+When the 'mkswap' option is selected for a particular target
+within @CM_SYSCONFDIR@/cmtab,
+.B cryptmount
+will attempt to automatically format an encrypted swap partition
+whenever you run "cryptmount \-\-swapon <target>".
+This is often useful when there is no need to preserve swap data
+between reboots, such as when not using the kernel's hibernation features.
+
+Because reformatting will destroy any existing data
+on the chosen swap partition,
+.B cryptmount
+will do some basic checking on the first megabyte of the partition,
+based on the degree of randomness (entropy) in the current contents.
+If the partition looks like it contains pure noise, or has been zeroed,
+then the partition will be formatted automatically.
+If
+.B cryptmount
+determines that the partition may contain non-random data,
+then it will ask you to run 'mkswap' manually.
+
+As there is no fool-proof way of determining whether a partition
+(especially after encryption) contains valuable data,
+you should be very careful about the raw device chosen
+for any target on which you select the 'mkswap' option.
+
+
+.\" --------------------------------
+.SH EXAMPLE FILE
+
+The following example of @CM_SYSCONFDIR@/cmtab consists of five targets,
+using a variety of encryption algorithms and storing
+their filesystems in different ways,
+including a target representing an encrypted swap partition:
+
+.nf
+
+    # @CM_SYSCONFDIR@/cmtab
+    # example file \- please modify before use
+
+    _DEFAULTS_ {
+        passwdretries=3     # allow 3 password attempts by default
+    }
+
+    basic {
+        dev=/home/secretiveuser/crypt.fs
+        dir=/home/secretiveuser/crypt           # where to mount
+        loop=auto                               # find free loop\-device
+        fstype=ext3     mountoptions=default
+        cipher=aes-cbc-plain                    # filesystem encryption
+        keyfile=/home/secretiveuser/crypt.key
+        # use default sha1/blowfish key-encryption:
+        keyformat=builtin
+    }
+
+    partition {
+        dev=/dev/hdb62                      # use whole disk partition
+        dir=/mnt/crypt62
+        fstype=ext3     mountoptions=nosuid,noexec
+        cipher=serpent-cbc-plain
+
+        # information about file used to store decryption key:
+        keyfile=@CM_SYSCONFDIR@/crypt_hdb62.key
+        keyformat=openssl                   # use OpenSSL key-encryption
+        keyhash=md5 keycipher=bf\-cbc        # encryption of key file
+    }
+
+    subset {
+        dev=/dev/hdb63
+        startsector=512 numsectors=16384    # use subset of partition
+        dir=/mnt/encrypted\\ subset\\ of\\ hdb
+        fstype=reiserfs     mountoptions=defaults
+        cipher=twofish-cbc-plain            # filesystem encryption
+
+        # information about file used to store decryption key:
+        keyfile=@CM_SYSCONFDIR@/crypt_hdb63.key
+        keyformat=libgcrypt
+        keyhash=md5 keycipher=blowfish\-cbc # encryption of key file
+    }
+
+    encswap {                               # encrypted swap partition
+        bootaction=swap
+        dev=/dev/disk/by-id/scsi-SATA_ST500_ABCDEFG-part37
+        startsector=16896 numsectors=1024   # use subset of partition
+        fstype=swap        flags=mkswap       cipher=twofish-cbc-plain
+
+        # read fresh 16-byte key from /dev/random whenever used:
+        keyfile=/dev/random        keymaxlen=16     keyformat=raw
+    }
+
+    luks {                          # partition created by cryptsetup-luks
+        dev=/dev/hdb63
+        dir=/mnt/luks-partition-$(USERNAME)
+        keyformat=luks
+        keyfile=/dev/hdb63
+        fstype=ext3
+    }
+
+    # end of cmtab
+.fi
+
+The 'basic' target uses an ordinary file "/home/secretiveuser/crypt.fs"
+to store the encrypted filesystem,
+perhaps within a normal user's home directory.
+A loopback device will be automatically allocated
+(because of the "loop=auto") by
+.B cryptmount
+to turn this into a block-special device, before mounting.
+The decryption key for the filesystem is also stored in this user's home directory, making it easier for them to change the password protecting the key.
+
+The 'partition' target uses a whole disk partition to store the encrypted filesystem, with the decryption key stored in the main
+.B cryptmount
+configuration directory.
+
+The 'subset' target is similar to the 'partition' target except that it does not use a whole disk partition.
+This would allow other groups of blocks within that partition to be used for other filesystems managed via
+.B cryptmount
+or
+.B dmsetup.
+
+The 'encswap' target uses a subset of blocks within a disk partition
+to form an encrypted swap device.
+A new encryption key is read from the system random-number generator
+/dev/random every time the target is used.
+___DELETE_CSWAP_1
+Note that the current installation of
+.B cryptmount
+does not appear to have support for crypto-swap enabled.
+___END_CSWAP_1
+
+The 'luks' target provides access to an encrypted partition
+created by the 'cryptsetup-luks' utility.
+By using the environmental variable $(USERNAME),
+the filesystem's mount-point will vary depending on which user invokes
+.B cryptmount.
+For example, user 'joe' would find the filesystem mounted below
+/mnt/luks-partition-joe.
+.B cryptmount
+will be able to mount and unmount the partition,
+but various advanced LUKS features must be accessed through
+.B cryptsetup
+
+.\" --------------------------------
+.SH FILES
+.I @CM_SYSCONF_DIR@/cmtab
+- main configuration file
+
+
+.SH "SEE ALSO"
+.BR cryptmount (8),
+.BR cryptmount-setup (8),
+.BR cryptsetup (8),
+.BR dmsetup (8),
+.BR openssl (1)
+
+
+.\" --------------------------------
+.SH COPYRIGHT NOTICE
+.B cryptmount
+is Copyright 2005-2018 RW Penney
+.br
+and is supplied with NO WARRANTY.
+Licencing terms are as described in the file "COPYING"
+within the cryptmount source distribution.
+
+.\" vim: set ts=4 sw=4 et:

@@ -1,0 +1,28 @@
+# cryptmount makefile-rules for man-pages
+# $Revision: $, $Date: $
+# RW Penney, April 2006
+
+
+# transform manpages in Makefile rather than configure,
+# because otherwise '${prefix}' may not be fully expanded:
+mantransform="s,@PACKAGE_VERSION\@,${PACKAGE_VERSION},g; \
+		s,@CM_SYSCONF_DIR\@,${CM_SYSCONF_DIR},g; \
+		s,@CM_SYSRUN_DIR\@,${CM_SYSRUN_DIR},g; \
+		s,@CM_DEFAULT_CIPHER\@,${CM_DEFAULT_CIPHER},g; \
+		s,@DFLT_KEYHASH\@,${DFLT_KEYHASH},g; \
+		s,@DFLT_KEYCIPHER\@,${DFLT_KEYCIPHER},g; \
+		s,@CM_DEFAULT_SUPATH\@,${CM_DEFAULT_SUPATH},g; \
+		/^___DELETE_CSWAP_${WITH_CSWAP}/,/^___END_CSWAP_${WTIH_CSWAP}/d; \
+		/^___DELETE_FSCK_${WITH_FSCK}/,/^___END_FSCK_${WTIH_FSCK}/d; \
+		/^___/d"
+
+
+cmtab.5:	cmtab.5.in ${top_builddir}/config.status
+	sed ${mantransform} $< > $@
+
+cryptmount.8:	cryptmount.8.in ${top_builddir}/config.status
+	sed ${mantransform} $< > $@
+
+cryptmount-setup.8:	cryptmount-setup.8.in ${top_builddir}/config.status
+	sed ${mantransform} $< > $@
+

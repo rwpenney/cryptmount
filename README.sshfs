@@ -1,0 +1,88 @@
+Encrypted filesystem on a remote host using "cryptmount"
+
+(A) Assumptions
+
+  * Remote machine is called "rmach"
+  * User login on the local machine is "luser"
+  * User login on the remote machine is "ruser"
+  * No firewall (otherwise an error "read: connection reset by peer"
+    can occur).
+  * SSH public key of user "luser" is present in
+      ~ruser/.ssh/authorized_keys
+    on "rmach"
+  * User "luser" is a member of the "fuse" group, to allow reading of
+      /etc/fuse.conf
+  * Option
+      user_allow_other
+    is enabled in
+      /etc/fuse.conf
+
+
+(B) Preparing a "virtual device" (operations to be performed once)
+
+  The following must be performed as the ordinary user on the
+  local machine.
+
+    1. Mount the remote home on the local machine:
+         $ mkdir -p mnt/remote
+         $ sshfs ruser@rmach: mnt/remote
+
+    2. Create a 100 GB (sparse) file that will contain the filesystem:
+         $ cd mnt/remote
+         $ truncate -s 100G virtual_disk.img
+
+    3. Release the mount point:
+         $ cd
+         $ fusermount -u mnt/remote
+
+    4. Define a mount point whose contents will be stored encrypted, e.g.
+         $ mkdir enc_remote
+
+
+  The following must be performed as "root" on the local machine.
+
+    5. Create an entry in "/etc/cryptmount/cmtab"
+
+       luser_data {
+         dev=/home/luser/mnt/remote/virtual_disk.img
+         dir=/home/luser/enc_remote
+         loop=auto
+         fstype=ext4     mountoptions=defaults
+         cipher=aes-cbc-plain
+         keyformat=luks
+       }
+
+    6. Mount the remote filesystem:
+        # cd ~luser
+        # sshfs -o IdentityFile=~luser/.ssh/id_rsa ruser@rmach: mnt/remote
+
+    7. Prepare the encrypted device (setting the password to access the
+       encrypted filesystem data):
+        # cryptmount --prepare luser_data
+
+    8. Create the filesystem (must be same as defined in the "cmtab" entry)
+        # mkfs.ext4 /dev/mapper/luser_data
+        # chown luser.luser 
+
+    9. Finalize:
+        # cryptmount --release luser_data
+
+   10. Mount encrypted filesystem in order to set appropriate ownership:
+        # cryptmount luser_data
+        # chown luser.luser /home/luser/enc_remote
+   
+   11. Release all resources:     
+        # cryptmount -u luser_data
+        # fusermount -u mnt/remote
+
+
+(C) Saving data to the remote encrypted filesystem
+
+  1. Mounting the remote home (as an ordinary user):
+      $ sshfs -o allow_root ruser@rmach: mnt/remote
+
+  2. Mounting the encrypted filesystem (password will be requested):
+      $ cryptmount luser_data
+
+  3. Checking the available space on the encrypted filsystem:
+      $ df -k enc_remote

@@ -1,0 +1,335 @@
+.\" cryptmount (French) manual page
+.\" Copyright (c) 2006-2018 RW Penney
+.\"
+.TH CRYPTMOUNT 8 "2018-01-18" "@PACKAGE_VERSION@" "Manuel de l'utilisateur Linux"
+.SH NOM
+cryptmount \- monter/d\['e]monter un syst\[`e]me de fichiers chiffr\['e]
+
+.\" --------------------------------
+.SH SYNOPSIS
+
+.BI "cryptmount \fICIBLE\fR [\fICIBLE ...\fR]"
+.LP
+.BI "cryptmount \-\-unmount \fICIBLE\fR [\fICIBLE ...\fR]"
+.LP
+.BI "cryptmount \-\-change\-password \fICIBLE\fR"
+.LP
+.BI "cryptmount \-\-generate\-key \fIsize\fP \fICIBLE\fR"
+___DELETE_CSWAP_0
+.LP
+.BI "cryptmount \-\-swapon \fICIBLE\fR"
+.LP
+.BI "cryptmount \-\-swapoff \fICIBLE\fR"
+___END_CSWAP_0
+
+
+.\" --------------------------------
+.SH DESCRIPTION
+
+.B cryptmount
+permet \[`a] un utilisateur ordinaire
+d'acc\['e]der \[`a] un syst\[`e]me de fichiers chiffr\['e]
+sans avoir besoin des privil\[`e]ges du super-utilisateur,
+et aussi aide le super-utilisateur
+\[`a] cr\['e]er des nouveaux syst\[`e]mes de fichiers chiffr\['e]s.
+Apr\[`e]s avoir \['e]t\['e] configur\['e] la premi\[`e]re fois par le super-utilisateur,
+l'utilisateur a seulement besoin de donner le mot de passe
+du syst\[`e]me de fichiers pour que
+.B cryptmount
+configure automatiquement des cibles du device-mapper et p\['e]riph\['e]rique loop
+avant de monter le syst\[`e]me de fichiers.
+
+.B cryptmount
+a \['e]t\['e] \['e]crit en r\['e]ponse aux diff\['e]rences entre le nouveau device-mapper du
+linux-2.6 serie des noyeaux et, le plus ag\['e], cryptoloop qui a permis
+\[`a] des utilisateurs ordinaires d'acc\['e]der aux syst\[`e]mes de fichiers chiffr\['e]s
+directement avec
+.B mount
+(8).
+
+.\" --------------------------------
+.SH OPTIONS
+
+.TP
+.B \-a \-\-all
+op\['e]rer sur toutes les cibles dans @CM_SYSCONF_DIR@/cmtab, par exemple si on veut monter toutes les cibles.
+.TP
+.B \-m \-\-mount
+monter une cible particuli\[`e]re.
+On demandera \[`a] l'utilisateur de donner un mot de passe pour r\['e]v\['e]ler la clef qui
+d\['e]chiffre le syst\[`e]me de fichiers.
+.TP
+.B \-u \-\-unmount
+d\['e]monter une cible particuli\[`e]re.
+On n'a pas besoin de donner un mot de passe,
+mais si un utilisateur ordinaire qui n'a pas mont\['e] ce syst\[`e]me de fichiers
+essaye de le d\['e]monter, cela se soldera par un \['e]chec.
+.TP
+.B \-l \-\-list
+donner une liste de toutes les cibles.
+.TP
+.B \-c \-\-change\-password
+changer le mot de passe qui prot\[`e]ge un syst\[`e]me de fichers.
+.TP
+.B \-\-generate\-key "\fItaille\fP"
+cr\['e]er une clef de d\['e]chiffrage pour un nouveau syst\[`e]me de fichiers.
+.IR taille\fP
+donne la longeur de la clef en octets.
+.TP
+.B \-e \-\-reuse\-key "\fIcible-actuel\fP"
+cr\['e]er une clef de d\['e]chiffrage pour un nouveau syst\[`e]me de fichiers,
+utilisant une clef existante d'un autre syst\[`e]me de fichiers.
+.TP
+.B \-f \-\-config\-fd "\fInum\fP"
+lire les information des cibles d'un descripteur de fichier num\['e]ro 
+.IR num\fP
+en place du fichier de configuration de defaut.
+Cette option est reserv\['e]e seulement pour le super-utilisateur.
+.TP
+.B \-w \-\-passwd\-fd "\fInum\fP"
+lire les mots de passe d'un descripteur de fichier num\['e]ro
+.IR num\fP
+en place du terminal.
+.TP
+.B \-p \-\-prepare
+pr\['e]parer toutes les cibles du device-mapper et p\['e]riph\['e]rique loop
+n\['e]cessaires pour acc\['e]der \[`a] une cible, mais sans la monter.
+Cette commande permet au super-utilisateur d'installer un syst\[`e]me de fichiers
+sur un p\['e]riph\['e]rique chiffr\['e].
+.TP
+.B \-r \-\-release
+lib\['e]rer toutes les cibles du device-mapper et p\['e]riph\['e]rique loop
+associ\['e]es \[`a] une cible particuli\[`e]re.
+Cette option est reserv\['e]e seulement pour le super-utilisateur.
+___DELETE_CSWAP_0
+.TP
+.B \-s \-\-swapon
+activer une cible pour la pagination sur disque chiffr\['e].
+Cette option est reserv\['e]e seulement pour le super-utilisateur.
+.TP
+.B \-x \-\-swapoff
+d\['e]sactiver une cible pour la pagination sur disque chiffr\['e].
+Cette option est reserv\['e]e seulement pour le super-utilisateur.
+___END_CSWAP_0
+.TP
+.B \-k \-\-key-managers
+donne une list de tous les gestionnaires des fichier-clefs.
+.TP
+.B \-v \-\-version
+donner le num\['e]ro version de la programme install\['e]e.
+
+
+.\" --------------------------------
+.SH CODES DE RETOUR
+.B cryptmount
+donne un z\['e]ro si l'action a r\['e]ussi.
+Une autre valeur indique qu'une erreur a \['e]t\['e] comise:
+.TP
+.B 1
+un argument n'est pas reconnu;
+.TP
+.B 2
+le nom d'une cible n'est pas reconnu;
+.TP
+.B 3
+l'excecution d'une programme a \['e]chou\['e];
+.TP
+.B 100
+l'utilisateur n'a pas assez de privil\[`e]ge;
+.TP
+.B 101
+il y a un \['e]chec de le securit\['e] dans l'installation.
+
+
+.\" --------------------------------
+.SH EXEMPLES
+
+Si vous voulez construire un nouveau syst\[`e]me de fichiers chiffr\['e]
+dirig\['e] par cryptmount, vous pouvez utiliser le programme 'cryptmount-setup'
+compris avec ce paquet, qui permet au super-utilisateur
+d'\['e]tablir interactivement une cible basique.
+
+Autrement, imaginez que l'on veuille construire
+un nouveau syst\[`e]me de fichiers chiffr\['e], que l'on appellera \[Fo]opaque\[Fc].
+Si on a une partition libre du disque dur, par exemple /dev/hdb63,
+on peut utiliser cette partition directement pour contenir
+le syst\[`e]me de fichiers.
+Sinon, on peut conserver le syst\[`e]me de fichiers chiffr\['e] dans
+un fichier ordinaire, si on reserve de l'espace-disque
+avec par exemple la commande suivante:
+
+.nf
+    dd if=/dev/zero of=/home/opaque.fs bs=1M count=512
+.fi
+
+et ensuite, on doit remplacer toutes les instances de \[Fo]/dev/hdb63\[Fc]
+dans ce qui suit par \[Fo]/home/opaque.fs\[Fc].
+
+D'abord, on doit cr\['e]er un inscription dans @CM_SYSCONF_DIR@/cmtab,
+qui d\['e]crit le chiffrage qui sera utilis\['e] pour prot\[`e]ger le syst\[`e]me de fichiers,
+ainsi:
+
+.nf
+    opaque {
+        dev=/dev/hdb63 dir=/home/crypt
+        fstype=ext2 mountoptions=defaults cipher=twofish
+        keyfile=@CM_SYSCONF_DIR@/opaque.key
+        keyformat=builtin
+    }
+.fi
+
+Ici, on utilisera l'algorithme "twofish"
+pour chiffrer le syst\[`e]me de fichiers lui-m\[^e]me,
+et le gestionnaire int\['e]gr\['e] ("builtin")
+va conserver le securit\['e] de la clef de d\['e]chiffrage dans
+@CM_SYSCONF_DIR@/opaque.key.
+
+Pour g\['e]n\['e]rer une clef de d\['e]chiffrage secr\[`e]te (dans @CM_SYSCONF_DIR@/opaque.key),
+on peut ex\['e]cuter, en tant que super-utilisateur:
+
+.nf
+    cryptmount \-\-generate\-key 32 opaque
+.fi
+
+Cette commande produit une clef de 32 octets (256 bits),
+et on sait que le chiffre Twofish accepte les clefs de 256 bits.
+
+Si on ex\['e]cute la commande suivante, en tant que super-utilisateur:
+
+.nf
+    cryptmount \-\-prepare opaque
+.fi
+
+on doit produire le mot de passe qu'on a donn\['e]
+lors de l'\['e]criture du @CM_SYSCONF_DIR@/opaque.key.
+Ceci permet \[`a]
+.B cryptmount
+de pr\['e]parer une cible device-mapper (/dev/mapper/opaque).
+
+Maintenant, les outils standards sont disponibles
+pour mettre un syst\[`e]me de fichiers sur /dev/mapper/opaque:
+
+.nf
+    mke2fs /dev/mapper/opaque
+.fi
+
+Apr\[`e]s avoir ex\['e]cut\['e]
+
+.nf
+    cryptmount \-\-release opaque
+    mkdir /home/crypt
+.fi
+
+le syst\[`e]me de fichiers chiffr\['e] est pr\[^e]t.
+
+Les utilisateurs ordinaires pouvent monter le syst\[`e]me de fichiers en tapant
+
+.nf
+    cryptmount \-m opaque
+.fi
+
+ou
+
+.nf
+    cryptmount opaque
+.fi
+
+et pouvent d\['e]monter avec
+
+.nf
+    cryptmount \-u opaque
+.fi
+
+.B cryptmount
+maintenit un rapport sur lequel utilisateur a mont\['e] chaque cible
+de mani\[`e]re \[`a] interdir \[`a] tout autre utilisateur (sauf le super-utilisateur)
+de d\['e]monter ce syst\[`e]me de fichiers.
+
+
+
+.\" --------------------------------
+.SH MODIFIER MOT DE PASSE
+
+Apr\[`e]s avoir utilis\['e] un syst\[`e]me de fichiers pendant un certain temps,
+on peut vouloir changer le mot de passe.
+Par exemple, si on a une cible appel\['e]e "opaque", on peut ex\['e]cuter:
+
+.nf
+    cryptmount \-\-change\-password opaque
+.fi
+
+On doit donner l'ancien mot de passe,
+et ensuite choisir un nouveau mot de passe
+qui va chiffrer la clef d'acc\[`e]s pour le syst\[`e]me de fichiers.
+(Le syst\[`e]me de fichier lui-m\[^e]me n'est pas modifi\['e].)
+
+
+.\" --------------------------------
+.SH SYSTEMES DE FICHIERS `LUKS'
+
+On peut utiliser
+.B cryptmount
+pour acc\[`e]der facilement les syst\[`e]mes de fichiers en format LUKS
+cr\['e]e avec le paquet
+.B cryptsetup.
+
+Si on a d\['e]j\[`a] construi un partition LUKS,
+on doit seulment mettre un autre cible dans @CM_SYSCONF_DIR@/cmtab.
+Par example, si le partition /dev/hdb62 sur le disque dur
+contient un syst\[`e]me de fichiers du type `ext3', chiffr\['e]e avec LUKS,
+on peut ecrire:
+
+.nf
+    LUKS {
+        keyformat=luks
+        dev=/dev/hdb62          keyfile=/dev/hdb62
+        dir=/home/luks-dir      fstype=ext3
+    }
+.fi
+
+Apr\[`e]s avoir faire \[,c]a, c'est possible de monter cette syst\[`e]me de fichiers
+sous /home/luks-dir avec
+
+.nf
+    cryptmount LUKS
+.fi
+
+
+.\" --------------------------------
+.SH FICHIERS
+.I @CM_SYSCONF_DIR@/cmtab
+- fichier de configuration
+.LP
+.I @CM_SYSRUN_DIR@/cryptmount.status
+- rapport sur les cibles mont\['e]es
+
+
+.SH "VOIR AUSSI"
+.BR cmtab (5),
+.BR cryptmount-setup (8),
+.BR cryptsetup (8),
+.BR mount (8),
+
+
+.\" --------------------------------
+.SH BOGUES
+L'auteur accueille les suggestions
+.B constructives
+\[`a] <rwpenney@users.sourceforge.net>
+
+
+.\" --------------------------------
+.SH COPYRIGHT NOTICE
+.B cryptmount
+est Copyright 2005-2018 RW Penney
+.br
+et il n'y a point de garantie.
+Les termes de sa licence sont d\['e]crits dans le fichier "COPYING"
+dans le paquet source de cryptmount.
+
+
+.\" --------------------------------
+.SH TRADUCTION
+RW Penney, 2006-2014, avec beaucoup d'assistance de mon \['e]pouse.
+
+.\" vim: set ts=4 sw=4 et:

@@ -1,0 +1,57 @@
+Add link to /lib/lsb/init-functions
+--- a/sysinit/initscript.in
++++ b/sysinit/initscript.in
+@@ -16,6 +16,8 @@
+ #                       filesystems and swap-partitions managed by cryptmount
+ ### END INIT INFO
+ 
++. /lib/lsb/init-functions
++
+ CM_EXE=@EXENAME@
+ DMPATH=/dev/mapper
+ 
+@@ -79,7 +79,7 @@ dofilesys() {
+ doALL() {
+     if test -n "${CM_BOOTDV}" -o -n "${CM_BOOTSW}" \
+             -o -n "${CM_BOOTFS}" -o -n "${CM_EARLYDV}"; then
+-        echo "Using /etc/default/cryptmount is DEPRECATED - please use 'bootaction={mount|swap|prepare}' flags within @SYSCONF_DIR@/cmtab"
++        log_warning_msg "Using /etc/default/cryptmount is DEPRECATED - please use 'bootaction={mount|swap|prepare}' flags within @SYSCONF_DIR@/cmtab"
+     fi
+ 
+     case "$1" in
+@@ -105,18 +105,20 @@ case "$1" in
+         ${CM_EXE} --system-boot
+ 
+         if configured; then
+-            echo "cryptmount ${STAGE}auto-filesystems seem to be already configured"
++            log_action_msg "cryptmount ${STAGE}auto-filesystems seem to be already configured"
+         else
+-            echo "Starting cryptmount ${STAGE}targets (hit shift/ctrl if short of entropy):"
++            log_action_begin_msg "Starting cryptmount ${STAGE}targets (hit shift/ctrl if short of entropy)"
+             doALL start
++            log_action_end_msg 0
+         fi
+         ;;
+     stop)
+         ${CM_EXE} --system-shutdown
+ 
+         if configured; then
+-            echo "Stopping cryptmount ${STAGE}targets:"
++            log_action_begin_msg "Stopping cryptmount ${STAGE}targets"
+             doALL stop
++            log_action_end_msg 0
+         fi
+         ${CM_EXE} --safetynet || true
+         ;;
+@@ -134,9 +136,9 @@ case "$1" in
+         ;;
+     status)
+         if configured; then
+-            echo "cryptmount ${STAGE}auto-filesystems are in use"
++            log_action_msg "cryptmount ${STAGE}auto-filesystems are in use"
+         else
+-            echo "cryptmount ${STAGE}auto-filesystems do not appear to be in use"
++            log_action_msg "cryptmount ${STAGE}auto-filesystems do not appear to be in use"
+             exit 3
+         fi
+         ;;

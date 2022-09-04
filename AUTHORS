@@ -1,0 +1,35 @@
+cryptmount was written by RW Penney (England, UK)
+
+The author gratefully recognizes the assistance of being able to refer
+to the source-code for the following packages:
+    cryptsetup-1.0.6 et seq.
+    openssl-0.9.8 (specifically apps/enc.c, by Eric Young)
+    devicemapper-1.01.05 (by Sistina UK)
+    utillinux-2.12q (specifically mount/lomount.c)
+Although cryptmount contains no code taken directly from any of these
+or other packages, certain similarities of structure cannot be avoided
+in some areas.
+
+
+Thanks are also due to the following people who have been
+very helpful in testing and improving cryptmount:
+    Carl Banks          (idea behind --safetynet option)
+    László Böszörményi  (debian-specific packaging)
+    Raphaël Droz        (advice on use of libcryptsetup)
+    Piotr Dziwinski     (patch for --status option)
+    Harald Dunkel       (debian chroot-installation testing)
+    Baruch Even         (patches for man-pages)
+    Levente Farkas      (patches to RH spec-file)
+    Glenn Golden        (documentation cleanups & systemd testing)
+    Rennie deGraaf      (tracing pathname canonicalization issues)
+    Daniel Grund        (tracing cmstatus-corruption vulnerability)
+    Jens Guenther       (improving compatibility with cryptsetup-2.x)
+    Holger Müller       (RH spec-file, Makefile.in patches, LARGEFILE testing)
+    Björn Nilsson       (suggestions for /dev/disk/by-id in documentation)
+    Dan O'Huiginn       (patch for Debian examples directory)
+    Sebastian Rasmussen (patches for readonly loopback devices)
+    Petter Reinholdtsen (patches for /etc/init.d dependencies)
+    Gilles Sadowski     (guide to using sshfs with cryptmount)
+    Erich Schubert      (patches to initscript)
+    Kai Wasserbäch      (German localization)
+    Eriks Zelenka       (improved portability of RPM spec-file)

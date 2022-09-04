@@ -1,0 +1,46 @@
+.\" cryptmount-setup manual page
+.\" Copyright (c) 2007-2018 RW Penney
+.\"
+.TH CRYPTMOUNT-SETUP 8 "2018-01-18" "@PACKAGE_VERSION@" "User commands"
+.SH NAME
+cryptmount-setup \- setup a new encrypted filesystem
+
+.\" --------------------------------
+.SH SYNOPSIS
+
+.BI "cryptmount-setup"
+
+.\" --------------------------------
+.SH DESCRIPTION
+
+.B cryptmount-setup
+assists in the initial configuration of
+an encrypted filesystem, to be managed by
+.B cryptmount
+(8).
+
+If run by the superuser,
+.B cryptmount-setup
+will allow a basic encrypted filesystem to be created
+within an ordinary file.
+The size, location, mount-point and ownership of the filesystem
+can be selected interactively.
+For more advanced options, please see the manual page for
+.B cryptmount
+(8) or
+.B cmtab
+(5)
+
+.SH "SEE ALSO"
+.BR cmtab (5)
+.BR cryptmount (8)
+
+
+.\" --------------------------------
+.SH COPYRIGHT NOTICE
+.B cryptmount
+is Copyright 2005-2018 RW Penney
+.br
+and is supplied with NO WARRANTY.
+Licencing terms are as described in the file "COPYING"
+within the cryptmount source distribution.

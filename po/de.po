@@ -1,0 +1,773 @@
+# German translation of the cryptmount language file resulting in de.po
+# Copyright © 2008-2014 Kai Wasserbäch <curan@debian.org>
+# This file is distributed under the same license as the cryptmount package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cryptmount 4.2-1\n"
+"Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
+"POT-Creation-Date: 2018-01-30 07:45+0000\n"
+"PO-Revision-Date: 2011-06-12 12:07+0200\n"
+"Last-Translator: Kai Wasserbäch <curan@debian.org>\n"
+"Language-Team: German <debian-l10n-german@lists.debian.org>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: armour.c:154 armour-builtin.c:300 armour-gcry.c:546 armour-gcry.c:702
+#, c-format
+msgid "Key-extraction failed for \"%s\"\n"
+msgstr "Auslesen des Schlüssels für »%s« schlug fehl.\n"
+
+#: armour.c:176
+#, c-format
+msgid "Key-writing failed for \"%s\"\n"
+msgstr "Schreiben des Schlüssels für »%s« schlug fehl.\n"
+
+#: armour.c:361
+#, c-format
+msgid "Failed to open keyfile \"%s\" for target \"%s\"\n"
+msgstr "Öffnen der Schlüsseldatei »%s« für Ziel »%s« schlug fehl.\n"
+
+#: armour.c:369
+#, c-format
+msgid "Missing keyfile for target \"%s\"\n"
+msgstr "Schlüsseldatei für Ziel »%s« fehlt.\n"
+
+#: armour.c:396
+#, c-format
+msgid "Missing output keyfile for target \"%s\"\n"
+msgstr "Schlüsselausgabedatei für Ziel »%s« fehlt.\n"
+
+#: armour.c:778
+#, c-format
+msgid "Specification for target \"%s\" contains non-absolute pathname\n"
+msgstr "Die Zielangabe für »%s« enthält eine nicht-absolute Pfadangabe.\n"
+
+#: armour-builtin.c:282 armour-gcry.c:528 armour-gcry.c:683
+#, c-format
+msgid "Password mismatch when extracting key\n"
+msgstr "Fehlerhaftes Passwort während des Auslesens des Schlüssels.\n"
+
+#: armour-builtin.c:398 armour-gcry.c:607 armour-gcry.c:761
+#, c-format
+msgid "Failed to create new key file\n"
+msgstr "Erstellen einer neuen Schlüsseldatei schlug fehl.\n"
+
+#: armour-gcry.c:166
+#, c-format
+msgid "Couldn't find libgcrypt cipher \"%s\"\n"
+msgstr "Konnte libgcrypt-Chiffre »%s« nicht finden.\n"
+
+#: armour-gcry.c:178
+#, c-format
+msgid "Couldn't find libgcrypt digest \"%s\"\n"
+msgstr "Konnte libgcrypt-Hash »%s« nicht finden.\n"
+
+#: armour-gcry.c:489
+#, c-format
+msgid "Bad keyfile format (libgcrypt)\n"
+msgstr "Falsches Schlüsseldateiformat (libgcrypt).\n"
+
+#: armour-gcry.c:532
+#, c-format
+msgid "Checksum mismatch in keyfile (gcry, %x != %x)\n"
+msgstr ""
+"Nicht übereinstimmende Prüfsumme in der Schlüsseldatei (gcry, %x != %x).\n"
+
+#: armour-gcry.c:648
+#, c-format
+msgid "Bad keyfile format (openssl-compat)\n"
+msgstr "Falsches Schlüsseldateiformat (openssl-compat).\n"
+
+#: armour-gcry.c:687
+#, c-format
+msgid "Checksum mismatch in keyfile (openssl-compat, ofs=%u,idx=%u)\n"
+msgstr ""
+"Nicht übereinstimmende Prüfsumme in der Schlüsseldatei (openssl-compat, ofs="
+"%u, idx=%u).\n"
+
+#: armour-luks.c:308 armour-luks.c:392
+#, fuzzy, c-format
+msgid "Failed to initialize device for LUKS keyfile\n"
+msgstr ""
+"Erstellen eines neuen Loop-Gerätes für LUKS-Schlüsseldatei schlug fehl.\n"
+
+#: armour-luks.c:318
+#, c-format
+msgid "Failed to extract LUKS key for \"%s\" (errno=%d)\n"
+msgstr "Auslesen des LUKS-Schlüssels für »%s« schlug fehl (errno=%d).\n"
+
+#: armour-luks.c:379
+#, c-format
+msgid "Formatting \"%s\", will probably destroy all existing data"
+msgstr ""
+"Formatiere »%s«, dies wird wahrscheinlich alle bestehenden Daten zerstören."
+
+#: armour-luks.c:408
+#, c-format
+msgid "Failed to create LUKS header for \"%s\"\n"
+msgstr "Erstellen eines neuen LUKS-Headers für »%s« schlug fehl.\n"
+
+#: armour-luks.c:418
+#, c-format
+msgid "Failed to create LUKS key for \"%s\"\n"
+msgstr "Erstellen eines neuen LUKS-Schlüssels für »%s« schlug fehl.\n"
+
+#: armour-luks.c:431
+#, c-format
+msgid "Setting password on LUKS keyslot-%u\n"
+msgstr "Setze Passwort für den LUKS-Schlüsselplatz »%u«\n"
+
+#: cryptmount.c:127
+#, fuzzy
+msgid ""
+"usage: cryptmount [OPTION [target ...]]\n"
+"\n"
+"  available options are as follows:\n"
+"\n"
+"    -h | --help\n"
+"    -a | --all\n"
+"    -c | --change-password <target>\n"
+"    -k | --key-managers\n"
+"    -l | --list\n"
+"    -S | --status\n"
+"    -m | --mount <target>\n"
+"    -u | --unmount <target>\n"
+"    --generate-key <key-size> <target>\n"
+"    --reuse-key <src-target> <dst-target>\n"
+"    --prepare <target>\n"
+"    --release <target>\n"
+"    --config-fd <num>\n"
+"    --passwd-fd <num>\n"
+"    --swapon <target>\n"
+"    --swapoff <target>\n"
+"    --version\n"
+"\n"
+"  please report bugs to <cryptmount@rwpenney.uk>\n"
+msgstr ""
+"Aufruf: cryptmount [OPTION [Ziel ...]]\n"
+"\n"
+"  Die folgenden Optionen sind verfügbar:\n"
+"\n"
+"    -h | --help\n"
+"    -a | --all\n"
+"    -c | --change-password <Ziel>\n"
+"    -k | --key-managers\n"
+"    -l | --list\n"
+"    -m | --mount <Ziel>\n"
+"    -u | --unmount <Ziel>\n"
+"    --generate-key <Schlüsselgröße> <Ziel>\n"
+"    --reuse-key <Quellziel> <neues-Ziel>\n"
+"    --prepare <Ziel>\n"
+"    --release <Ziel>\n"
+"    --config-fd <Nummer>\n"
+"    --passwd-fd <Nummer>\n"
+"    --swapon <Ziel>\n"
+"    --swapoff <Ziel>\n"
+"    --version\n"
+"\n"
+"  Bitte melden Sie Fehler (auf Englisch) an <cryptmount@rwpenney.uk>.\n"
+
+#. TRANSLATORS: this string is marked as 'no-c-format' because
+#. some localizations may require the mount-point and filesystem type
+#. to be printed in a different order, but the untranslated string needs
+#. to remain an ordinary string that can be printed without gettext.
+#: cryptmount.c:262
+#, no-c-format
+msgid "%-16s  [to mount on \"%s\" as \"%s\"]\n"
+msgstr "%-16s [um »%3$s« unter »%2$s« einzuhängen]\n"
+
+#: cryptmount.c:394
+#, c-format
+msgid "Failed to extract cipher key\n"
+msgstr "Auslesen des Chiffreschlüssels schlug fehl.\n"
+
+#: cryptmount.c:403
+#, c-format
+msgid "Cannot open device \"%s\" for target \"%s\"\n"
+msgstr "Kann Gerät »%s« für Ziel »%s« nicht öffnen.\n"
+
+#: cryptmount.c:411
+#, c-format
+msgid "Failed to get size of \"%s\"\n"
+msgstr "Konnte Größe von »%s« nicht ermitteln.\n"
+
+#: cryptmount.c:421
+#, c-format
+msgid "Bad device-mapper start/length"
+msgstr "Falsche(r) device-mapper-Beginn/Länge."
+
+#: cryptmount.c:448
+#, c-format
+msgid "Device-mapper target-creation failed for \"%s\"\n"
+msgstr "Erstellen des device-mapper-Ziels für »%s« schlug fehl.\n"
+
+#: cryptmount.c:487 cryptmount.c:720
+#, c-format
+msgid "Target \"%s\" does not appear to be configured\n"
+msgstr "Ziel »%s« scheint unkonfiguriert zu sein.\n"
+
+#: cryptmount.c:502
+#, c-format
+msgid "Cannot stat \"%s\"\n"
+msgstr "Kann Status für »%s« nicht abfragen.\n"
+
+#: cryptmount.c:510
+#, c-format
+msgid "Failed to remove device-mapper target \"%s\"\n"
+msgstr "Entfernen des device-mapper-Ziels »%s« schlug fehl.\n"
+
+#: cryptmount.c:543
+#, c-format
+msgid "Target \"%s\" is already mounted\n"
+msgstr "Ziel »%s« ist bereits eingehängt.\n"
+
+#: cryptmount.c:601
+#, c-format
+msgid "Target \"%s\" does not appear to be mounted\n"
+msgstr "Ziel »%s« scheint noch nicht eingehängt zu sein.\n"
+
+#: cryptmount.c:611
+#, c-format
+msgid "Only \"%s\" can unmount \"%s\"\n"
+msgstr "Nur »%s« kann »%s« aushängen.\n"
+
+#. TRANSLATORS: the following expands to include
+#. the *numerical* user-identity in place of '%lu',
+#. e.g. giving 'only user-16 can unmount "target"':
+#: cryptmount.c:617
+#, c-format
+msgid "Only user-%lu can unmount \"%s\"\n"
+msgstr "Nur der Benutzer mit der ID »%lu« kann »%s« aushängen.\n"
+
+#: cryptmount.c:661
+#, fuzzy, c-format
+msgid "Target \"%s\" is already configured\n"
+msgstr "Ziel »%s« ist bereits eingehängt.\n"
+
+#: cryptmount.c:684 cryptmount.c:740
+#, c-format
+msgid "Crypto-swap is not supported by this installation of cryptmount\n"
+msgstr ""
+"Crypto-swap wird von dieser cryptmount-Installation nicht unterstützt.\n"
+
+#: cryptmount.c:772
+#, c-format
+msgid "Key-file for \"%s\" isn't password-protected\n"
+msgstr "Schlüsseldatei für »%s« ist nicht passwortgeschützt.\n"
+
+#: cryptmount.c:798 cryptmount.c:919
+#, c-format
+msgid "Cannot open \"%s\" for writing\n"
+msgstr "Kann »%s« nicht zum Schreiben öffnen.\n"
+
+#: cryptmount.c:813
+#, c-format
+msgid "Retiring old key (%s -> %s) failed\n"
+msgstr "Ausmustern des alten Schlüssels (%s -> %s) schlug fehl.\n"
+
+#: cryptmount.c:821
+#, c-format
+msgid "Installing new key (%s -> %s) failed\n"
+msgstr "Installation des neuen Schlüssels (%s -> %s) schlug fehl.\n"
+
+#: cryptmount.c:828
+#, c-format
+msgid "Backup of previous key is in \"%s\"\n"
+msgstr "Eine Sicherheitskopie des vorherigen Schlüssels ist in »%s«.\n"
+
+#: cryptmount.c:868 cryptmount.c:1545
+#, c-format
+msgid "Target name \"%s\" is not recognized\n"
+msgstr "Zielname »%s« wurde nicht erkannt.\n"
+
+#: cryptmount.c:874
+#, c-format
+msgid "Bad key-length parameter"
+msgstr "Falscher Schlüssellängen-Parameter"
+
+#: cryptmount.c:886
+#, c-format
+msgid "Key-file \"%s\" already exists for target \"%s\"\n"
+msgstr "Schlüsseldatei »%s« existiert für das Ziel »%s« bereits.\n"
+
+#: cryptmount.c:896
+#, c-format
+msgid "Generating random key; please be patient...\n"
+msgstr "Erstelle zufälligen Schlüssel; bitte warten Sie ...\n"
+
+#: cryptmount.c:900
+#, c-format
+msgid "Failed to generate new key\n"
+msgstr "Generieren des neuen Schlüssels schlug fehl\n"
+
+#: cryptmount.c:933
+#, c-format
+msgid "Installation of new keyfile \"%s\" failed"
+msgstr "Installation der neuen Schlüsseldatei »%s« schlug fehl."
+
+#: cryptmount.c:1069
+#, c-format
+msgid "Only root can use option \"%s\"\n"
+msgstr "Nur root kann die Option »%s« verwenden.\n"
+
+#: cryptmount.c:1082
+#, c-format
+msgid "Only root can configure \"%s\"\n"
+msgstr "Nur root kann »%s« konfigurieren.\n"
+
+#: cryptmount.c:1146
+#, c-format
+msgid "Cannot find key-manager to match target \"%s\"\n"
+msgstr "Kann keinen für das Ziel »%s« passenden Schlüsselmanager finden.\n"
+
+#: cryptmount.c:1413
+#, c-format
+msgid "Multiple operating modes not supported\n"
+msgstr ""
+
+#: cryptmount.c:1468
+#, c-format
+msgid "Memory-locking failed...\n"
+msgstr "Sperren des Arbeitsspeichers schlug fehl ...\n"
+
+#: cryptmount.c:1496
+#, c-format
+msgid "Bad file-descriptor (%d)\n"
+msgstr "Fehlerhafter Dateideskriptor (%d)\n"
+
+#: cryptmount.c:1506
+#, c-format
+msgid "Security failure\n"
+msgstr "Sicherheitsfehler\n"
+
+#: cryptmount.c:1525
+#, c-format
+msgid "Trailing command-line arguments given with '--all' option\n"
+msgstr ""
+"Abschließende Kommandozeilen-Argumente; wurden zusammen mit der Option »--"
+"all« angegeben.\n"
+
+#: cryptmount.c:1557
+#, c-format
+msgid "Target security failure for \"%s\"\n"
+msgstr "Sicherheitsfehler für Ziel »%s«.\n"
+
+#: cryptmount.c:1566
+#, c-format
+msgid "No targets specified\n"
+msgstr "Keine Ziele angegeben.\n"
+
+#: fsutils.c:267
+#, c-format
+msgid "Unsuitable filesystem type \"%s\" for swapping\n"
+msgstr "Unpassender Dateisystemtyp »%s« zum Auslagern.\n"
+
+#: fsutils.c:297
+#, c-format
+msgid ""
+"Device \"%s\" appears to contain data (entropy=%.3g,%.3g) - please run "
+"mkswap manually\n"
+msgstr ""
+"Das Gerät »%s« scheint Daten zu enthalten (Entropie=%.3g,%.3g) – bitte "
+"führen Sie mkswap manuell aus.\n"
+
+#: looputils.c:225
+#, c-format
+msgid "Failed to free device (%d,%d)\n"
+msgstr "Konnte Gerät (%d,%d) nicht freigeben.\n"
+
+#: looputils.c:261
+#, c-format
+msgid "No available loopback devices\n"
+msgstr "Keine verfügbaren Loopback-Geräte.\n"
+
+#: looputils.c:275
+#, c-format
+msgid "Bad device type (%x) for \"%s\" (need block/file)\n"
+msgstr "Falscher Gerätetyp (%x) für »%s« (Block/Datei benötigt).\n"
+
+#: tables.c:549
+#, c-format
+msgid ""
+"cryptmount: please replace \"fsoptions\" with \"mountoptions\" in cmtab\n"
+msgstr ""
+"cryptmount: Bitte ersetzen »fsoptions« mit »mountoptions« in der cmtab\n"
+
+#: tables.c:554
+#, c-format
+msgid "cryptmount: unrecognized option \"%s\" in cmtab\n"
+msgstr "cryptmount: Nicht unterstützte Option »%s« in der cmtab.\n"
+
+#: tables.c:637
+#, c-format
+msgid "Configuration error near %s:%d\n"
+msgstr "Konfigurationsfehler nahe %s:%d\n"
+
+#: utils.c:315
+#, c-format
+msgid "Unable to allocate memory\n"
+msgstr "Konnte keinen Speicher reservieren.\n"
+
+#: utils.c:425
+#, fuzzy, c-format
+msgid "Too few random-number sources found\n"
+msgstr "Kein Zufallszahlengenerator gefunden.\n"
+
+#: utils.c:484
+#, c-format
+msgid "Cannot read stdin"
+msgstr "Kann nicht von der Standardeingabe lesen."
+
+#: utils.c:496
+#, c-format
+msgid "Failed to turn off keyboard echoing on terminal\n"
+msgstr "Konnte die Wiedergabe der Tastatureingabe nicht deaktivieren.\n"
+
+#: utils.c:526
+#, c-format
+msgid "Enter new password for target \"%s\": "
+msgstr "Bitte geben Sie ein neues Passwort für das Ziel »%s« ein: "
+
+#: utils.c:527
+#, c-format
+msgid "Enter password for target \"%s\": "
+msgstr "Bitte geben Sie das Passwort für das Ziel »%s« ein: "
+
+#: utils.c:536
+#, c-format
+msgid "Confirm password: "
+msgstr "Passwort bestätigen: "
+
+#: utils.c:539
+#, c-format
+msgid "Password mismatch\n"
+msgstr "Passworte stimmen nicht überein.\n"
+
+#: utils.c:578 sysinit/setupscript.sh.in:218
+#, sh-format
+msgid "yes"
+msgstr "ja"
+
+#: utils.c:585
+#, c-format
+msgid "Are you sure? (Type \"%s\" to proceed): "
+msgstr "Sind Sie sicher? (Geben Sie »%s« ein, um fortzufahren): "
+
+#: utils.c:588
+#, c-format
+msgid "Cannot read stdin\n"
+msgstr "Kann nicht von der Standardeingabe lesen.\n"
+
+#: sysinit/setupscript.sh.in:41
+#, sh-format
+msgid "Abandoning $ProgName ..."
+msgstr "Beende $ProgName ..."
+
+#: sysinit/setupscript.sh.in:49
+#, sh-format
+msgid ""
+"This script must be run with superuser privileges - please try again, e.g. "
+"using one of the following:"
+msgstr ""
+"Dieses Skript muss mit den Rechten von root (superuser) ausgeführt werden - "
+"bitte versuchen Sie es z.B. mit einem der folgenden Benutzernamen erneut:"
+
+#: sysinit/setupscript.sh.in:112
+#, sh-format
+msgid "opaque"
+msgstr "undurchlässig"
+
+#: sysinit/setupscript.sh.in:113
+#, sh-format
+msgid ""
+"Each cryptmount filesystem is identifed by a short name which is used when "
+"mounting or configuring that filesystem. This name should be a single word "
+"(without spaces), such as \"${DefaultTargetName}\"."
+msgstr ""
+"Jedes cryptmount-Dateisystem wird durch einen Kurznamen identifiziert, der "
+"verwandt wird, wenn das Dateisystem eingehängt oder konfiguriert wird. "
+"Dieser Name sollte ein einzelnes Wort (ohne Leerzeichen) wie beispielsweise "
+"»${DefaultTargetName}« sein."
+
+#: sysinit/setupscript.sh.in:114
+#, sh-format
+msgid "The following target names have already been used:"
+msgstr "Die folgenden Zielnamen werden bereits verwandt:"
+
+#: sysinit/setupscript.sh.in:121
+#, sh-format
+msgid "Please enter a target name for your filesystem"
+msgstr "Bitte geben Sie einen Zielnamen für Ihr Dateisystem ein."
+
+#: sysinit/setupscript.sh.in:125
+#, sh-format
+msgid "The target-name \"${TargetName}\" has already been used"
+msgstr "Der Zielname »${TargetName}« wird bereits verwandt."
+
+#: sysinit/setupscript.sh.in:133
+#, sh-format
+msgid ""
+"The ${TargetName} filesystem can be configured to be owned by a nominated "
+"user, who will be able to create top-level files & directories without "
+"needing to involve the superuser."
+msgstr ""
+"Das Dateisystem mit dem Namen »${TargetName}« kann so konfiguriert werden, "
+"dass es einem bestimmten Benutzer gehört, der dann ohne den Superuser im "
+"Wurzelverzeichnis des Dateisystems Dateien und Verzeichnisse erstellen kann."
+
+#: sysinit/setupscript.sh.in:135
+#, sh-format
+msgid "Which user should own the filesystem (leave blank for \"root\")"
+msgstr ""
+"Welchem Benutzer soll das Dateisystem gehören (leer lassen für »root«)?"
+
+#: sysinit/setupscript.sh.in:141
+#, sh-format
+msgid ""
+"In order to access the ${TargetName} filesystem, it must be mounted on top "
+"of an empty directory."
+msgstr ""
+"Um auf das Dateisystem »${TargetName}« zugreifen zu können, muss es in ein "
+"leeres Verzeichnis eingehängt werden."
+
+#: sysinit/setupscript.sh.in:145
+#, sh-format
+msgid "Please specify where \"${TargetName}\" should be mounted"
+msgstr "Bitte geben Sie an, wo »${TargetName}« eingehängt werden soll."
+
+#: sysinit/setupscript.sh.in:149
+#, sh-format
+msgid "${mount_dir} is not a valid directory name"
+msgstr "»${mount_dir}« ist kein gültiger Verzeichnisname."
+
+#: sysinit/setupscript.sh.in:157
+#, sh-format
+msgid ""
+"The maximum available size of your filesystem needs to be chosen so that "
+"enough space can be reserved on your disk."
+msgstr ""
+"Die maximal verfügbare Größe des Dateisystems muss angegeben werden, damit "
+"auf der Festplatte ausreichend Speicherplatz reserviert werden kann."
+
+#: sysinit/setupscript.sh.in:161
+#, sh-format
+msgid "Enter the filesystem size (in MB)"
+msgstr "Bitte geben Sie die Größe des Dateisystems ein (in MB)."
+
+#: sysinit/setupscript.sh.in:166
+#, sh-format
+msgid "${fs_size} is not a valid number"
+msgstr "»${fs_size}« ist keine gültige Zahl"
+
+#: sysinit/setupscript.sh.in:172
+#, sh-format
+msgid ""
+"The actual encrypted filesystem will be stored in a special file, which "
+"needs to be large enough to contain your entire encrypted filesystem."
+msgstr ""
+"Das eigentliche verschlüsselte Dateisystem wird in einer speziellen Datei "
+"abgelegt, die groß genug sein muss, um Ihr komplettes verschlüsseltes "
+"Dateisystem zu enthalten."
+
+#: sysinit/setupscript.sh.in:176
+#, sh-format
+msgid "Enter a filename for your encrypted container"
+msgstr "Bitte geben Sie einen Dateinamen für den verschlüsselten Container an"
+
+#: sysinit/setupscript.sh.in:180
+#, sh-format
+msgid "WARNING: ${crypto_dev} already exists"
+msgstr "WARNUNG: »${crypto_dev}« existiert bereits."
+
+#: sysinit/setupscript.sh.in:188
+#, sh-format
+msgid ""
+"Access to your encrypted filesystem is protected by a key that is kept in a "
+"separate small file. The key is locked by a password that you must enter "
+"whenever you mount the filesystem."
+msgstr ""
+"Der Zugriff auf Ihr verschlüsseltes Dateisystem wird durch einen Schlüssel "
+"geschützt, der in einer kleinen, separaten Datei gespeichert wird. Der "
+"Schlüssel wird durch ein Passwort gesichert, welches Sie jedes Mal eingeben "
+"müssen, wenn Sie das Dateisystem einhängen wollen."
+
+#: sysinit/setupscript.sh.in:192
+#, sh-format
+msgid "Enter a location for the keyfile"
+msgstr "Bitte geben Sie einen Speicherplatz für die Schlüsseldatei ein."
+
+#: sysinit/setupscript.sh.in:196
+#, sh-format
+msgid "WARNING: ${key_file} already exists"
+msgstr "WARNUNG: »${key_file}« existiert bereits."
+
+#: sysinit/setupscript.sh.in:207
+#, sh-format
+msgid "Your filing system is now ready to be built - this will involve:"
+msgstr ""
+"Ihr Dateisystem kann nun erstellt werden, dies umfasst die folgenden "
+"Schritte:"
+
+#: sysinit/setupscript.sh.in:208
+#, sh-format
+msgid " - Creating the directory \"${mount_dir}\""
+msgstr " - Erstellen des Verzeichnisses »${mount_dir}«"
+
+#: sysinit/setupscript.sh.in:209
+#, sh-format
+msgid " - Creating a ${fs_size}MB file, \"${crypto_dev}\""
+msgstr ""
+" - Erstellen einer ${fs_size} MB großen Datei mit dem Namen »${crypto_dev}«"
+
+#: sysinit/setupscript.sh.in:210
+#, sh-format
+msgid " - Adding an extra entry (\"${TargetName}\") in ${CM_CFGDIR}/cmtab"
+msgstr ""
+" - Hinzufügen eines zusätzlichen Eintrags (»${TargetName}«) in ${CM_CFGDIR}/"
+"cmtab"
+
+#: sysinit/setupscript.sh.in:211
+#, sh-format
+msgid " - Creating a key-file (\"${key_file}\")"
+msgstr " - Erstellen der Schlüsseldatei »${key_file}«"
+
+#: sysinit/setupscript.sh.in:212
+#, sh-format
+msgid " - Creating an ext3 filingsystem on \"${crypto_dev}\""
+msgstr " - Erstellen eines ext3-Dateisystems auf »${crypto_dev}«"
+
+#: sysinit/setupscript.sh.in:215
+#, sh-format
+msgid " - Overwriting the backup configuration-file \"${bckp_cmtab}\""
+msgstr ""
+" - Überschreiben der Sicherheitskopie der Konfigurationsdatei ${bckp_cmtab}"
+
+#: sysinit/setupscript.sh.in:217
+#, sh-format
+msgid "If you do not wish to proceed, no changes will be made to your system."
+msgstr ""
+"Falls Sie nicht fortfahren möchten, werden keine Änderungen an Ihrem System "
+"vorgenommen."
+
+#: sysinit/setupscript.sh.in:219
+#, sh-format
+msgid "no"
+msgstr "nein"
+
+#: sysinit/setupscript.sh.in:220
+#, sh-format
+msgid ""
+"Please confirm that you want to proceed (enter \"${AffirmativeResponse}\")"
+msgstr ""
+"Bitte bestätigen Sie, dass Sie fortfahren möchten (geben Sie bitte "
+"»${AffirmativeResponse}« ein)"
+
+#: sysinit/setupscript.sh.in:223
+#, sh-format
+msgid "Installation abandoned"
+msgstr "Installation abgebrochen"
+
+#: sysinit/setupscript.sh.in:227
+#, sh-format
+msgid "done"
+msgstr "erledigt"
+
+#: sysinit/setupscript.sh.in:229
+#, sh-format
+msgid "Making mount-point (${mount_dir})..."
+msgstr "Erstelle Einhängepunkt »${mount_dir}« ..."
+
+#: sysinit/setupscript.sh.in:232
+#, sh-format
+msgid "Creating filesystem container (${crypto_dev})..."
+msgstr "Erstelle Dateisystemcontainer »${crypto_dev}« ..."
+
+#: sysinit/setupscript.sh.in:237
+#, sh-format
+msgid "Taking backup of cryptmount master config-file (${bckp_cmtab})..."
+msgstr ""
+"Erstelle Sicherheitskopie der Haupt-Cryptmount-Konfigurationsdatei "
+"»${bckp_cmtab}« ..."
+
+#: sysinit/setupscript.sh.in:254
+#, sh-format
+msgid "Generating filesystem access key (${key_file})..."
+msgstr "Erstelle Zugriffsschlüssel (${key_file}) für das Dateisystem ..."
+
+#: sysinit/setupscript.sh.in:262
+#, sh-format
+msgid "Formatting encrypted filesystem..."
+msgstr "Formatiere das verschlüsselte Dateisystem ..."
+
+#: sysinit/setupscript.sh.in:291
+#, sh-format
+msgid "cryptmount setup script"
+msgstr "cryptmount-Einrichtungsskript"
+
+#: sysinit/setupscript.sh.in:293
+#, sh-format
+msgid ""
+"This program will allow you to setup a secure filing-system that will be "
+"managed by \"cryptmount\". You will be able to select basic features such as "
+"the location and size of the filesystem - if you want more advanced "
+"features, you should consult the cryptmount manual page."
+msgstr ""
+"Dieses Programm erlaubt es Ihnen, ein verschlüsseltes Dateisystem zu "
+"erstellen, welches von »cryptmount« verwaltet wird. Sie können grundlegende "
+"Eigenschaften wie Speicherort und Größe des Dateisystems einstellen. Wollen "
+"Sie weitere fortgeschrittenere Eigenschaften beeinflussen, sollten Sie die "
+"Handbuchseite von »cryptmount« lesen."
+
+#: sysinit/setupscript.sh.in:296
+#, sh-format
+msgid "cryptmount comes with ABSOLUTELY NO WARRANTY."
+msgstr "cryptmount wird OHNE JEDWEDE GARANTIEN angeboten."
+
+#: sysinit/setupscript.sh.in:297
+#, sh-format
+msgid ""
+"This is free software, and you are welcome to redistribute it under certain "
+"conditions - see the file 'COPYING' in the source directory."
+msgstr ""
+"Dies ist freie Software und Sie dürfen sie unter bestimmten Bedingungen "
+"weiterverbreiten - die Details finden Sie in der Datei »COPYING« im "
+"Quellcodeverzeichnis."
+
+#: sysinit/setupscript.sh.in:323
+#, sh-format
+msgid "Your new encrypted filesystem is now ready for use - to access, try:"
+msgstr ""
+"Ihr neues, verschlüsseltes Dateisystem kann nun verwandt werden. Um darauf "
+"zuzugreifen, versuchen Sie Folgendes:"
+
+#: sysinit/setupscript.sh.in:326
+#, sh-format
+msgid "After you have finished using the filesystem, try:"
+msgstr "Nach der Benutzung des Dateisystems, geben Sie bitte Folgendes ein:"
+
+#~ msgid "Failed to create loop device for LUKS keyfile\n"
+#~ msgstr ""
+#~ "Erstellen eines neuen Loop-Gerätes für LUKS-Schlüsseldatei schlug fehl.\n"
+
+#~ msgid "Failed to read LUKS header for \"%s\"\n"
+#~ msgstr "Konnte LUKS-Header von »%s« nicht lesen.\n"
+
+#~ msgid ""
+#~ "Writing LUKS keys is not possible unless cryptmount has been built with "
+#~ "the uuid-dev package installed\n"
+#~ msgstr ""
+#~ "Nur falls das »uuid-dev«-Paket beim kompilieren von cryptmount verfügbar "
+#~ "war, können LUKS-Schlüssel geschrieben werden.\n"
+
+#~ msgid ""
+#~ "cryptmount: using \"keycipher=none\" is deprecated - please use "
+#~ "\"keyformat=raw\" instead\n"
+#~ msgstr ""
+#~ "cryptmount: Die Verwendung von »keycipher=none« ist veraltet - bitte "
+#~ "verwenden Sie stattdessen »keyformat=raw«.\n"
+
+#~ msgid "Missing parameter\n"
+#~ msgstr "Fehlender Parameter\n"

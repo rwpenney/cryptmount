@@ -1,0 +1,12 @@
+# uscan watch for cryptmount
+# run the "uscan" command to check for upstream updates and more.
+# See uscan(1) for format
+
+# Compulsory format-version line:
+version=3
+
+# Search sourceforge.net webpage (via qa.debian.org redirector):
+http://sf.net/cryptmount/ cryptmount-([\d\.]*)\.tar\.gz
+
+# Location of cryptographic signature of upstream package:
+opts=pgpsigurlmangle=s/$/.sig/ http://sf.net/cryptmount/ cryptmount-([\d\.]*)\.tar\.gz

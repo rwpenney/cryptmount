@@ -1,0 +1,40 @@
+# Sample configuration file for cryptmount
+
+# the following target uses a raw file to contain the encrypted fs
+# (e.g. created by "dd if=/dev/zero of=/home/crypt.fs bs=1M count=128)
+# cryptmount will automatically configure a vacant loopback device on mounting
+crypt_basic {
+    dev=/home/crypt.fs
+    dir=/mnt/crypt
+    fstype=ext2         mountoptions=defaults
+    cipher=aes
+    keyfile=/home/secretiveuser/crypt.key
+    keyformat=builtin
+}
+
+
+# the following target uses part of a raw disk partition as the encrypted fs:
+# (sectors 512-16895 are used here. Remove the 'startsector' and 'numsector'
+# parameters to use the whole partition.)
+crypt_hdb63 {
+    dev=/dev/hdb63      startsector=512 numsectors=16384
+    dir=/mnt/crypt63
+    fstype=ext3         mountoptions=defaults \
+    cipher=serpent      # filesystem encryption
+
+    # information about file used to store decryption key:
+    keyfile=/usr/local/etc/cryptmount/crypt_hdb63.key
+    keyformat=openssl keyhash=md5 keycipher=bf-cbc
+}
+
+
+# the following target uses part of a raw disk partition to create
+# an encrypted swap (paging) area.
+crypto_swap {
+    dev=/dev/hdb63      startsector=16896 numsectors=1024
+    fstype=swap         flags=mkswap
+    cipher=twofish
+    keyfile=/dev/random        keymaxlen=16
+    keyformat=raw
+    bootaction=swap
+}

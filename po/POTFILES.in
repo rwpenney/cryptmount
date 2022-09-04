@@ -1,0 +1,18 @@
+# List of cryptmount source files containing translatable strings.
+# RW Penney, April 2006
+
+# main sources:
+armour.c
+armour-builtin.c
+armour-gcry.c
+armour-luks.c
+blowfish.c
+cryptmount.c
+dmutils.c
+fsutils.c
+looputils.c
+tables.c
+utils.c
+
+# shell-scripts:
+sysinit/setupscript.sh.in

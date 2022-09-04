@@ -1,0 +1,604 @@
+ChangeLog for cryptmount (http://cryptmount.sourceforge.net)
+
+17Mar18	- *** cryptmount-5.3 released
+
+27Jan18	- Improved handling of LUKS plain files for libcryptsetup-2.x.
+	Changed default location of cmtab to /etc/cryptmount/cmtab
+
+17Jan18	- Minor updates to documentation & Debian packaging
+
+16Dec17	- Patched to support cryptsetup-2.x
+	Updated to automake-1.15
+
+30Sep16	- Suppressed benign error codes when handling '--all' targets
+
+11Aug16	- Improved detection of already configured targets
+
+05Aug16	- Improved handling of '--all' with already mounted filesystems
+
+02Apr16	- Updated bug-report email address
+
+25Oct15	- *** cryptmount-5.2 released
+
+22Oct15	- Added "supath" option to configure PATH via /etc/cryptmount/cmtab
+
+07Oct15	- Improved setup of PATH when invoking fsck
+
+18Aug15	- Dispensed with debian/dirs installation-directory list
+
+17Aug15	- Allowed multiple attempts for password entry in setup script
+
+16Aug15	- Updated debian/rules build-script to use debhelper v7
+
+07Jul15	- Removed support for dynamically loadable key-managers
+
+06Jul15	- Various cleanups to avoid warnings when compiled as C++
+
+04May15	- *** cryptmount-5.1 released
+
+03May15	- Updated to automake-1.14.1
+
+30Aug14	- Resolved libgcrypt/libcryptsetup versioning in Debian packaging
+
+28Aug14	- Patched rpm build-script to better support redhat/fedora distros
+
+30Apr14	- *** cryptmount-5.0 released
+
+13Apr14	- Added further error checks on LUKS password changing
+
+12Apr14	- *** cryptmount-5.0beta1 released
+
+05Apr14	- Removed legacy LUKS wrappers in favour of libcryptsetup
+	Various improvements to Doxygen documentation.
+
+25Mar14	- Converted LUKS key-writing to use libcryptsetup
+
+21Mar14	- Added '--status' option for querying filesystem mount status
+
+18Mar14	- Converted LUKS key-reading to use libcryptsetup
+
+14Mar14	- Updated LUKS functions to mirror cryptsetup-1.6.4
+
+12Mar14	- Removed support for using LUKS partitions without UUID library.
+
+12Feb14	- Patched unexpanded @ETCDIR@ in cryptmount-setup script
+
+14Jan14	- *** cryptmount-4.5 released
+
+01Jan13	- Removed legacy non-64bit loop-device support
+
+31Dec13	- Added support for /dev/loop-control interface of kernel >= 3.1
+
+23Dec13	- *** cryptmount-4.5beta1 released
+
+22Dec13	- Updated LUKS functions to mirror cryptsetup-1.6.3
+
+20Dec13	- Added runtime warning about deprecated 'fsoptions' in cmtab
+
+16Dec13	- Added support for trim/allow_discards option within dm-crypt
+
+13Dec13	- Moved /etc/cryptmount/cmstatus into /var/run/cryptmount.status
+	Added '--with-sysrundir' option to configure
+
+13Oct13	- Removed support for /etc/init.d/cryptmount-early bootup script
+
+03Aug13	- Added mechanism for validating contents of target-status file
+
+19May13	- *** cryptmount-4.4 released
+
+18May13	- Improved consistency of terminology within cmtab.5 manual page.
+
+17May13	- Added automatic modprobe for dm-crypt etc. as part of installation
+	Improved documentation of need for kernel-support for /dev/loop etc.
+
+10May13	- Updated to autoconf-2.69
+	Updated Debian packaging to require package-hardening tools
+
+22Apr13	- *** cryptmount-4.4beta1 released
+
+14Apr13	- Moved various /etc/init.d & systemd files into new sysinit/ directory
+
+24Feb13	- Added support for '--system-boot' command-line option
+	Added deprecation notice for /etc/default/cryptmount in bootup script
+
+13Feb13	- Reorganized command-line parser to unify mode & flag declarations
+
+09Feb13	- Added support for 'bootaction' option within configuration file
+
+05Feb13	- Updated LUKS functions to mirror cryptsetup-1.6.0
+
+19Dec12	- Adjusted key-generation to reduce risk of blocking on /dev/random
+
+18Mar12	- *** cryptmount-4.3 released
+
+28Jan12	- *** cryptmount-4.3beta1 released
+
+26Jan12	- Added unit-test for config-files containing environmental variables
+
+22Jan12	- Improved robustness to random combinations of compilation options
+
+01Jan12	- Updated LUKS functions to mirror cryptsetup-1.4.1
+
+31Dec11	- Updated LUKS functions to mirror cryptsetup-1.3.1
+
+29Dec11	- Added support for variables (e.g. $(USERNAME)) in configuration file
+
+08Oct11	- Added support for udev queue hosted beneath /run
+
+17Jun11	- *** cryptmount-4.2 released
+
+11Jun11	- Updated French & German localizations
+
+03May10	- *** cryptmount-4.2beta1 released
+
+02May11	- Added check for working '--size' in cryptsetup-compatibility test
+
+26Apr11	- Added unit-tests for 'mkswap' protection & entropy calculation
+
+26Mar11	- *** cryptmount-4.2alpha1 released
+
+28Feb11	- Patched block-size calculations to consistently use 512-byte blocks
+
+20Feb11	- Added entropy-based check on filesystem before forcing 'mkswap'
+
+21Dec10	- Updated LUKS functions to mirror cryptsetup-1.2.0
+
+23Aug10	- Adjusted configure.ac to use pkg-config to find uuid-dev library
+
+22Aug10	- Updated LUKS functions to mirror cryptsetup-1.1.3
+
+02Jun10	- *** cryptmount-4.1 released
+
+14May10	- Improved logging of system information in testing logfile
+
+02May10	- *** cryptmount-4.1beta1 released
+
+30Apr10	- Extended udev_settle() to support queue.bin of recent udev packages
+
+25Apr10	- Added udev-settling operations to LUKS key manager
+
+06Mar10	- *** cryptmount-4.1alpha1 released
+
+02Mar10	- Added support for 'fsckoptions' flag in cmtab
+
+27Feb10	- Improved legacy-key unit-test to allow for optional key-managers
+
+24Jan10	- Updated LUKS functions to mirror cryptsetup-1.1.0
+
+16Jan10	- Added test of installing in chroot for debian/postinst script
+
+06Dec09	- Patched /etc/init.d script to apply --safety-net option to all targets
+
+17Sep09	- Patched /etc/init.d scripts to correct startup dependencies
+
+13Sep09	- Renamed 'fsoptions' flag to 'mountoptions' in cmtab & internals
+
+08Aug09	- Updated LUKS functions to mirror cryptsetup-1.0.7
+
+17Jun09	- Migrated version control from Subversion to Git
+
+04May09	- *** cryptmount-4.0 released
+
+02May09	- Improved error-trapping in writing of target-status file
+
+25Apr09	- Updated to autoconf-2.61
+
+07Mar09	- Added various udev-waits to avoid race-conditions in mudslinger tests
+
+03Mar09	- Added waits to allow udev events to settle on device creation/deletion
+
+22Feb09	- Added automated test for pure-password key-manager
+
+22Feb09	- *** cryptmount-4.0beta1 released
+
+21Feb09	- Replaced accented chars in French man-pages with groff named chars
+
+01Feb09	- Added mudslinger unit-test for file-format overrides
+
+31Jan09	- Added means for overriding file-format version in builtin key-manager
+	Added various unit-tests for string-processing functions
+
+28Jan09	- Neatened checks on file read/write failures
+
+07Jan09	- *** cryptmount-4.0alpha1 released
+
+06Jan09	- Added support for enhanced password-fortifying in builtin key-manager
+	Added automated test for reading keyfiles created by earlier releases
+
+04Jan09	- Refactored & improved password-fortifying algorithm
+	Purged (redundant) hashing methods from keymanager_t interface
+
+02Jan09	- Extended LUKS-compatibility tests to explore multiple ciphers
+	Improved LUKS key-writing to support choice of cipher+modes
+
+01Jan09	- Refactored linkages between target-definitions & key-managers
+	Neatened installation of default parameters in key-managers
+
+31Dec08	- Renamed 'cment_t' to 'tgtdefn_t' to better align with documentation
+
+16Nov08	- Increased strength of pure-password key derivation function
+
+01Nov08	- Added basic pure-password keymanager, without external keyfile
+
+31Oct08	- Added explicit warnings in documentation about deleting keyfiles
+
+27Oct08	- Patched call to fsck so that fixed f/s errors are treated as success
+
+23Oct08	- Added configuration of /etc/init.d scripts to rpm build-script
+
+20Oct08	- Neatened rpm build-script based on version by Dag Wieers
+
+03Oct08	- *** cryptmount-3.1 released
+
+16Aug08	- tidied internal tests for presence of exising LUKS headers
+	extended LUKS unit-tests to include re-formatting protection
+
+03Aug08	- *** cryptmount-3.1beta1 released
+
+02Aug08	- added basic documentation of LUKS usage to man-pages
+
+01Aug08	- added LUKS inverse-compatibility unit-test
+
+27Jul08	- *** cryptmount-3.1alpha2 released
+
+27Jul08	- added user-confirmation mechanism before formatting LUKS partitions
+	added password-changing mechanisms to LUKS key-manager
+
+26Jul08	- added support for formatting LUKS partitions
+
+19Jul08	- extended keymanager interface to support fixed keyfile locations (e.g. LUKS)
+
+20Jun08	- added auto loopback creation for LUKS targets within ordinary files
+
+19Jun08	- *** cryptmount-3.1alpha1 released
+
+19Jun08	- added unit-test for LUKS compatibility layer
+
+16Jun08	- added prototypical mechanisms for mounting LUKS partitions
+
+15Jun08	- preparing basic infrastructure for LUKS compatibility layer
+
+07Jun08	- *** cryptmount-3.0 released
+
+06Jun08	- added German localization of messages, provided by Kai Wasserbäch
+
+18May08	- converted charset of French manpages from latin1 to utf8
+
+16May08	- tidied more OpenSSL artefacts
+
+12May08	- titied debian build-directory
+
+11May08	- *** cryptmount-3.0beta1 released
+
+10May08	- added basic French localization of cryptmount-setup script
+
+05May08	- began internationalizing cryptmount-setup script
+
+26Apr08	- added support for multiple password attempts on key-extraction
+	improved consistency of usage of baddecrypt error-flag
+
+24Mar08	- added unit-test for '_DEFAULTS_' pseudo-target
+
+11Mar08	- added support for '_DEFAULTS_' pseudo-target
+
+18Feb08	- neatened licence statements in *.c, *.h
+
+03Feb08	- began removing dependence on OpenSSL library
+
+27Jan08	- updated to automake-1.10
+
+20Jan08	- *** cryptmount-2.2 released
+
+20Jan08	- enhanced error-trapping on loop-device setup failure
+
+18Jan08	- added further explanation of device-mapper error messages to README
+
+20Dec07	- updated French translations
+
+14Dec07	- *** cryptmount-2.2beta1 released
+
+09Dec07	- removed (spurious) restriction of '--passwd-fd' option to root only
+
+08Dec07	- altered relative priority of libgcrypt & openssl in configure script
+
+07Dec07	- refactored command-line password reading into km_get_passwd()
+	wired-together reading of passwords from file-descriptor
+
+25Nov07	- tidied various whitespace anomalies
+
+04Nov07	- added lintian-override file to quieten complaints about setuid binary
+
+27Oct07	- changed OpenSSL key-manager to use internal password dialogue function
+	added posix-compliant version of getpass() when termios.h is available
+
+06Oct07	- improved memory-cleanup within gcrypt key-extraction
+
+05Oct07	- patched module-installation to give better control over strip/no-strip
+	adjusted key-manager def'ns to prepare for reading passwds via streams
+
+05Aug07	- refactored cleanup mechanisms in 'mudslinger' testing script
+
+04Aug07	- *** cryptmount-2.1 released
+
+04Aug07	- split /etc/init.d script into separate early & normal phases
+	added basic man-page for cryptmount-setup
+
+17Jul07	- *** branch-2.1 forked from trunk
+
+15Jul07	- added notices about migration plans for avoiding OpenSSL library
+	added 'reuse-key' option
+
+14Jul07	- add OpenSSL-compatible key reading/writing via libgcrypt
+	extended tests for cipher/digest name-mapping in armour-gcry.c
+	added unit-test for extraction of OpenSSL keys via libgcrypt
+	extended automatic cipher/digest name-mapping in armour-gcry.c
+
+13Jul07	- reorganized libgcrypt key/iv-init to allow OpenSSL-compatible algo
+
+12Jul07	- adjusted add_keymgr() to allow adding pre-built lists of key-managers
+
+30May07	- extended commentary messaging in auto-setup script
+
+28May07	- added beginning of auto-setup script
+
+06May07	- added basic '--safetynet' option
+
+04May07	- added precautionary modprobe for dm-mod to /etc/init.d startup script
+
+29Apr07	- patched BLKGETSIZE test to cope better with block-size != 512bytes
+	added comments in documentation about bad keysizes
+	added explicit casting on converting uint32 to uchar
+	updated to autoconf-1.9.6 & gettext-0.16.1
+
+18Apr07	- added more return-code checks in password-changing
+
+10Apr07	- *** cryptmount-2.0 released
+
+02Apr07	- updated French manual pages
+
+29Mar07	- added extra checks for fwrite()-success on key-generation
+
+27Mar07	- widened use of size_t, to improve 64bit-cleanliness
+
+24Mar07	- added 'splint' target to Makefile
+	patched various type imperfections identified by 'splint'
+
+19Mar07	- added basic security check on key-manager module directory
+
+18Mar07	- extended README discussion of configuration at boot
+
+15Mar07	- patched unsigned/size_t conflict in km_aug_key()
+
+12Mar07	- *** cryptmount-2.0beta1 released
+
+10Mar07	- reduced dependency of mudslinger testing-script on OpenSSL support
+	adjusted configure.ac to use OpenSSL & libgcrypt by default if available
+
+07Mar07	- made random-key generation less excessively greedy for entropy
+
+06Mar07	- neatened internal special cases for unencrypted (raw) keys
+
+04Mar07	- re-prioritized keymanagers to make builtin-type default for new keys
+	added '--key-managers' option for listing available crypto engines
+
+03Mar07	- increased security of memory management in armour-gcry key-extraction
+
+01Mar07	- extracted armour-gcry key augmentation/checksum routines into utils.c
+
+27Feb07	- added beginnings of built-in sha1/blowfish key-manager mechanisms
+	added unit-test for internal Blowfish algorithm
+
+25Feb07	- added unit-test for internal SHA1 algorithm
+	added implementation of Blowfish algorithm (from http://www.schneier.com/code/bfsh-sch.zip (declared as "public domain"))
+
+24Feb07	- extracted various armour/tables functions into new utils.{h,c}
+	added basic implementation of SHA1 message-digest
+	replaced crude raw-keymanager hashing algorithm with SHA1
+
+23Feb07	- added basic support for dynamically loadable keymanager modules
+
+19Feb07	- extracted OpenSSL & libgcrypt routines into separate armour-*.c files
+	adjusted key-manager list-mechanisms to prepare for loadable modules
+
+17Feb07	- added support for 'early' setup of cryptmount devices on system boot
+
+13Feb07	- improved cleanup on test-failure in testing script
+
+11Feb07	- improved configure.ac tests for libdevmapper components
+
+10Feb07	- added randomized time-delay to config-file locking mechanisms
+
+28Jan07	- added outline description of boot-time mounting/swap-on to README
+
+26Jan07	- added new getblkcount() method for 32/64 bit filesystem block-count
+	added unit-test for relationship between BLKGETSIZE64 & BLKGETSIZE
+
+25Jan07	- changed block-start/length & iv-offset to int64 type to support v.large filesystems
+
+05Nov06	- automated translation of install-paths in debian setup
+
+15Oct06	- *** cryptmount-1.2 released
+
+15Oct06	- added debian/* entries to default distribution
+
+10Oct06	- augmented initscript to automatically include pathname of executable
+
+05Oct06	- adjusted is_mounted() to use device-IDs rather than pathnames
+
+01Oct06	- enhanced checking for missing command-line parameters
+
+30Sep06	- added support for reading config-info from command-line via stream
+	added separate unit-test for locks on privileged operations
+
+02Sep06	- added support for 'pri=' flag in fsoptions for crypto-swap
+	patched is_mounted() to mitigate pathname canonicalization in /etc/mtab
+	added tests for pathname oddities in testing script
+
+29Aug06	- incorporated Erich Schubert's patch for posix-compliant init script
+
+14Aug06	- *** cryptmount-1.1 released
+
+06Aug06	- added /etc/init.d script for setting up swap/filesystems at boot-up
+
+30Jul06	- added '--enable-swap' option to configure.ac for crypto-swap
+
+17Jul06	- *** cryptmount-1.1_beta released
+
+16Jul06	- added support for encrypted swap partitions via '--swapon' option
+
+08Jul06	- incorporated Baruch Even's '\-' patches into man-pages
+
+30Jun06	- added unit-test for keyfile r/w across all key formats
+
+24Jun06	- added support for keyfiles protected by libgcrypt library
+
+18Jun06	- added clarifications to licence relating to OpenSSL linkage
+
+17Jun06	- added simple unit-testing mechanisms for internal routines
+
+16Jun06	- added '--with-openssl' option to configure
+
+14Jun06	- abstracted cipher functions to enable support for multiple crypto-libs
+
+27May06	- added default cipher-algorithm variables to configure.ac
+
+26May06	- patched bug relating to loopbacks on readonly devices
+
+08May06	- *** cryptmount-1.0rc1 forked & released
+
+07May06	- added testing of multiple quasi-simultaneous mounts to testing script
+
+06May06	- added cmstatus file to store user-locks rather than chown() keyfiles
+
+30Apr06	- added argv[0] switches to allow invocation via 'cryptumount' etc
+
+28Apr06	- updated man-page and README to include easier keyfile generation
+	added testing of --change-password to testing script
+
+27Apr06	- added testing of --generate-key to testing script
+
+23Apr06	- added password-changing facilities
+	added user-friendly facility for generating new key-files
+
+21Apr06	- added preliminary French message translations (.po file)
+
+20Apr06	- added French versions of manual pages
+
+16Apr06	- changed delegation and fsck to be enabled by default
+	moved man-pages into separate sub-directory (to prepare to i18n)
+
+14Apr06	- patched rpm .spec file to allow building by non-root user
+
+------
+
+08Apr06	- *** cryptmount-0.4 released
+
+08Apr06	- added test for user/nouser flags
+	adjusted man-page preprocessing to reflect fsck compilation-flag
+
+07Apr06	- added 'flags' parameter to control privileged actions + auto-fsck
+
+01Apr06	- added optional automatic fsck before mounting
+
+24Mar06	- added optional delegation of (un)mounting to /bin/mount, /bin/umount
+
+22Mar06	- created new fsutils.{h,c} & prepared fsoptions for mount-delegation
+
+14Mar06	- added facility for unprotected (plain) decryption key
+
+11Mar06	- added separate man-page for configuration file
+	improved configure/Makefile expansion of @etcdir@ macro in man-pages
+
+10Mar06	- changed output of --list to go to stdout rather than stderr
+	added testing of --list and null-cmtab to testing script
+
+------
+
+05Mar06	- *** cryptmount-0.3 released
+
+02Mar06	- added password-changing & fsck examples to man-page
+
+28Feb06	- added debianization scripts
+
+26Feb06	- added test for /etc/mtab updating to testing script
+
+25Feb06	- added connection to syslog for mount/unmount/prepare/release actions
+	neatened configure tests for openssl & libdevmapper
+
+24Feb06	- patched to improve support for LARGEFILEs
+
+22Feb06	- made testing-script more tolerant of miscompiled executable
+
+17Feb06	- changed /etc/mtab entries to use full name of mounted device
+	adjusted unmount/release modes to continue beyond unconfigured targets
+
+11Feb06	- added facilities for multiple-targets & '--all' option on command-line
+
+10Feb06	- added security checks on directory containing cmtab
+
+------
+
+02Feb06	- *** cryptmount-0.2 released
+
+28Jan06	- added 'loop' parameter test to testing script
+	improved syntax-error catching in cmtab
+	added basic checks on security of target specification
+
+23Jan06	- added 'loop' parameter to cmtab parser
+	added basic checks on security of cmtab
+
+22Jan06	- added rpm spec-file (based on version by Holger Mueller)
+
+21Jan06	- added 'ivoffset' parameter to cmtab parser
+	neatened delegation mechanisms for cmtab token-processing
+	added cryptsetup-compatibility test to testing-script
+
+20Jan06	- moved various security-related routines into new armour.{c,h}
+
+15Jan06	- increased speed of startsector/numsector unit-test with new bingrep.c
+
+14Jan06	- added 'startsector' & 'numsectors' parameters to cmtab parser
+
+------
+
+06Jan06	- *** cryptmount-0.1 released
+
+04Jan06	- added more informative error-messages for (un)mount failures
+
+25Dec05	- patched command-line options to prefer 'unmount' over 'umount'
+	added option-synonym test to testing-script
+
+23Dec05	- patched to ease compilation on FedoraCore-4 (+ kernel-2.4 headers)
+
+22Dec05	- neatened usage examples in README & man-page
+
+18Dec05	- added mechanisms for updating /etc/mtab on (un)mounting
+
+------
+
+16Dec05	- *** cryptmount-0.0.3 released
+
+16Dec05	- allowed for automatic creation of device-nodes by libdevmapper
+
+15Dec05	- added key-decryption failure detection
+
+14Dec05	- patched bug in handling non-default keycipher & keyhash algorithms
+
+12Dec05	- informative return-codes wired-in
+	automatic testing script ("mudslinger") created
+
+------
+
+09Dec05	- *** cryptmount-0.0.2 released
+
+06Dec05	- added basic man-page
+	added locking mechanism to avoid unmounting by different user
+
+04Dec05	- added facility for configuring devices without mounting
+
+03Dec05	- config-files below ${sysconfdir}/cryptmount/
+	improved error-handling & debris-removal on mount-failures
+
+------
+
+02Dec05	- *** cryptmount-0.0.1 released

@@ -1,0 +1,335 @@
+#!/bin/sh
+# simple setup script for cryptmount
+# RW Penney, May 2007
+
+# This file is part of 'cryptmount' and is therefore
+# supplied with NO WARRANTY of any form.
+# Please see the file 'COPYING' in the main cryptmount source directory
+# for further information.
+
+CM_BINEXE="@EXENAME@"
+CM_CFGDIR="@SYSCONF_DIR@"
+
+
+# prepare gettext internationalization:
+TEXTDOMAIN="@PKG_NAME@"
+export TEXTDOMAIN
+TEXTDOMAINDIR="@LCL_DIR@"
+export TEXTDOMAINDIR
+if which gettext.sh > /dev/null 2>&1; then
+    . gettext.sh
+else
+    eval_gettext() {
+        eval "echo \"$1\"";
+    }
+fi
+
+
+FoldLines() {
+    # wrap text-output to fit into 70-columns, breaking on whitespace
+    fold -s -w 70
+}
+
+ToLowerCase() {
+    # translate upper-case letters to lower-case
+    tr '[:upper:]' '[:lower:]'
+}
+
+TrapCleanup() {
+    # try to mitigate any damage if terminated prematurely
+    ProgName="$0"
+    eval_gettext "Abandoning \$ProgName ..."; echo
+    exit 2
+}
+
+
+CheckPrivileges() {
+    if [ "`whoami`" != "root" ]; then
+        echo ""
+        eval_gettext "This script must be run with superuser privileges - please try again, e.g. using one of the following:" | FoldLines; echo
+        echo "    sudo $0"
+        echo "    su -c $0"
+        echo ""
+        exit 1
+    fi
+}
+
+
+SectionBreak() {
+    echo ""
+    case "$1" in
+        minor)  ;;
+        major)
+            echo "------------------------------"
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
+
+
+GetResponse() {
+    # Issue prompt string & await response from user
+    # syntax: GetResponse <prompt> <default_val> <variable>
+    echo ""
+    echo "  $1"
+    echo -n "  [$2]: "
+    read resp
+    if [ -z "${resp}" ]; then
+        resp="$2"
+    fi
+    eval "$3=\"${resp}\""
+}
+
+
+GuessHome() {
+    # Try to guess user's home-directory, even after su/sudo
+    guessed_home="${HOME}"
+    if [ "${user_owner}" != "" ]; then
+        eval "guessed_home=~${user_owner}"
+    fi
+    for tgt in "${guessed_home}" "${HOME}" "`pwd`" "/home"; do
+        hm="`echo ${tgt}/ | sed -n -e 's%^\(/.*home/[^/]*\).*$%\1%p'`"
+        if [ "${hm}" != "" -a -d "${hm}" ]; then
+            guessed_home="`echo ${hm} | sed 's%/$%%'`"
+            break
+        fi
+    done
+}
+
+
+CanonVars() {
+    # Canonicalize string variables
+    for var in $@; do
+        eval "val=\"\$${var}\""
+        eval "$var=\"`echo \"${val}\" | sed 's, ,\\\\ ,g'`\""
+    done
+}
+
+
+GetTargetName() {
+    DefaultTargetName=`eval_gettext "opaque"`
+    eval_gettext "Each cryptmount filesystem is identifed by a short name which is used when mounting or configuring that filesystem. This name should be a single word (without spaces), such as \"\${DefaultTargetName}\"." | FoldLines; echo
+    eval_gettext "The following target names have already been used:"
+    echo -n "    "
+    tgts=`${CM_BINEXE} --list | awk '{printf"%s ", $1}'`
+    if [ ! -z "${tgts}" ]; then echo "${tgts}"; else echo "(NONE)"; fi
+
+    TargetName=""
+    while [ -z "${TargetName}" ]; do
+        prompt=`eval_gettext "Please enter a target name for your filesystem"`
+        GetResponse "${prompt}" "${DefaultTargetName}" "TargetName"
+
+        if ${CM_BINEXE} --list "${TargetName}" >/dev/null 2>&1; then
+            eval_gettext "The target-name \"\${TargetName}\" has already been used"
+            TargetName=""
+        fi
+    done
+}
+
+
+GetUser() {
+    eval_gettext "The \${TargetName} filesystem can be configured to be owned by a nominated user, who will be able to create top-level files & directories without needing to involve the superuser." | FoldLines; echo
+
+    prompt=`eval_gettext "Which user should own the filesystem (leave blank for \"root\")"`
+    GetResponse "${prompt}" "" "user_owner"
+}
+
+
+GetMountPoint() {
+    eval_gettext "In order to access the \${TargetName} filesystem, it must be mounted on top of an empty directory." | FoldLines; echo
+
+    mount_dir=""
+    while [ -z "${mount_dir}" ]; do
+        prompt=`eval_gettext "Please specify where \"\\\${TargetName}\" should be mounted"`
+        GetResponse "${prompt}" "${guessed_home}/crypt" "mount_dir"
+
+        if [ -e "${mount_dir}" -a ! -d "${mount_dir}" ]; then
+            eval_gettext "\${mount_dir} is not a valid directory name"; echo
+            mount_dir=""
+        fi
+    done
+}
+
+
+GetContainerInfo() {
+    eval_gettext "The maximum available size of your filesystem needs to be chosen so that enough space can be reserved on your disk." | FoldLines; echo
+
+    fs_size=""
+    while [ -z "${fs_size}" ]; do
+        prompt=`eval_gettext "Enter the filesystem size (in MB)"`
+        GetResponse "${prompt}" "64" "fs_size"
+        if [ "${fs_size}" -gt 0 ] 2>/dev/null; then
+            true
+        else
+            eval_gettext "\${fs_size} is not a valid number"; echo
+            fs_size=""
+        fi
+    done
+
+    SectionBreak
+    eval_gettext "The actual encrypted filesystem will be stored in a special file, which needs to be large enough to contain your entire encrypted filesystem." | FoldLines; echo
+
+    crypto_dev=""
+    while [ -z "${crypto_dev}" ]; do
+        prompt=`eval_gettext "Enter a filename for your encrypted container"`
+        GetResponse "${prompt}" "${guessed_home}/crypto.fs" "crypto_dev"
+
+        if [ -e "${crypto_dev}" ]; then
+            eval_gettext "WARNING: \${crypto_dev} already exists"; echo
+            crypto_dev=""
+        fi
+    done
+}
+
+
+GetKeyInfo() {
+    eval_gettext "Access to your encrypted filesystem is protected by a key that is kept in a separate small file. The key is locked by a password that you must enter whenever you mount the filesystem." | FoldLines; echo
+
+    key_file=""
+    while [ -z "${key_file}" ]; do
+        prompt=`eval_gettext "Enter a location for the keyfile"`
+        GetResponse "${prompt}" "${CM_CFGDIR}/${TargetName}.key" "key_file"
+
+        if [ -e "${key_file}" ]; then
+            eval_gettext "WARNING: \${key_file} already exists"; echo
+            key_file=""
+        fi
+    done
+}
+
+
+BuildFS() {
+    bckp_cmtab="${CM_CFGDIR}/cmtab.bckp-setup"
+
+    SectionBreak major
+    eval_gettext "Your filing system is now ready to be built - this will involve:" | FoldLines; echo ""
+    eval_gettext " - Creating the directory \"\${mount_dir}\""; echo
+    eval_gettext " - Creating a \${fs_size}MB file, \"\${crypto_dev}\""; echo
+    eval_gettext " - Adding an extra entry (\"\${TargetName}\") in \${CM_CFGDIR}/cmtab"; echo
+    eval_gettext " - Creating a key-file (\"\${key_file}\")"; echo
+    eval_gettext " - Creating an ext3 filingsystem on \"\${crypto_dev}\""; echo
+
+    if [ -f "${bckp_cmtab}" ]; then
+        eval_gettext " - Overwriting the backup configuration-file \"\${bckp_cmtab}\""; echo
+    fi
+    eval_gettext "If you do not wish to proceed, no changes will be made to your system."; echo
+    AffirmativeResponse=`eval_gettext "yes" | ToLowerCase`
+    NegativeResponse=`eval_gettext "no"`
+    prompt=`eval_gettext "Please confirm that you want to proceed (enter \"\\\${AffirmativeResponse}\")"`
+    GetResponse "${prompt}" "${NegativeResponse}" "confirm"
+    if [ "`echo ${confirm} | ToLowerCase`" != "${AffirmativeResponse}" ]; then
+        eval_gettext "Installation abandoned"; echo
+        exit 1
+    fi
+
+    Completed=`eval_gettext "done"`
+    set -e
+    eval_gettext "Making mount-point (\${mount_dir})..."
+    mkdir -p "${mount_dir}"
+    echo " ${Completed}"
+    eval_gettext "Creating filesystem container (\${crypto_dev})..."
+    pfx=`dirname "${crypto_dev}"`
+    test -d "${pfx}" || mkdir -p "${pfx}"
+    dd if=/dev/zero of="${crypto_dev}" bs=1M count="${fs_size}" >/dev/null 2>&1
+    echo " ${Completed}"
+    eval_gettext "Taking backup of cryptmount master config-file (\${bckp_cmtab})..."
+    mv "${CM_CFGDIR}/cmtab" "${bckp_cmtab}"
+    echo " ${Completed}"
+    cat "${bckp_cmtab}" > "${CM_CFGDIR}/cmtab"
+    cat <<EOF >> "${CM_CFGDIR}/cmtab"
+
+# Entry automatically generated by setup-script:
+`echo "${TargetName}" | sed 's, ,\\\\ ,g'` {
+    dev=`echo "${crypto_dev}" | sed 's, ,\\\\ ,g'`
+    dir=`echo "${mount_dir}" | sed 's, ,\\\\ ,g'`
+    fstype=ext3
+    mountoptions=defaults
+    cipher=aes
+    keyformat=builtin
+    keyfile=`echo "${key_file}" | sed 's, ,\\\\ ,g'`
+}
+EOF
+    eval_gettext "Generating filesystem access key (\${key_file})..."; echo
+    until  ${CM_BINEXE} --generate-key 32 "${TargetName}"; do
+        cmerrno=$?
+        if [ ${cmerrno} -ne 33 ]; then
+            eval_gettext "Key-generation failure (status=${cmerrno})"
+            exit 3
+        fi
+    done
+    eval_gettext "Formatting encrypted filesystem..."; echo
+    until ${CM_BINEXE} --prepare "${TargetName}"; do
+        cmerrno=$?
+        if [ ${cmerrno} -ne 21 ]; then
+            eval_gettext "Cannot prepare device (status=${cmerrno})"
+            exit 4
+        fi
+    done
+    mke2fs -j "/dev/mapper/${TargetName}" >/dev/null 2>&1
+    if [ "${user_owner}" != "" ]; then
+        chown "${user_owner}" "${mount_dir}" "${crypto_dev}"
+        chmod 0500 "${mount_dir}"
+        chmod 0600 "${crypto_dev}"
+        mount "/dev/mapper/${TargetName}" "${mount_dir}"
+        chown "${user_owner}" "${mount_dir}"
+        chmod 0700 "${mount_dir}"
+        umount "${mount_dir}"
+    fi
+    (udevadm settle || udevsettle || sleep 5) 2>/dev/null
+    ${CM_BINEXE} --release "${TargetName}"
+}
+
+
+
+#
+# Main program
+#
+
+SectionBreak major
+eval_gettext "cryptmount setup script"; echo; echo
+
+eval_gettext "This program will allow you to setup a secure filing-system that will be managed by \"cryptmount\". You will be able to select basic features such as the location and size of the filesystem - if you want more advanced features, you should consult the cryptmount manual page." | FoldLines; echo; echo
+
+echo "cryptmount version @PKG_VERSION@, (C)Copyright 2007-2014 RW Penney"
+eval_gettext "cryptmount comes with ABSOLUTELY NO WARRANTY."; echo
+eval_gettext "This is free software, and you are welcome to redistribute it under certain conditions - see the file 'COPYING' in the source directory." | FoldLines; echo
+
+
+CheckPrivileges
+modprobe -q -a loop dm-mod dm-crypt || true
+trap TrapCleanup INT QUIT HUP
+
+
+# Interactively gather configuration information from user:
+SectionBreak major
+GetTargetName
+SectionBreak
+GetUser
+GuessHome
+SectionBreak
+GetMountPoint
+SectionBreak
+GetContainerInfo
+SectionBreak
+GetKeyInfo
+
+# Build filesystem:
+BuildFS
+
+SectionBreak major
+
+eval_gettext "Your new encrypted filesystem is now ready for use - to access, try:" | FoldLines; echo
+echo "    cryptmount ${TargetName}"
+echo "    cd ${mount_dir}"
+eval_gettext "After you have finished using the filesystem, try:" | FoldLines; echo
+echo "    cd"
+echo "    cryptmount --unmount ${TargetName}"
+
+echo
+eval_gettext "Please take great care NOT to delete or damage your keyfile (\"${key_file}\"). Without that file, and the associated password, it will be virtually impossible to access your encrypted filesystem. You may want to keep a separate backup copy of the keyfile." | FoldLines; echo
+
+exit 0
+
+# vim: set ts=4 sw=4 et:

@@ -1,0 +1,4 @@
+# lintian-override for cryptmount
+
+# cryptmount needs to have setuid privileges to be usable by ordinary users:
+cryptmount: setuid-binary usr/bin/cryptmount 4755 root/root

@@ -1,0 +1,48 @@
+/*
+ *  Doxygen introductory sections for cryptmount
+ *  (C)Copyright 2012-2014, RW Penney
+ */
+
+/*! \mainpage Cryptmount source documentation
+ *
+ *  \section sec_intro Introduction
+ *
+ *  This document contains details of the source-code of 'cryptmount',
+ *  a tool for management of encrypted filesystems under GNU/Linux.
+ *
+ *  \sa http://cryptmount.sourceforge.net
+ *
+ *  \section sec_overview Overview
+ *
+ *  Principal components within the within the software archicture
+ *  are as follows:
+ *
+ *  <ul>
+ *  <li> Top-level routines for setting-up encrypted devices,
+ *      e.g. do_devsetup(), do_mount(), do_swapon();</li>
+ *  <li>Top-level routines for generating cryptographic keys,
+ *      and changing passwords,
+ *      e.g. do_keygen(), do_passwd();</li>
+ *  <li>Supporting routines for ingesting configuration information
+ *      about the available encrypted devices, in the form of
+ *      a \ref tgtdefn "target-definition" structure:
+ *      e.g. parse_config()</li>
+ *  <li>Interfaces to various formats of cryptographic keys
+ *      specified by the \ref keymanager "keymanager_t" structure,
+ *      with static instances visible via, e.g.:
+ *    <ul>
+ *    <li>kmblti_gethandle() - built-in cryptographic functions</li>
+ *    <li>kmgcry_gethandle() - libgcrypt</li>
+ *    <li>kmluks_gethandle() - LUKS/cryptsetup</li>
+ *    </ul>
+ *  </ul>
+ *
+ *  \defgroup keymgrs       Encryption key management
+ *  \defgroup cmtab_utils   Target definition and status parsers
+ *  \defgroup dev_mapper    Device-mapper utilities
+ *  \defgroup loop_utils    Loop-back device utilities
+ *  \defgroup fsys_utils    Filesystem setup utilities
+ *  \defgroup unit_tests    Built-in unit-tests
+ */
+
+# vim: set ts=4 sw=4 et:

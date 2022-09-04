@@ -1,0 +1,148 @@
+#!/bin/sh
+# boot-time init script for cryptmount
+# RW Penney, August 2006
+
+# Basic support for Linux Standard Base:
+### BEGIN INIT INFO
+# Provides:             cryptmount
+# Required-Start:       $remote_fs
+# Required-Stop:        $remote_fs
+# Should-Start:         $syslog
+# Should-Stop:          $syslog
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Short-Description:    setup encrypted filesystems/swap at boot
+# Description:          configure device-mapper targets for encrypted
+#                       filesystems and swap-partitions managed by cryptmount
+### END INIT INFO
+
+CM_EXE=@EXENAME@
+DMPATH=/dev/mapper
+
+CM_BOOTDV=""
+CM_BOOTSW=""
+CM_BOOTFS=""
+
+# Check whether cryptmount executable is usable:
+test -x "${CM_EXE}" || exit 5
+
+# Read user-specified lists of filesystems to initialize:
+if [ -f /etc/default/cryptmount ]; then
+    . /etc/default/cryptmount
+fi
+
+
+configured() {
+    # Check if any of the targets needed at boot has been configured:
+    for target in ${CM_BOOTDV} ${CM_BOOTFS} ${CM_BOOTSW}; do
+        if [ -b "${DMPATH}/${target}" ]; then
+            true
+            return
+        fi
+    done
+    false
+}
+
+
+dodevices() {
+    case "$1" in
+        start)  test -z "${CM_BOOTDV}" || ${CM_EXE} --prepare ${CM_BOOTDV}
+            ;;
+        stop)   test -z "${CM_BOOTDV}" || ${CM_EXE} --release ${CM_BOOTDV}
+            ;;
+    esac
+}
+
+
+doswaps() {
+    case "$1" in
+        start)  test -z "${CM_BOOTSW}" || ${CM_EXE} --swapon ${CM_BOOTSW}
+            ;;
+        stop)   test -z "${CM_BOOTSW}" || ${CM_EXE} --swapoff ${CM_BOOTSW}
+            ;;
+    esac
+}
+
+
+dofilesys() {
+    case "$1" in
+        start)  test -z "${CM_BOOTFS}" || ${CM_EXE} --mount ${CM_BOOTFS}
+            ;;
+        stop)   test -z "${CM_BOOTFS}" || ${CM_EXE} --unmount ${CM_BOOTFS}
+            ;;
+    esac
+}
+
+
+doALL() {
+    if test -n "${CM_BOOTDV}" -o -n "${CM_BOOTSW}" \
+            -o -n "${CM_BOOTFS}" -o -n "${CM_EARLYDV}"; then
+        echo "Using /etc/default/cryptmount is DEPRECATED - please use 'bootaction={mount|swap|prepare}' flags within @SYSCONF_DIR@/cmtab"
+    fi
+
+    case "$1" in
+        start)
+            dodevices start
+            doswaps start
+            dofilesys start
+            ;;
+        stop)
+            dofilesys stop
+            doswaps stop
+            dodevices stop
+            ;;
+    esac
+}
+
+
+case "$1" in
+    start)
+        # Make sure that kernel device-mapper is available:
+        modprobe -q -a dm-mod dm-crypt || true
+
+        ${CM_EXE} --system-boot
+
+        if configured; then
+            echo "cryptmount ${STAGE}auto-filesystems seem to be already configured"
+        else
+            echo "Starting cryptmount ${STAGE}targets (hit shift/ctrl if short of entropy):"
+            doALL start
+        fi
+        ;;
+    stop)
+        ${CM_EXE} --system-shutdown
+
+        if configured; then
+            echo "Stopping cryptmount ${STAGE}targets:"
+            doALL stop
+        fi
+        ${CM_EXE} --safetynet || true
+        ;;
+    restart)
+        ${CM_EXE} --system-shutdown
+        if configured; then
+            doALL stop
+        fi
+
+        ${CM_EXE} --system-boot
+        doALL start
+        ;;
+    force-reload|reload)
+        # nothing to do
+        ;;
+    status)
+        if configured; then
+            echo "cryptmount ${STAGE}auto-filesystems are in use"
+        else
+            echo "cryptmount ${STAGE}auto-filesystems do not appear to be in use"
+            exit 3
+        fi
+        ;;
+    *)
+        echo "Usage: $0 " \
+            " {start|stop|restart|reload|force-reload|status}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

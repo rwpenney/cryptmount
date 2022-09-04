@@ -1,0 +1,452 @@
+.\" cmtab (French) manual page
+.\" Copyright (c) 2006-2018 RW Penney
+.\"
+
+.\" ---- macro definitions ----
+.de Sh \" Subsection heading
+.br
+.ne 5
+.PP
+\fB\\$1\fR
+.PP
+..
+
+
+.TH CMTAB 5 "2018-01-18" "@PACKAGE_VERSION@" "Manuel de l'utilisateur Linux"
+.SH NOM
+cmtab \- informations statiques sur les syst\[`e]mes de fichiers dirig\['e]s par cryptmount
+
+
+.\" --------------------------------
+.SH DESCRIPTION
+
+Les informations sur les syst\[`e]mes de fichiers chiffr\['e]s dirig\['e]s par
+.B cryptmount
+sont contenues dans le fichier @CM_SYSCONF_DIR@/cmtab.
+Chaque syst\[`e]me de fichiers est appell\['e] par un nom de cible
+qu'on peut utiliser comme param\[`e]tre de
+.B cryptmount
+et ce nom appara\[^i]t dans @CM_SYSCONF_DIR@/cmtab
+devant une liste des param\[`e]tres qui d\['e]crit
+o\[`u] le syst\[`e]me de fichiers est contenu, et comment il est chiffr\['e].
+
+Le format du cmtab est souple, et la description de chaque cible est d\['e]limit\['e]e
+par des accolades, les param\[`e]tres sont sp\['e]cifi\['e]s par les paires CLEF=VALEUR,
+et on peut mettre autant de caract\[`e]re blanc d'espacement que l'on veut.
+Les annotations commencent avec un caract\[`e]re `#',
+qui peut \[^e]tre utilis\['e] \[`a] n'importe quel endroit dans une ligne,
+et continuent jusqu'\[`a] la fin de cette ligne.
+Le caract\[`e]re `\\' indique que
+si le caract\[`e]re suitvant a une signification sp\['e]ciale, celle-ci sera ignor\['e]e,
+comme par exemple si on veut incorporer un espace dans le nom d'un fichier.
+
+@CM_SYSCONF_DIR@/cmtab contient des inscriptions de la forme suivante:
+
+.nf
+    NOM_CIBLE {
+        dev=PERIPHERIQUE
+        flags=DRAPEAU,DRAPEAU,...
+        startsector=SECTEURDEBUT
+        numsectors=NUMSECTEURS
+        loop=PERIPH_LOOP
+        dir=REP_MONT
+        fstype=TYPE
+        mountoptions=MOPT,MOPT,...
+        fsckoptions=FOPT;FOPT;...
+        supath=SUPATH
+        cipher=CHIFFRE
+        ivoffset=IVOFFSET
+        keyformat=FORMAT_CLEF
+        keyfile=FICHIER_CLEF
+        keyhash=HASH_CLEF
+        keycipher=CHIFFRE_CLEF
+        keymaxlen=MAX_CLEF
+        passwdretries=NUMESSAYES
+    }
+.fi
+
+Ici, les param\[`e]tres `flags', `startsector', `numsectors', `loop',
+`ivoffset', `keyformat', `keymaxlen' et `passwdretries' sont optionnels.
+
+Les param\[`e]tres ont les sens suivants:
+
+.TP
+.BI NOM_CIBLE
+est le nom par lequel cryptmount se r\['e]f\[`e]re \[`a] un syst\[`e]me de fichiers particulier.
+Il est possible d'indiquer valeurs par d\['e]faut pour les cibles suivanteis
+en utilisant le nom sp\['e]cial "_DEFAULTS_".
+.\" ----
+.TP
+.BI PERIPHERIQUE
+est le nom du vrai p\['e]riph\['e]rique (e.g. /dev/hdb63)
+ou du fichier ordinaire (e.g. /home/secretiveuser/private.fs)
+qui range le syst\[`e]me de fichiers chiffr\['e].
+.\" ----
+.TP
+.BI DRAPEAU
+est un bouton de configuration, comme par exemple
+.nf
+  * "user" (n'importe quel utilisateur peut monter),
+  * "nouser" (seulement le super-utilisateur peut monter),
+  * "fsck" (v\['e]rifier automatiquement le syst\[`e]me de fichiers avant de monter),
+  * "nofsck" (ne v\['e]rifier pas le syst\[`e]me de fichiers avant de monter),
+  * "mkswap" (formater la cible pour la pagination),
+  * "nomkswap" (ne formater pas la cible),
+  * "trim" (activer SSD TRIM/discard),
+  * "notrim" (d\['e]sactiver SSD TRIM/discard).
+.fi
+Ce param\[`e]tre est optionnel,
+et le d\['e]faut est "user,fsck,nomkswap,notrim".
+.\" ----
+.TP
+.BI SECTEURDEBUT
+est le numero du secteur (de 512 octets) du
+.B PERIPHERIQUE
+o\[`u] le syst\[`e]me de fichiers va commencer.
+Ce param\[`e]tre est optionnel, et le d\['e]faut est z\['e]ro.
+.\" ----
+.TP
+.BI NUMSECTEURS
+donne la taille totale du syst\[`e]me de fichiers,
+en secteurs (blocs de 512 octets).
+Ce param\[`e]tre est optionnel, et le d\['e]faut est \-1,
+ce qui signifie que tout le
+.B PERIPHERIQUE
+sera utilis\['e]e.
+.\" ----
+.TP
+.BI PERIPH_LOOP
+peut \[^e]tre utilis\['e] pour specifier un p\['e]riph\['e]rique loop particulier (e.g. /dev/loop0) au cas o\[`u]
+.B PERIPHERIQUE
+est un fichier ordinaire.
+Ce param\[`e]tre est optionnel, et le d\['e]faut est "auto".
+.\" ----
+.TP
+.BI REP_MONT
+est le r\['e]pertoire dans lequel le syst\[`e]me de fichiers chiffr\['e] sera mont\['e].
+.\" ----
+.TP
+.BI TYPE
+specifie le type du syst\[`e]me de fichiers (comme utilis\['e] par
+.B mount
+(8)).
+On doit specifier "swap" si la p\['e]riph\['e]rique va \[^e]tre utilis\['e]e pour la pagination chiffr\['e]e.
+.\" ----
+.TP
+.BI MOPT
+est une option de montage, comme compris par
+.B mount
+(8). Typiquement, MOPT peut \[^e]tre "default", "noatime", "noexec", "nosuid", "ro", "sync" etc.
+.\" ----
+.TP
+.BI FOPT
+est une option de v\['e]rification, comme compris par
+.B fsck
+(8). Typiquement, FOPT peut \[^e]tre "\-C", "\-V" etc.
+.\" ----
+.TP
+.BI CHIFFRE
+est le type d'algorithme de chiffrage qui sera utilis\['e] sur
+.B PERIPHERIQUE.
+La liste des algorithmes possibles est d\['e]termine par le noyau.
+.\" ----
+.TP
+.BI FORMAT_CLEF
+indique quel moteur de chiffrage on utilise pour diriger le
+.B FICHIER_CLEF.
+Les moteurs disponibles sont d\['e]termin\['e]s pendant l'installation de
+.B cryptmount
+mais peuvent comprendre "openssl" et "libgcrypt"
+en plus de "builtin" (int\['e]gr\['e]) et "raw" (brut).
+Ce param\[`e]tre est optionel, est s'il est absent,
+"builtin" sera utilis\['e] quand la clef est construit.
+.\" ----
+.TP
+.BI FICHIER_CLEF
+est un fichier ordinaire qui contient la clef utilis\['e]e par l'algorithme
+.B CHIFFRE
+pour d\['e]chiffrer le syst\[`e]me de fichiers.
+Cette clef elle-m\[^e]me est chiffr\['e]e a partir de
+.B HASH_CLEF
+et
+.B CHIFFRE_CLEF
+\.
+.\" ----
+.TP
+.BI IVOFFSET
+est l'offset qui est ajout\['e] au num\['e]ro du secteur pendant le calcul
+du vecteur d'initialisation de l'algorithme de chiffrage.
+Ce param\[`e]tre est optionnel, et le d\['e]faut est z\['e]ro.
+.\" ----
+.TP
+.BI HASH_CLEF
+est l'algorithme (hash) utilis\['e] pour brouiller le mot de passe de l'utilisateur dans l'algorithme
+.B CHIFFRE_CLEF
+qui protege la clef du syst\[`e]me de fichiers chiffr\['e].
+On peut choisir n'importe quel algorithme qui est fourni par le
+.B FORMAT_CLEF
+qu'on a choisi.
+.\" ----
+.TP
+.BI CHIFFRE_CLEF
+est l'algorithme chiffre qui prot\[`e]ge la clef du syst\[`e]me de fichiers chiffr\['e] lui-m\[^e]me.
+Le menu d'algorithmes est d\['e]termin\['e] par la choix de
+.B FORMAT_CLEF
+.\" ----
+.TP
+.BI MAX_CLEF
+est le nombre d'octets maximum qui sera lu du
+.B FICHIER_CLEF
+pour devenir la clef de d\['e]chiffrage.
+Ce param\[`e]tre est optionnel, et le d\['e]faut est z\['e]ro, ce qui indique que
+.B FICHIER_CLEF
+sera lu en entier.
+.\" ----
+.TP
+.BI NUMESSAYES
+est le nombre de tentatives de mot de passe avant que
+cryptmount aille terminer quand on essaye de monter ou configurer une cible.
+
+
+.\" --------------------------------
+.SH COMMENT CHOISIR LE FORMAT DE LA CLEF
+
+.B cryptmount
+offrit un s\['e]lection de fa\[,c]ons pour proteger
+la clef associ\['e]e avec chaque syst\[`e]me de fichiers chiffr\['e].
+Pour le plupart des utilisateurs, la choix d\['e]faute "builtin"
+donne un bon niveau de securit\['e] et versatilit\['e].
+Quelques autre moteurs de chiffrage sont disponible,
+et donnent plus de choix des algorithms pour brouiller
+le mot de passe, ou compatabilit\['e] avec quelques autre paquets.
+Le menu des moteurs sont le suivant.
+
+.Sh builtin
+
+Ce moteur est inclus dans cryptmount-2.0 et suivant,
+est utilise un fichier independent pour cacher la clef.
+
+.Sh libgcrypt
+
+Ce moteur est inclus dans cryptmount-1.1 et suivant,
+est utilise un fichier independent pour cacher la clef.
+
+.Sh luks
+
+Ce moteur est inclus dans cryptmount-3.1 et suivant,
+est peut diriger les syst\[`e]me de fichiers du format LUKS
+("Linux Unified Key Setup").
+Ce format cache la clef dans une region sp\['e]ciale
+du syst\[`e]me de fichiers lui-m\[^e]me.
+Il est recommand\['e] de ne pas utiliser les param\[`e]tres
+"startsector" ou "numsectors" parce que le format LUKS suppose
+qu'une partition enti\[`e]re est disponible pour le syst\[`e]me de fichiers.
+
+.Sh openssl/openssl-compat
+
+Ce moteur etait disponible depuis les premiers versions de cryptmount,
+et utilise un fichier independent pour cacher la clef.
+Le format de ce fichier est compatible aver le paquet "openssl".
+
+.Sh password
+
+Ce moteur est inclus dans cryptmount-4.0 et suivant,
+est n'a pas besoin d'un fichier pour cacher la clef.
+Plut\[^o]t, la clef est constui directment du mot de passe,
+et donc il n'est pas possible de changer le mot de passe sans
+rechiffrer le syst\[`e]me de fichiers en entiers.
+
+.Sh raw
+
+Ce moteur est inclus dans cryptmount-1.1 et suivant,
+est utilise un fichier independent pour contenir la clef,
+sans aucun chiffrage.
+Ce moteur est utile principalement pour les partitions de pagination.
+
+
+.\" --------------------------------
+.SH SECURITE
+
+Etant donn\['e] que
+.B cryptmount
+est install\['e] avec des permissions setuid,
+il est tr\[`e]s imporant que son fichier de configuration soit solide.
+Id\['e]alement, @CM_SYSCONF_DIR@/cmtab devrait \[^e]tre dirig\['e]
+seulement par le super-utilisateur, et toutes les clefs
+devraient \[^e]tre seulement lisibles par leurs utilisateurs propres.
+
+.B
+cryptmount
+v\['e]rifie la s\['e]curit\['e] du @CM_SYSCONF_DIR@/cmtab
+chaque fois qu'il est execut\['e], et se terminera \[`a] moins que:
+.nf
+  * cmtab ne soit poss\['e]d\['e] par le super-utilisateur
+  * cmtab ne soit un fichier r\['e]gulier
+  * les permissions de cmtab ne contiennent pas d'\['e]criture universelle
+  * le r\['e]pertoire, qui contient cmtab, ne soit poss\['e]d\['e] par le super-utilisateur
+  * les permissions du r\['e]pertoire, qui contient cmtab, ne contiennent pas d'\['e]criture universelle.
+.fi
+De plus, pour toutes les cibles dans @CM_SYSCONF_DIR@/cmtab,
+tous les fichiers doivent avoir des nom absolus
+(c'est\-\[`a]\-dire commencent avec '/').
+
+En cas qu'on a choisi "raw" (brut) pour le
+.B FORMAT_CLEF
+c'est pr\['e]f\['e]rable si
+.B FICHIER_CLEF
+est rang\['e] avec des permissions d'acc\[`e]s non moins restrictives que 0600,
+ou bien est contenu sur un disque USB-flash, par exemple.
+
+
+.\" --------------------------------
+.SH PAGINATION CHIFFREE ET MKSWAP AUTOMATIQUE
+
+Lorsque l'option `mkswap' est s\['e]lectionn\['e]
+pour une cible particuli\[`e]re dans @CM_SYSCONF_DIR@/cmtab,
+. B cryptmount
+tentera automatiquement de formater une partition swap chiffr\['e]e
+chaque fois que vous ex\['e]cutez "cryptmount \-\-swapon <cible>".
+C'est souvent utile quand il n'est pas n\['e]cessaire de conserver
+les donn\['e]es de pagination entre les red\['e]marrages,
+comme lorsque vous n'utilisez pas les caract\['e]ristiques
+d'hibernation du noyau.
+
+Parce que le reformatage supprime toutes les donn\['e]es existantes
+sur la partition de pagination choisi,
+. B cryptmount
+se faire des v\['e]rifications de base sur
+le premier m\['e]gaoctet de la partition,
+bas\['e]e sur le degr\['e] d'al\['e]a (entropie) dans le contenu actuel.
+Si la partition semble contenir bruit pur,
+ou a \['e]t\['e] remis \[`a] z\['e]ro,
+la partition sera format\['e]e automatiquement.
+Si
+. B cryptmount
+d\['e]termine que la partition peut contenir des donn\['e]es non-al\['e]atoire,
+puis il vous demandera d'ex\['e]cuter "mkswap" manuellement.
+
+Comme il n'existe aucun moyen infaillible de d\['e]terminer si une partition
+(surtout chiffr\['e]e) contient des donn\['e]es importantes,
+vous devriez \[^e]tre tr\[`e]s prudent sur p\['e]riph\['e]rique brut choisi
+pour n'importe quelle cible sur lequel vous s\['e]lectionnez l'option "mkswap".
+
+
+.\" --------------------------------
+.SH FICHIER EXEMPLE
+
+Le @CM_SYSCONF_DIR@/cmtab exemple suivant contient cinq cibles,
+qui utilisent un m\['e]lange d'algorithmes de chiffrage
+et qui rangent leurs syst\[`e]mes de fichiers de mani\[`e]res differentes.
+Il y en a aussi un cible qui represent une partition de pagination.
+
+.nf
+
+    # @CM_SYSCONF_DIR@/cmtab
+    # fichier exemplaire \- modifiez avant d'utiliser SVP
+
+    _DEFAULTS_ {
+        passwdretries=3     # permet 3 essayes de mot de passe par d\['e]faut
+    }
+
+    basic {
+        dev=/home/secretiveuser/crypt.fs
+        dir=/home/secretiveuser/crypt           # o\[`u] on va monter
+        loop=auto                               # trouver un p\['e]riph loop libre
+        fstype=ext3     mountoptions=default
+        cipher=aes-cbc-plain                    # chiffrage du syst\[`e]me de fichiers
+        keyfile=/home/secretiveuser/crypt.key
+        # utiliser le gestionnaire des clefs int\['e]gr\['e]
+        keyformat=builtin
+    }
+
+    partition {
+        dev=/dev/hdb62                      # utiliser une partition enti\[`e]re
+        dir=/mnt/crypt62
+        fstype=ext3     mountoptions=nosuid,noexec \
+        cipher=serpent-cbc-plain
+
+        # info sur le fichier qui contient la clef de d\['e]chiffrage:
+        keyfile=@CM_SYSCONF_DIR@/crypt_hdb62.key
+        keyformat=openssl                   # utiliser OpenSSL pour chiffrage de la clef
+        keyhash=md5 keycipher=bf\-cbc        # chiffrage du fichier de la clef
+    }
+        
+    subset {
+        dev=/dev/hdb63
+        startsector=512 numsectors=16384    # utiliser une partie d'une partition
+        dir=/mnt/encrypted\\ subset\\ of\\ hdb
+        fstype=reiserfs         mountoptions=defaults
+        cipher=twofish-cbc-plain            # chiffrage du syst\[`e]me de fichiers
+
+        # info sur le fichier qui contient la clef de d\['e]chiffrage:
+        keyfile=@CM_SYSCONF_DIR@/crypt_hdb63.key
+        keyformat=libgcrypt
+        keyhash=md5 keycipher=blowfish\-cbc  # chiffrage de la clef d'acc\[`e]s
+    }
+
+    encswap {                               # pagination chiffr\['e]e
+        dev=/dev/hdb63
+        startsector=16896 numsectors=1024   # utiliser une partie d'une partition
+        fstype=swap        flags=mkswap       cipher=twofish-cbc-plain
+
+        # lire une clef nouvelle de 16-octets de /dev/random chaque fois:
+        keyfile=/dev/random        keymaxlen=16     keyformat=raw
+    }
+
+    luks {                          # partition cre\['e] avec cryptsetup-luks
+        dev=/dev/hdb63
+        dir=/mnt/partition-luks
+        keyformat=luks
+        keyfile=/dev/hdb63
+        fstype=ext3
+    }
+
+    # fin de cmtab
+.fi
+
+La cible `basic' utilise le fichier ordinaire "/home/secretiveuser/crypt.fs"
+pour ranger le syst\[`e]me de fichiers chiffr\['e].
+Un p\['e]riph\['e]rique loop sera configur\['e] automatiquement par
+.B cryptmount
+(\[`a] cause du "loop=auto").
+
+La cible `partition' utilise une partition enti\[`e]re du disque dur pour ranger le syst\[`e]me de fichiers chiffr\['e].
+La clef de d\['e]chiffrage est contenue dans le r\['e]pertoire principal de
+.B cryptmount.
+
+La cible `subset' est semblable \[`a] la cible `partition' sauf qu'elle n'utilise pas une partition enti\[`e]re.
+De cette mani\[`e]re, on peut utiliser des autres groupes de blocs de la partition pour des autres syst\[`e]mes de fichiers dirig\['e]s par
+.B cryptmount
+ou
+.B dmsetup.
+
+La cible `encswap' utilise une partie d'une partition du disque dur pour proviser la pagination chiffr\['e]e.
+Une nouvelle clef de d\['e]chiffrage sera lu du /dev/random chaque fois la cible est utilis\['e]e.
+
+.\" --------------------------------
+.SH FICHIERS
+.I @CM_SYSCONF_DIR@/cmtab
+- fichier principal du configuration
+
+
+.SH "VOIR AUSSI"
+.BR cryptmount (8),
+.BR cryptmount-setup (8),
+.BR dmsetup (8),
+.BR openssl (1)
+
+.\" --------------------------------
+.SH COPYRIGHT NOTICE
+.B cryptmount
+est Copyright 2005-2018 RW Penney
+.br
+et il n'y a point de garantie.
+Les termes de sa licence sont d\['e]crits dans le fichier "COPYING"
+dans le paquet source de cryptmount.
+
+
+.\" --------------------------------
+.SH TRADUCTION
+RW Penney, 2006-2014, avec beaucoup d'assistance de FP.
+
+.\" vim: set ts=4 sw=4 et:

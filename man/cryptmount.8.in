@@ -1,0 +1,437 @@
+.\" cryptmount manual page
+.\" Copyright (c) 2005-2018 RW Penney
+.\"
+.TH CRYPTMOUNT 8 "2018-01-18" "@PACKAGE_VERSION@" "User commands"
+.SH NAME
+cryptmount \- mount/unmount/configure an encrypted filesystem
+
+.\" --------------------------------
+.SH SYNOPSIS
+
+.BI "cryptmount \fITARGET\fR [\fITARGET ...\fR]"
+.LP
+.BI "cryptmount \-\-unmount \fITARGET\fR [\fITARGET ...\fR]"
+.LP
+.BI "cryptmount \-\-change\-password \fITARGET\fR"
+.LP
+.BI "cryptmount \-\-generate\-key \fISIZE\fP \fITARGET\fR"
+___DELETE_CSWAP_0
+.LP
+.BI "cryptmount \-\-swapon \fITARGET\fR"
+.LP
+.BI "cryptmount \-\-swapoff \fITARGET\fR"
+___END_CSWAP_0
+
+
+.\" --------------------------------
+.SH DESCRIPTION
+
+.B cryptmount
+allows an encrypted filesystem to be mounted or unmounted,
+without requiring superuser privileges,
+and assists the superuser in creating new encrypted filesystems.
+After initial configuration of the filesystem by the system administrator,
+the user needs only to provide the decryption password
+for that filing system in order for
+.B cryptmount
+to automatically configure device-mapper and loopback targets
+before mounting the filesystem.
+
+.B cryptmount
+was written in response to differences between
+the newer device-mapper infrastructure of the linux-2.6 kernel series,
+and the older cryptoloop infrastructure which allowed ordinary users
+access to encrypted filesystems directly through
+.B mount
+(8).
+
+
+.\" --------------------------------
+.SH OPTIONS
+
+.TP
+.B \-a \-\-all
+act on all available targets, e.g. for mounting all targets.
+.TP
+.B \-m \-\-mount
+mount the specified target, configuring any required device-mapper
+or loopback devices.
+The user will be asked to supply a password to unlock
+the decryption key for the filesystem.
+.TP
+.B \-u \-\-unmount
+unmount the specified target, and deconfigure any underlying device-mapper
+or loopback devices.
+No password is required, although the operation will fail
+if the filesystem is in use, or if a non-root user tries
+to unmount a filesystem mounted by a different user.
+.TP
+.B \-S \-\-status
+provide information on whether the specified target is currently mounted or not
+.TP
+.B \-l \-\-list
+lists all available targets, including basic information
+about the filesystem and mount point of each.
+.TP
+.B \-c \-\-change\-password
+change the password protecting the decryption key for a given filesystem.
+.TP
+.B \-g \-\-generate\-key "\fIsize\fP"
+setup a decryption key for a new filesystem.
+.IR size\fP
+gives the length of the key in bytes.
+.TP
+.B \-e \-\-reuse\-key "\fIexisting-target\fP"
+setup a decryption key for a new filesystem,
+using an existing key from another filesystem,
+for example to translate between different file-formats
+for storing a single key.
+This option is only available to the superuser.
+.TP
+.B \-f \-\-config\-fd "\fInum\fP"
+read configuration information about targets from file-descriptor
+.IR num\fP
+instead of the default configuration file.
+This option is only available to the superuser.
+.TP
+.B \-w \-\-passwd\-fd "\fInum\fP"
+read passwords from file-descriptor
+.IR num\fP
+instead of from the terminal,
+e.g. for using cryptmount within scripts or GUI wrappers.
+Each password is read once only,
+in contrast to terminal-based operation
+where new passwords would be requested twice for verification.
+.TP
+.B \-p \-\-prepare
+prepare all the device-mapper and loopback devices needed to access a target, but do not mount.
+This is intended to allow the superuser to install a filesystem on an encrypted device.
+.TP
+.B \-r \-\-release
+releases all device-mapper and loopback devices associated with a particular target. This option is only available to the superuser.
+___DELETE_CSWAP_0
+.TP
+.B \-s \-\-swapon
+enable the specified target for paging and swapping.
+This option is only available to the superuser.
+.TP
+.B \-x \-\-swapoff
+disable the specified target for paging and swapping.
+This option is only available to the superuser.
+___END_CSWAP_0
+.TP
+.B \-k \-\-key-managers
+list all the available formats for protecting the filesystem access keys.
+.TP
+.B \-B \-\-system-boot
+setup all targets which have declared a "bootaction" parameter.
+This will typically be used to automatically mount encrypted filesystems,
+or setup encrypted swap partitions, on system startup.
+This option is only available to the superuser.
+.TP
+.B \-Q \-\-system-shutdown
+close-down all targets which have declared a "bootaction" parameter.
+This is essentially the opposite of the "\-\-system-boot" option.
+.TP
+.B \-n \-\-safetynet
+attempts to close-down any mounted targets that should normally have been
+shutdown with \-\-unmount or \-\-swapoff.
+This option is only available to the superuser, and intended
+.B exclusively
+for use during shutdown/reboot of the operating system.
+.TP
+.B \-v \-\-version
+show the version-number of the installed program.
+
+
+.\" --------------------------------
+.SH RETURN CODES
+.B cryptmount
+returns zero on success.
+A non-zero value indicates a failure of some form, as follows:
+.TP
+.B 1
+unrecognized command-line option;
+.TP
+.B 2
+unrecognized filesystem target name;
+.TP
+.B 3
+failed to execute helper program;
+.TP
+.B 100
+insufficient privilege;
+.TP
+.B 101
+security failure in installation.
+
+
+.\" --------------------------------
+.SH EXAMPLE USAGE
+
+In order to create a new encrypted filesystem managed by cryptmount,
+you can use the supplied 'cryptmount-setup' program,
+which can be used by the superuser to interactively configure a basic setup.
+
+Alternatively, a manual setup allows more control of configuration settings.
+Before doing so, one should ensure that kernel support for /dev/loop
+and /dev/mapper is available, e.g. via
+.nf
+    modprobe \-a loop dm\-crypt
+.fi
+Now suppose that we wish to setup a new encrypted filesystem,
+that will have a target-name of "opaque".
+If we have a free disk partition available, say /dev/hdb63, then we can use this directly to store the encrypted filesystem.
+Alternatively, if we want to store the encrypted filesystem within an ordinary file, we need to create space using a recipe such as:
+
+.nf
+    dd if=/dev/zero of=/home/opaque.fs bs=1M count=512
+.fi
+
+and then replace all occurrences of '/dev/hdb63' in the following
+with '/home/opaque.fs'.
+(/dev/urandom can be used in place of /dev/zero, debatably for extra security,
+but is rather slower.)
+
+First, we need to add an entry in @CM_SYSCONF_DIR@/cmtab,
+which describes the encryption that will be used
+to protect the filesystem itself and the access key, as follows:
+
+.nf
+    opaque {
+        dev=/dev/hdb63 dir=/home/crypt
+        fstype=ext2 mountoptions=defaults cipher=twofish
+        keyfile=@CM_SYSCONF_DIR@/opaque.key
+        keyformat=builtin
+    }
+.fi
+
+Here, we will be using the "twofish" algorithm to encrypt
+the filesystem itself,
+with the built-in key-manager being used
+to protect the decryption key (to be stored in @CM_SYSCONF_DIR@/opaque.key).
+
+In order to generate a secret decryption key (in @CM_SYSCONF_DIR@/opaque.key)
+that will be used to encrypt the filesystem itself,
+we can execute, as root:
+
+.nf
+    cryptmount \-\-generate\-key 32 opaque
+.fi
+
+This will generate a 32-byte (256-bit) key,
+which is known to be supported by the Twofish cipher algorithm,
+and store it in encrypted form
+after asking the system administrator for a password.
+
+If we now execute, as root:
+
+.nf
+    cryptmount \-\-prepare opaque
+.fi
+
+we will then be asked for the password that we used when setting up
+@CM_SYSCONF_DIR@/opaque.key, which will enable
+.B cryptmount
+to setup a device-mapper target (/dev/mapper/opaque).
+(If you receive an error message of the form
+.B "device-mapper ioctl cmd 9 failed: Invalid argument",
+this may mean that you have chosen a key-size that isn't supported
+by your chosen cipher algorithm.
+You can get some information about suitable key-sizes
+by checking the output from "more /proc/crypto", and looking at the
+"min keysize" and "max keysize" fields.)
+
+
+We can now use standard tools to create the actual filesystem on /dev/mapper/opaque:
+
+.nf
+    mke2fs /dev/mapper/opaque
+.fi
+
+(It may be advisable, after the filesystem is first mounted,
+to check that the permissions of the top-level directory
+created by mke2fs are appropriate for your needs.)
+
+After executing
+
+.nf
+    cryptmount \-\-release opaque
+    mkdir /home/crypt
+.fi
+
+the encrypted filesystem is ready for use.
+Ordinary users can mount it by typing
+
+.nf
+    cryptmount \-m opaque
+.fi
+
+or
+
+.nf
+    cryptmount opaque
+.fi
+
+and unmount it using
+
+.nf
+    cryptmount \-u opaque
+.fi
+
+.B cryptmount
+keeps a record of which user mounted each filesystem
+in order to provide a locking mechanism to ensure that
+only the same user (or root) can unmount it.
+
+
+.\" --------------------------------
+.SH PASSWORD CHANGING
+
+After a filesystem has been in use for a while,
+one may want to change the access password.
+For an example target called "opaque", this can be performed by executing:
+
+.nf
+    cryptmount \-\-change\-password opaque
+.fi
+
+After successfully supplying the old password, one can then choose
+a new password which will be used to re-encrypt the access key for the
+filesystem.
+(The filesystem itself is not altered or re-encrypted.)
+
+
+.\" --------------------------------
+.SH LUKS ENCRYPTED FILESYSTEMS
+
+.B cryptmount
+can be used to provide easy access to encrypted filesystems
+compatible with the Linux Unified Key Setup (LUKS) capabilities of the
+.B cryptsetup
+application.
+
+In order to access an existing LUKS partition,
+an entry needs to be created within @CM_SYSCONF_DIR@/cmtab.
+For example, if the hard-disk partition /dev/hdb62
+is used to contain a LUKS encrypted ext3 filesystem,
+an entry of the form:
+
+.nf
+    LUKS {
+        keyformat=luks
+        dev=/dev/hdb62          keyfile=/dev/hdb62
+        dir=/home/luks-dir      fstype=ext3
+    }
+.fi
+
+would allow this to be mounted via
+.B cryptmount
+beneath /home/luks-dir
+by executing
+
+.nf
+    cryptmount LUKS
+.fi
+
+.B cryptmount
+will also allow any user that knows one of the access-passwords
+to change their password via
+
+.nf
+    cryptmount \-\-change-password LUKS
+.fi
+
+.B cryptmount
+also provides basic support for creating new LUKS encrypted filesystems,
+which can be placed within ordinary files as well as disk partitions,
+via the '\-\-generate-key' recipe shown above.
+However, to exploit the full range of functionality within LUKS,
+such as for adding multiple passwords, one needs to use
+.B cryptsetup
+
+It is strongly recommended that you do not attempt to use LUKS support
+in combination with cryptmount's features for storing
+.I multiple
+encrypted filesystems within a single disk partition or an ordinary file.
+This is because of assumptions within the cryptsetup-luks design that
+the LUKS key-material is always stored at the beginning of the disk partition.
+
+
+___DELETE_FSCK_1
+.\" --------------------------------
+.SH FILESYSTEM MAINTENANCE
+
+For filesystems that are mounted on system-startup,
+it is normal for checks on their integrity
+to be performed automatically at regular intervals,
+typically every few dozen mounts.
+If
+.B cryptmount
+has not been compiled with the '\-\-enable\-fsck' option,
+such checks need to be performed manually
+for filesystems managed by
+.B cryptmount
+, which will require the involvement of both the system administrator
+and the users who know the relevant access passwords
+for the filesystems involved.
+Suppose that we wish to check the filesystem associated with
+.B cryptmount
+target 'opaque', we first need to prepare the decryption devices:
+
+.nf
+    cryptmount \-\-prepare opaque
+.fi
+
+this will create a device-mapper target accessible via '/dev/mapper/opaque', on which we can then run standard checking utilities:
+
+.nf
+    fsck \-t auto /dev/mapper/opaque
+.fi
+
+After these tests have been completed, we can then release the devices:
+
+.nf
+    cryptmount \-\-release opaque
+.fi
+
+and continue using the filesystem as before.
+___END_FSCK_1
+
+
+.\" --------------------------------
+.SH FILES
+.I @CM_SYSCONF_DIR@/cmtab
+- main configuration file
+.LP
+.I @CM_SYSRUN_DIR@/cryptmount.status
+- record of mounted filesystems
+
+
+.SH "SEE ALSO"
+.BR cmtab (5),
+.BR cryptmount-setup (8),
+.BR cryptsetup (8),
+___DELETE_FSCK_1
+.BR fsck (8),
+___END_FSCK_1
+.BR mount (8)
+
+
+.\" --------------------------------
+.SH BUGS
+The author would be grateful for any
+.B constructive
+suggestions and bug-reports, via <rwpenney@users.sourceforge.net>
+
+
+.\" --------------------------------
+.SH COPYRIGHT NOTICE
+.B cryptmount
+is Copyright 2005-2018 RW Penney
+.br
+and is supplied with NO WARRANTY.
+Licencing terms are as described in the file "COPYING"
+within the cryptmount source distribution.
+
+.\" vim: set ts=4 sw=4 et:

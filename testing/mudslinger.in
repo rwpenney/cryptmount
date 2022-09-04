@@ -1,0 +1,1577 @@
+#!/bin/bash
+# Testing script for cryptmount (compiled with -DTESTING)
+# RW Penney, December 2005
+
+DD=/bin/dd
+LOSETUP=/sbin/losetup
+SU_p="/bin/su -p"
+TMPDIR=/tmp/cm-$$
+CM=../cryptmount
+PASSWD="hopeless"
+# Pair of users, with valid login-shells:
+USER1=bin
+USER2=nobody
+# Pair of unused loopback devices:
+LOOPDEV=`${LOSETUP} -f`
+LOOPDEV2=/dev/loop5
+DATEFMT="+%d%b%y-%H:%M:%S"
+
+
+
+#
+# Testing infrastructure
+#
+
+NTESTS_RUN=0
+NTESTS_FAILED=0
+NTESTS_PASSED=0
+NTESTS_ABORTED=0
+
+if test -t 1 && which tput >/dev/null 2>&1; then
+    ts_norm=$(tput sgr0)
+    ts_bold=$(tput bold)
+    ts_good=$(tput setaf 2)
+    ts_warn=$(tput setaf 5)
+    ts_fail=${ts_bold}$(tput setaf 1)
+fi
+
+function test_start() {
+    # Syntax: test_start <test-name>
+    echo -n "Testing $1..."
+    echo -e "\n\n----  Test \"$1\" ---- ("`date ${DATEFMT}`")\n" 1>&3
+    if [ ${NTESTS_ABORTED} -gt 0 ]; then
+        test_abort
+        false
+        return
+    else
+        NTESTS_RUN=`expr ${NTESTS_RUN} + 1`
+        true
+        return
+    fi
+};
+
+function test_fail() {
+    echo "  ${ts_fail}FAILED!${ts_norm}   [$1]"
+    echo "!!! TEST FAILED [$1] ("`date ${DATEFMT}`") !!!" 1>&3
+    NTESTS_FAILED=`expr ${NTESTS_FAILED} + 1`
+    # Execute optional clean-up command
+    if [ ! -z "$2" ]; then
+        echo "    (attempting clean-up with \"$2\")" 1>&3
+        eval "$2" 1>&3
+    fi
+};
+
+function test_pass() {
+    echo "  ${ts_good}passed${ts_norm}"
+    echo "(test passed @ "`date ${DATEFMT}`")" 1>&3
+    NTESTS_PASSED=`expr ${NTESTS_PASSED} + 1`
+};
+
+function test_abort() {
+    echo "  ${ts_warn}aborted${ts_norm}"
+    echo "(test aborted)" 1>&3
+    NTESTS_ABORTED=`expr ${NTESTS_ABORTED} + 1`
+};
+
+function test_summary() {
+    echo -e "\n========"
+    echo "${NTESTS_RUN} tests run"
+    echo "  ${NTESTS_FAILED} tests failed"
+    echo "  ${NTESTS_PASSED} tests passed"
+    echo -e "\n\n${NTESTS_RUN}/${NTESTS_FAILED}/${NTESTS_PASSED} tests run/failed/passed" 1>&3
+};
+
+
+
+#
+# Utility routines
+#
+
+function tupelize() {
+    # Assign comma-separated fields to set of scalars
+    # Syntax: tupelize <string> [var0 [var1]...]
+    local tupstring=`echo $1 | sed 's/,/ /g'`
+    shift
+    for field in ${tupstring}; do
+    local var="$1"
+        eval "${var}=\"${field}\""
+    shift
+    done
+}
+
+function wait_udev() {
+    # Wait for udev events to settle
+    udevadm settle 2>/dev/null \
+    || udevsettle 2>/dev/null \
+    || sleep 5
+};
+
+function mk_ssl_keyfile() {
+    # Syntax: mk_ssl_keyfile <bytes> <message_digest> <cipher>
+    ${DD} if=/dev/urandom bs=${1}c count=1 2>/dev/null | \
+    openssl enc -e -pass pass:${PASSWD} -md $2 -${3}
+};
+
+function mkrandshort() {
+    # Create random 4-digit hex number
+    od -An -N2 -t x2 /dev/urandom | sed 's% *%%g'
+};
+
+function mkbingrep() {
+    # Create simple binary-grep for block-offset test
+    cat <<EOF > "${1}.c"
+#include <unistd.h>
+#include <stdio.h>
+#define BLKLEN 32
+
+int main(int argc, char*argv[])
+{   int i, notzeros, state=0;
+    long fpos=0;
+    char buff[BLKLEN];
+
+    while (read(STDIN_FILENO,(void*)buff,(size_t)BLKLEN) == (ssize_t)BLKLEN && state < 2) {
+        for (notzeros=0,i=0; !notzeros && i<BLKLEN; ++i) {
+            notzeros |= buff[i];
+        }
+        if (state == 0 && notzeros) {         /* found start of non-zero data */
+            printf("%ld ", fpos);
+            ++state;
+        } else if (state == 1 && !notzeros) { /* found end of non-zero data */
+            printf("%ld\n", fpos);
+            ++state;
+        }
+        fpos += BLKLEN;
+    }
+    return 0;
+}
+EOF
+    gcc -O "${1}.c" -o "${1}" && rm "${1}.c"
+};
+
+
+#
+# Cleanup functions
+#
+
+function cleanup_devmap() {
+    # Remove zombie device-mapper targets
+    if [ ! -f ${TMPDIR}/dm-list0 ]; then false; return; fi
+    dmsetup ls | grep '^target' > ${TMPDIR}/dm-list1
+
+    for tgt in `awk '{printf"%s\n",$1}' ${TMPDIR}/dm-list1`
+    do
+        if grep -q "${tgt}" ${TMPDIR}/dm-list0; then true; else
+            echo "removing ${tgt}"
+            umount "/dev/mapper/${tgt}" 2>&3 || true
+            dmsetup remove ${tgt} 2>&3
+        fi
+    done
+    rm "${TMPDIR}/dm-list1"
+}
+
+
+#
+# Specific test-cases
+#
+
+function test_version() {
+    # Check that cryptmount has been compiled properly for further tests
+    if test_start "version"; then true; else return; fi
+    echo "#nothing here!" > ${TMPDIR}/cmtab
+    if ${CM} --config-dir ${TMPDIR} --version 2>&3; then
+        test_pass
+    else
+        test_abort
+        echo "*** Please ensure cryptmount has been compiled with -DTESTING"
+        echo "*** or rebuild using 'make clean cmtest'"
+    fi
+};
+
+
+function test_binary() {
+    # Run built-in unit-tests
+    if test_start "binary self-test"; then true; else return; fi
+    if ${CM} --self-test 2>&3; then
+        test_pass
+    else
+        test_abort
+    fi
+};
+
+
+function test_keygen() {
+    # Test automatic key generation
+    if test_start "key generation"; then true; else return; fi
+    mgrlist=`${CM} --key-managers 2>/dev/null | sed -e 's/,/ /g' -e 's/\<password\>//' -e 's/\<luks\>//'`
+    for mgr in $mgrlist;
+    do
+        for len in 4 16 64;
+        do
+            echo "${mgr}: len=${len}" 1>&3
+            idx=`mkrandshort`
+            cat <<EOF > ${TMPDIR}/cmtab
+                target${idx} {
+                dev=${LOOPDEV}
+                dir=${TMPDIR}/mnt
+                fstype=ext2 mountoptions=defaults cipher=twofish
+                keyformat=${mgr}
+                keyfile=${TMPDIR}/keyfile }
+EOF
+            rm -f ${TMPDIR}/keyfile
+            if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx}" 2>&3; then test_fail "privilege violation"; return; fi
+            if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key ${len} target${idx} 2>&3; then true; else test_fail make-key; return; fi
+            if [ ! -f ${TMPDIR}/keyfile ]; then test_fail missing-key; return; fi
+            fllen=`wc -c ${TMPDIR}/keyfile | awk '{printf"%d", $1}'`
+            if [ "${fllen}" -lt "${len}" ]; then test_fail "keyfile size"; return; fi
+            if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then test_fail key-overwrite; return; fi
+        done
+    done
+    test_pass
+};
+
+
+function test_setup_dev() {
+    # Basic test of prepare/release on raw device
+    if test_start "basic setup (device)"; then true; else return; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        dev=${LOOPDEV}
+        dir=${TMPDIR}/mnt
+        fstype=ext2 mountoptions=defaults cipher=twofish
+        keyformat=builtin keyfile=${TMPDIR}/keyfile
+    }
+EOF
+    rm -f ${TMPDIR}/keyfile
+    if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+    if mke2fs -q /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    wait_udev
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+    test_pass
+};
+
+
+function test_setup_loop() {
+    # Basic test of prepare/release via loopback device
+    if test_start "basic setup (loopback)"; then true; else return; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        dev=${TMPDIR}/loopfile
+        loop=auto
+        dir=${TMPDIR}/mnt
+        fstype=ext2 mountoptions=defaults cipher=twofish
+        keyformat=raw keyfile=${TMPDIR}/keyfile
+    }
+EOF
+    rm -f ${TMPDIR}/keyfile
+    if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+    if mke2fs -q /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    wait_udev
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+    test_pass
+};
+
+
+function test_setup_roloop() {
+    # Test prepare/release of loopback on read-only device
+    if test_start "read-only loopback"; then true; else return; fi
+    idx=`mkrandshort`
+    mkdir ${TMPDIR}/romnt
+    ${DD} if=/dev/zero of=${TMPDIR}/roloopfile bs=1M count=16 2>/dev/null
+    ${LOSETUP} ${LOOPDEV2} ${TMPDIR}/roloopfile
+    mke2fs -q ${LOOPDEV2}
+    mount -t ext2 ${LOOPDEV2} ${TMPDIR}/romnt
+    ${DD} if=/dev/zero of=${TMPDIR}/romnt/lpfl bs=1M count=8 2>/dev/null
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        dev=${TMPDIR}/romnt/lpfl flags=nofsck
+        loop=auto
+        dir=${TMPDIR}/mnt
+        fstype=ext2 mountoptions=ro cipher=twofish
+        keyformat=builtin keyfile=${TMPDIR}/keyfile
+        keyhash=sha1 keycipher=blowfish-cbc
+    }
+EOF
+    cleanup="umount ${TMPDIR}/romnt; ${LOSETUP} -d ${LOOPDEV2}; rm ${TMPDIR}/roloopfile; rmdir ${TMPDIR}/romnt"
+    rm -f ${TMPDIR}/keyfile
+    if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation" "${cleanup}"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail "prepare" "${cleanup}" ; return; fi
+    if mke2fs -q /dev/mapper/target${idx}; then true; else test_fail "mke2fs" "${cleanup}"; return; fi
+    wait_udev
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release" "${cleanup}"; return; fi
+    mount -o remount,ro ${TMPDIR}/romnt
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --mount target${idx} 2>&3; then true; else test_fail "mount-ro" "${cleanup}" ; return; fi
+    wait_udev
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --unmount target${idx} 2>&3; then true; else test_fail "unmount-ro" "${cleanup}" ; return; fi
+    # ideally we should try rw-mounting the filesystem,
+    # and checking that the operation fails, but libdevmapper-1.01 apparently
+    # does not deal well with read-only loopback devices
+    eval "${cleanup}"
+    test_pass
+};
+
+function test_null() {
+    # Test robustness to null cmtab targets
+    if test_start "null targets"; then true; else return; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+    }
+EOF
+    if ${CM} --config-dir ${TMPDIR} --list 1>&3 2>&3 ; then true; else test_fail list; return; fi
+    if ${CM} --config-dir ${TMPDIR} --list target${idx} 1>&3 2>&3; then true; else test_fail list; return; fi
+    test_pass
+};
+
+
+function test_passchange() {
+    # Test password-changing
+    if test_start "password changing"; then true; else return; fi
+    mgrlist=`${CM} --key-managers 2>/dev/null | sed -e 's/,/ /g' -e 's/\<password\>//' -e 's/\<raw\>//' -e 's/\<luks\>//'`
+    for mgr in ${mgrlist};
+    do
+        echo "${mgr}" 1>&3
+        if [ -f ${TMPDIR}/keyfile ]; then rm ${TMPDIR}/keyfile; fi
+        idx=`mkrandshort`
+        NEWPASSWD="${PASSWD}-new${idx}"
+        if [ "${mgr}" != "luks" ]; then
+            keyline="keyformat=$mgr keyfile=${TMPDIR}/keyfile"
+        else
+            keyline="keyformat=$mgr"
+        fi
+        cat <<EOF > ${TMPDIR}/cmtab
+        target${idx} {
+            dev=${LOOPDEV}
+            dir=${TMPDIR}/mnt
+            fstype=ext2 mountoptions=defaults cipher=blowfish
+            ${keyline}
+        }
+EOF
+        if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 1>&3 2>&3; then true; else test_fail "make-key"; return; fi
+        if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail "prepare"; return; fi
+        wait_udev
+        if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; return; fi
+
+        rm -f ${TMPDIR}/keyfile-old
+        if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --newpassword ${NEWPASSWD} --change-password target${idx} 1>&3 2>&3; then true; else test_fail "changing password"; return; fi
+        if [ "${mgr}" != "luks" ]; then
+            if [ -f ${TMPDIR}/keyfile-old ]; then rm ${TMPDIR}/keyfile-old; else test_fail "missing backup key"; return; fi
+        fi
+        if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then test_fail "old password"; return; fi
+        if ${CM} --config-dir ${TMPDIR} --password ${NEWPASSWD} --prepare target${idx} 2>&3; then true; else test_fail "prepare-new"; return; fi
+        if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release-new"; return; fi
+        wait_udev
+    done
+    test_pass
+};
+
+
+function test_mtab() {
+    # Test of updates to mtab
+    if test_start "mtab updates"; then true; else return; fi
+    if [ -x /sbin/mkfs.minix ]; then
+        fstype=minix
+    else
+        fstype=ext3
+    fi
+    rm -f ${TMPDIR}/keyfile
+    ln -s ./mnt ${TMPDIR}/mnt-link0
+    ln -s mnt ${TMPDIR}/mnt-link1
+    cleanup="true"
+    # Slackware-12 doesn't like variant="/.//./", for unknown reasons
+    for variant in "" "/" "//" "/./" "/.//./" "-link0" "-link1"
+    do
+        idx=`mkrandshort`
+        cat <<EOF > ${TMPDIR}/cmtab
+        target${idx} {
+            flags=user,fsck
+            dev=${TMPDIR}/loopfile
+            dir=${TMPDIR}/mnt${variant}
+            fstype=${fstype} mountoptions=ro,noexec cipher=cast5
+            fsckoptions=-N;-T;-V
+            keyformat=builtin keyfile=${TMPDIR}/keyfile
+        }
+EOF
+        cleanup="rm ${TMPDIR}/mnt-link0 ${TMPDIR}/mnt-link1"
+        echo "variant=\"${variant}\"" >&3
+        test -f ${TMPDIR}/keyfile || ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3;
+        if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail "prepare" "${cleanup}" ; return; fi
+        if mkfs -t ${fstype} /dev/mapper/target${idx} 1>&3 2>&3; then true; else
+            ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3;
+            test_fail "mkfs.${fstype}" "${cleanup}"; return
+        fi
+        wait_udev
+        if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release" "${cleanup}" ; return; fi
+
+        if [ `df -k | grep -c /dev/mapper/target${idx}` -ne 0 ]; then test_fail "pre-existing" "${cleanup}" ; return; fi
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --mount target${idx}" 1>&3 2>&3; then true; else test_fail "mount" "${cleanup}" ; return; fi
+        if [ `df -k | grep -c "/dev/mapper/target${idx}"` -ne 1 ]; then test_fail "unregistered" "${cleanup}" ; return; fi
+        wait_udev
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail "unmount" "${cleanup}" ; return; fi
+        if [ `df -k | grep -c /dev/mapper/target${idx}` -ne 0 ]; then test_fail "remnant" "${cleanup}" ; return; fi
+    done
+    eval "${cleanup}"
+    test_pass
+};
+
+
+function test_listing() {
+    # Test listing of cmtab targets
+    if test_start "listing targets"; then true; else return; fi
+    cat < /dev/null > ${TMPDIR}/cmtab
+    tlist=""
+    for tgt in 0 1 2 3 4 5 6 7
+    do
+        idx=`mkrandshort`
+        idx2=`mkrandshort`
+        cat <<EOF >> ${TMPDIR}/cmtab
+            target${idx} { dev=${TMPDIR}/loopfile dir=/mnt/point-${idx2}
+                fstype=brokenfs mountoptions=nosuid,noatime,sync
+                cipher=blowfish
+                keyfile=${TMPDIR}/keyfile keyhash=md5 keycipher=aes }
+EOF
+        tlist="${tlist} target${idx},/mnt/point-${idx2}"
+    done
+    if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --list" > ${TMPDIR}/tlist 2>&3; then true; else test_fail listing; return; fi
+    for marker in ${tlist}
+    do
+        tupelize $marker tgt dir
+        dirq=`awk "/^${tgt}/{ printf\"%s\",\\$5 }" ${TMPDIR}/tlist`
+        if [ "${dirq}" = "" ]; then test_fail "absent"; return; fi
+        if [ "${dirq}" != "\"${dir}\"" ]; then test_fail "mismatched: ${dirq} != ${dir}"; return; fi
+    done
+    rm ${TMPDIR}/tlist
+    test_pass
+};
+
+
+function test_defaults() {
+    # Test _DEFAULTS_ pseudo-targets
+    if test_start "defaults pseudo-targets"; then true; else return; fi
+    cat < /dev/null > ${TMPDIR}/cmtab
+    tlist=""
+    for tgt in 0 1 2 3 4 5 6 7
+    do
+        idx=`mkrandshort`
+        idx2=`mkrandshort`
+        idx3=`mkrandshort`
+        cat <<EOF >> ${TMPDIR}/cmtab
+            _DEFAULTS_ {
+                fstype=fs-${idx3} cipher=random keyhash=md-${idx} }
+            target${idx} { dev=${TMPDIR}/loopfile dir=/mnt/point-${idx2}
+                mountoptions=sync cipher=blowfish keyfile=${TMPDIR}/keyfile }
+EOF
+        tlist="${tlist} target${idx},/mnt/point-${idx2},fs-${idx3}"
+    done
+    if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --list" > ${TMPDIR}/tlist 2>&3; then true; else test_fail listing; return; fi
+    if [ "`echo ${tlist} | wc -w`" -ne "`wc -l < ${TMPDIR}/tlist`" ]; then
+        test_fail "wrong number of targets"; return
+    fi
+    for marker in ${tlist}
+    do
+        tupelize $marker tgt dir fs
+        echo $tgt __ $dir __ $fs 1>&3
+        dirq=`awk "/^${tgt}/{ printf\"%s\",\\$5 }" ${TMPDIR}/tlist`
+        fsq=`awk "/^${tgt}/{ printf\"%s\",\\$7 }" ${TMPDIR}/tlist`
+        if [ "${dirq}" != "\"${dir}\"" ]; then test_fail "mismatched mount-point (${dirq} != ${dir})"; return; fi
+        if [ "${fsq}" != "\"${fs}\"]" ]; then test_fail "mismatched fstype (${fsq} != ${fs})"; return; fi
+    done
+    rm ${TMPDIR}/tlist
+    test_pass
+};
+
+
+function test_bad_passwd() {
+    # Test of password mismatch
+    if test_start "basic password mismatch"; then true; else return; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        dev=${LOOPDEV}
+        dir=${TMPDIR}/mnt
+        fstype=ext2 mountoptions=defaults cipher=twofish
+        keyformat=builtin keyfile=${TMPDIR}/keyfile
+        keyhash=sha1 keycipher=blowfish-cbc
+    }
+EOF
+    rm -f ${TMPDIR}/keyfile
+    if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password NOT${PASSWD} --prepare target${idx} 2>&3; then
+        ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3
+        test_fail prepare
+    else
+        test_pass;
+    fi
+};
+
+
+function test_fdpasswd() {
+    # Check reading of password via file-descriptor
+    if test_start "command-line passwords"; then true; else return; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        dev=${LOOPDEV}
+        dir=${TMPDIR}/mnt
+        keyfile=${TMPDIR}/keyfile
+    }
+EOF
+    rm -f ${TMPDIR}/keyfile
+    echo PASS1 > ${TMPDIR}/cmstrm
+    COMMAND="${CM} --config-dir ${TMPDIR} --passwd-fd 5 --generate-key 16 target${idx}"
+    if ${COMMAND} 5< ${TMPDIR}/cmstrm 2>&3; then true; else test_fail "key-generation (priv)"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password PASS1 --prepare target${idx} 2>&3; then true; else test_fail "prepare"; fi
+    wait_udev
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; fi
+    echo PASS2 >> ${TMPDIR}/cmstrm
+    if ${CM} --config-dir ${TMPDIR} --change-password --passwd-fd 6 target${idx} 6< ${TMPDIR}/cmstrm 2>&3; then true; else test_fail "password change"; fi
+    echo PASS2 > ${TMPDIR}/cmstrm
+    COMMAND="${CM} --config-dir ${TMPDIR} --passwd-fd 7 --prepare target${idx}"
+    if ${COMMAND} 5< ${TMPDIR}/cmstrm 7< /dev/null 2>&3; then test_fail "prepare (bad-fd)"; return; fi
+    if ${COMMAND} 7< ${TMPDIR}/cmstrm 2>&3; then true; else test_fail "prepare (2,priv)"; return; fi
+    wait_udev
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release (2)"; fi
+    rm ${TMPDIR}/cmstrm ${TMPDIR}/keyfile-old
+
+    test_pass
+};
+
+
+function test_bad_keyfmt() {
+    # Test of unavailable key-manager
+    if test_start "unavailable key-format"; then true; else return; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        dev=${LOOPDEV}
+        dir=${TMPDIR}/mnt
+        fstype=ext2 mountoptions=defaults cipher=twofish
+        keyfile=${TMPDIR}/keyfile
+        keyformat=BAD
+    }
+EOF
+    rm -f ${TMPDIR}/keyfile
+    if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then test_fail "key-generation"; return; fi
+    ${DD} if=/dev/urandom of=${TMPDIR}/keyfile bs=16c count=1 2>/dev/null
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then
+        ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3
+        test_fail prepare
+    else
+        test_pass;
+    fi
+};
+
+
+function test_bad_keyhash() {
+    # Test of unavailable keyhash algorithm
+    if test_start "unavailable key-hashing"; then true; else return; fi
+    mgrlist=`${CM} --key-managers 2>/dev/null | sed -e 's/,/ /g' -e 's/\<builtin\>//' -e 's/\<raw\>//' -e 's/\<luks\>//'`
+    for mgr in $mgrlist;
+    do
+        for alg in md15 sha19.2 rypemd;
+        do
+            echo "key-manager=${mgr} keyhash=${alg}" 1>&3
+            idx=`mkrandshort`
+            cat <<EOF > ${TMPDIR}/cmtab
+            target${idx} {
+                dev=${LOOPDEV}
+                dir=${TMPDIR}/mnt
+                fstype=ext2 mountoptions=defaults cipher=twofish
+                keyformat=${mgr} keyfile=${TMPDIR}/keyfile
+                keyhash=${alg}
+            }
+EOF
+            rm -f ${TMPDIR}/keyfile
+            if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then test_fail "key-generation"; return; fi
+        done
+    done
+    test_pass;
+};
+
+
+function test_envvars() {
+    # Test targets involving environmental variables
+    if test_start "environmental variables"; then true; else return; fi
+    idx=`mkrandshort`
+    rm -f ${TMPDIR}/keyfile*
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        dev=${LOOPDEV} flags=nofsck
+        dir=${TMPDIR}/mnt-\$(GROUPNAME)
+        fstype=ext2 mountoptions=defaults cipher=twofish
+        keyformat=builtin
+        keyfile=${TMPDIR}/keyfile-\$(USERNAME)
+    }
+EOF
+    if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then true; else test_fail "make-key"; return; fi
+    if [ ! -f ${TMPDIR}/keyfile-root ]; then test_fail "missing key"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail "prepare"; return; fi
+    if mke2fs -q /dev/mapper/target${idx}; then true; else test_fail "mke2fs"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; return; fi
+
+    for user in ${USER1} ${USER2}; do
+        group=`su -s /bin/sh -c "id -ng" ${user}`
+        echo "user=${user}.${group}" >&3
+
+        cp ${TMPDIR}/keyfile-root ${TMPDIR}/keyfile-${user}
+        if ${SU_p} ${user} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --newpassword ${PASSWD}-${user} --change-password target${idx}" 2>&3; then true; else test_fail "changing password"; return; fi
+        wait_udev
+
+        mkdir ${TMPDIR}/mnt-${group}
+        if ${SU_p} ${user} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD}-${user} --mount target${idx}" 2>&3; then true; else test_fail "mount-${user}"; return; fi
+        if [ ! -d ${TMPDIR}/mnt-${group}/lost+found ]; then test_fail "lost+found ${user}.${group}"; return; fi
+        if ${SU_p} ${user} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail "mount-${user}"; return; fi
+    done
+    rm -f ${TMPDIR}/keyfile-*
+    rmdir ${TMPDIR}/mnt-*
+    test_pass;
+};
+
+function test_frenzy() {
+    # Test multiple targets being (un)mounted in parallel
+    if test_start "frenetic activity"; then true; else return; fi
+    rm -f ${TMPDIR}/keyfile
+    tgtlist=""
+    pos=0
+    fsz=2048
+    cat /dev/null > ${TMPDIR}/cmtab
+    for cnt in 0 1 2 3 4 5 6 7; do
+        if [ ! -d ${TMPDIR}/mnt${cnt} ]; then mkdir ${TMPDIR}/mnt${cnt}; fi
+        idx=`mkrandshort`
+        while ( echo ${tgtlist} | grep -q target${idx} ); do
+            idx=`mkrandshort`
+        done
+        tgtlist="$tgtlist target${idx}"
+        cat <<EOF >> ${TMPDIR}/cmtab
+        target${idx} {
+            dev=${LOOPDEV} startsector=${pos} numsectors=${fsz}
+            dir=${TMPDIR}/mnt${cnt} flags=user,nofsck
+            fstype=ext2 mountoptions=defaults cipher=blowfish
+            keyformat=builtin keyfile=${TMPDIR}/keyfile }
+EOF
+        test -f ${TMPDIR}/keyfile || ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3
+        pos=`expr ${pos} + ${fsz}`
+    done
+    cleanup="${CM} --config-dir ${TMPDIR} --release --all"
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare --all 2>&3; then true; else test_fail "prepare" "${cleanup}"; return; fi
+    for tgt in ${tgtlist}; do
+        ${DD} if=/dev/zero of=/dev/mapper/target${idx} bs=1M count=1 2>/dev/null
+        if mke2fs -q /dev/mapper/${tgt}; then true; else test_fail mke2fs; return; fi
+    done
+    wait_udev
+    for tgt in ${tgtlist}; do
+        if ${CM} --config-dir ${TMPDIR} --release ${tgt} 2>&3; then true; else test_fail release; fi
+    done
+    srtlist=`echo ${tgtlist} | awk '{for (i=1; i<=NF; ++i) printf"%s\n",\$i}' | sort`
+    for tgt in ${srtlist}; do
+        ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --mount ${tgt}" 2>&3 &
+    done
+    wait
+    cat ${TMPDIR}/cryptmount.status 1>&3
+    cleanup="${CM} --config-dir ${TMPDIR} --unmount --all"
+    if [ "`wc -l ${TMPDIR}/cryptmount.status | awk '{printf"%d",$1}'`" -ne 10 ]; then test_fail "cmstatus" "${cleanup}" ; return; fi
+    if [ `df -k | grep -c /dev/mapper/target` -lt 8 ]; then test_fail "df" "${cleanup}" ; return; fi
+    if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount ${tgtlist}" 2>&3; then true; else test_fail unmount; return; fi
+    test_pass
+};
+
+
+function test_cipher_algs() {
+    # Test usability of different encryption algorithms
+    if test_start "cipher-algorithm availability"; then true; else return; fi
+    for CipherLen in aes,32 blowfish,48 twofish,32 serpent,12
+    do
+        tupelize $CipherLen cipher len
+        echo "cipher=${CipherLen}" 1>&3
+
+        idx=`mkrandshort`
+        cat <<EOF > ${TMPDIR}/cmtab
+            target${idx} {
+                flags=user,fsck
+                dev=${TMPDIR}/loopfile
+                dir=${TMPDIR}/mnt
+                fstype=ext3 mountoptions=noatime,sync cipher=${cipher}
+                fsckoptions=-N;-V
+                keyfile=${TMPDIR}/keyfile keyformat=builtin
+            }
+EOF
+        rm -f ${TMPDIR}/keyfile
+        if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
+        if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+        if mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+        wait_udev
+        if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --mount target${idx}" 1>&3 2>&3; then true; else test_fail "mount"; return; fi
+        wait_udev
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail "unmount"; return; fi
+
+    done
+    test_pass
+};
+
+
+function test_purepw() {
+    # Test pure-password key-manager
+    if test_start "pure-password key-manager"; then true; else return; fi
+
+    # Check against reference encrypted filesystem:
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+        target${idx} { keyformat=password cipher=aes
+            dev=`pwd`/passwd.fs }
+EOF
+    cleanup="${CM} --config-dir ${TMPDIR} --release --all"
+    if ${CM} --config-dir ${TMPDIR} --password "pure" --prepare target${idx} 2>&3; then true; else test_fail "prepare passwd.fs"; return; fi
+    wait_udev
+    if [ "`head -n 1 /dev/mapper/target${idx}`" = "PurePassword" ]; then true; else test_fail "bad decrypt" "${cleanup}"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release passwd.fs" "${cleanup}"; return; fi
+
+    # Check creation & access of new filesystems:
+    for CipherLen in aes,16 twofish,24 serpent,18
+    do
+        tupelize $CipherLen cipher len
+        echo "cipher=${CipherLen}" 1>&3
+
+        idx=`mkrandshort`
+        cat <<EOF > ${TMPDIR}/cmtab
+            target${idx} {
+                keyformat=password
+                dev=${TMPDIR}/loopfile dir=${TMPDIR}/mnt
+                flags=user,nofsck fstype=ext2
+                cipher=${cipher}
+            }
+EOF
+        rm -f ${TMPDIR}/keyfile
+        if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+        ${DD} if=/dev/zero of=/dev/mapper/target${idx} bs=1M count=1 2>/dev/null
+        if mke2fs -q /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+        wait_udev
+        if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+        wait_udev
+
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password "not-${PASSWD}" --mount target${idx}" 2>&3; then test_fail "bad-password"; return; fi
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --mount target${idx}" 2>&3; then true; else test_fail "mount"; return; fi
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail "unmount"; return; fi
+        wait_udev
+    done
+    test_pass
+};
+
+
+function test_ssl_algs() {
+    # Test usability of OpenSSL key & hashing algorithms
+    if test_start "OpenSSL-algorithm availability"; then true; else return; fi
+    if ${CM} --key-managers 2>/dev/null | grep -q openssl; then true; else test_fail "No OpenSSL support"; return; fi
+    for keycipher in aes-128-cbc des cast
+    do
+        for keyhash in md5 sha1
+        do
+            echo "keycipher=${keycipher} keyhash=${keyhash}" 1>&3
+
+            mk_ssl_keyfile 16 ${keyhash} ${keycipher} > ${TMPDIR}/keyfile
+            idx=`mkrandshort`
+            cat <<EOF > ${TMPDIR}/cmtab
+                target${idx} {
+                    flags=user,nofsck
+                    dev=${TMPDIR}/loopfile
+                    dir=${TMPDIR}/mnt
+                    fstype=ext3 mountoptions=noatime,sync cipher=aes-ecb
+                    keyformat=openssl keyfile=${TMPDIR}/keyfile
+                    keyhash=${keyhash} keycipher=${keycipher}
+                }
+EOF
+            if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+            ${DD} if=/dev/zero of=/dev/mapper/target${idx} bs=1M count=1 2>/dev/null
+            if mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+            wait_udev
+            if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+
+            if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --mount target${idx}" 2>&3; then true; else test_fail mount; return; fi
+            wait_udev
+            if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail unmount; return; fi
+
+            wait_udev
+        done
+    done
+    test_pass
+};
+
+
+function test_gcry_algs() {
+    # Test usability of libgcrypt key & hashing algorithms
+    if test_start "libgcrypt-algorithm availability"; then true; else return; fi
+    if ${CM} --key-managers 2>/dev/null | grep -q -w libgcrypt; then true; else test_fail "No libgcrypt support"; return; fi
+    for keycipher in blowfish cast5-ecb aes192 3des-cbc
+    do
+        for keyhash in ripemd160 tiger192 sha512
+        do
+            echo "keycipher=${keycipher} keyhash=${keyhash}" 1>&3
+
+            idx=`mkrandshort`
+            cat <<EOF > ${TMPDIR}/cmtab
+                target${idx} {
+                    flags=user,nofsck
+                    dev=${TMPDIR}/loopfile
+                    dir=${TMPDIR}/mnt
+                    fstype=ext3 mountoptions=noatime,sync cipher=twofish
+                    keyformat=libgcrypt keyfile=${TMPDIR}/keyfile
+                    keyhash=${keyhash} keycipher=${keycipher}
+                }
+EOF
+            rm -f ${TMPDIR}/keyfile
+            if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
+            if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+            ${DD} if=/dev/zero of=/dev/mapper/target${idx} bs=1M count=1 2>/dev/null
+            if mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+            wait_udev
+            if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+
+            if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --mount target${idx}" 2>&3; then true; else test_fail mount; return; fi
+            wait_udev
+            if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail "unmount"; return; fi
+
+            wait_udev
+        done
+    done
+    test_pass
+};
+
+
+function test_gcryossl() {
+    # Test usability of libgcrypt OpenSSL-compatibility layer
+    if test_start "libgcrypt OpenSSL-emulator"; then true; else return; fi
+    if ${CM} --key-managers 2>/dev/null | grep -q -w openssl-compat; then true; else test_fail "No openssl-compat support"; return; fi
+    configs="aes128:rmd160:aes128:ripemd160 aes-128-cbc:md5:aes-cbc:md5 \
+            aes-192-ecb:md4:aes192-ecb:md4 aes-256-cbc:md5:aes256-cbc:md5 \
+            bf-cbc:sha1:blowfish-cbc:sha1 cast:rmd160:cast5-cbc:ripemd160 \
+            des:sha1:des:sha1"
+    for config in ${configs}
+    do
+        echo "config=${config}" 1>&3
+        Ocipher=`echo $config | awk 'BEGIN{FS=":"}{printf"%s",$1}'`
+        Ohash=`echo $config | awk 'BEGIN{FS=":"}{printf"%s",$2}'`
+        Gcipher=`echo $config | awk 'BEGIN{FS=":"}{printf"%s",$3}'`
+        Ghash=`echo $config | awk 'BEGIN{FS=":"}{printf"%s",$4}'`
+
+        # Generate key-file with openssl program:
+        mk_ssl_keyfile 16 ${Ohash} ${Ocipher} > ${TMPDIR}/keyfile
+        idx=`mkrandshort`
+        cat <<EOF > ${TMPDIR}/cmtab
+            target${idx} {
+                flags=user,nofsck
+                dev=${TMPDIR}/loopfile
+                dir=${TMPDIR}/mnt
+                fstype=ext3 mountoptions=noatime,sync cipher=aes-ecb
+                keyformat=openssl-compat keyfile=${TMPDIR}/keyfile
+                keyhash=${Ghash} keycipher=${Gcipher}
+            }
+EOF
+        # Configure filesystem with libgcrypt-openssl compatibility layer:
+        if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+        ${DD} if=/dev/zero of=/dev/mapper/target${idx} bs=1M count=1 2>/dev/null
+        if mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+        wait_udev
+        if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+
+        # change to openssl-keymanager, if available:
+        if ${CM} --key-managers 2>/dev/null | grep -q -w openssl; then
+            ed -s ${TMPDIR}/cmtab <<EOF
+1,\$s/openssl-compat/openssl/
+/^ *keyhash/c
+keyhash=${Ohash} keycipher=${Ocipher}
+.
+w
+q
+EOF
+        fi
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --mount target${idx}" 2>&3; then true; else test_fail mount; return; fi
+        wait_udev
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail unmount; return; fi
+
+        wait_udev
+    done
+    test_pass
+};
+
+
+function test_mountlock() {
+    # Test of mounting & user-locking
+    if test_start "mounting & user-locking"; then true; else return; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        flags=user,nofsck
+        dev=${TMPDIR}/loopfile
+        dir=${TMPDIR}/mnt
+        fstype=ext3 mountoptions=nosuid,noexec cipher=twofish
+        keyfile=${TMPDIR}/keyfile
+    }
+EOF
+    rm -f ${TMPDIR}/keyfile
+    if ${CM} --config-dir ${TMPDIR} --generate-key 32 --newpassword ${PASSWD} target${idx} 2>&3; then true; else test_fail make-key; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+    if mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    wait_udev
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+
+    if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --mount target${idx}" 2>&3; then true; else test_fail mount; return; fi
+    if ${SU_p} ${USER2} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then test_fail bad-unmount; return; fi
+    if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail unmount; return; fi
+
+    test_pass
+};
+
+
+function test_userflags() {
+    # Test of mounting with user/nouser flags
+    if test_start "mounting & user-flags"; then true; else return; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        flags=nouser,nofsck
+        dev=${TMPDIR}/loopfile
+        dir=${TMPDIR}/mnt
+        fstype=ext3 mountoptions=nosuid,noexec cipher=twofish
+        keyfile=${TMPDIR}/keyfile
+    }
+EOF
+    rm -f ${TMPDIR}/keyfile
+    if ${CM} --config-dir ${TMPDIR} --generate-key 16 --newpassword ${PASSWD} target${idx} 2>&3; then true; else test_fail make-key; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+    if mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    wait_udev
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+
+    for cfg in user,${USER1},pass user,root,pass nouser,${USER1},fail nouser,root,pass
+    do
+        tupelize $cfg flgs usr exp
+        ed -s ${TMPDIR}/cmtab <<EOF 2>/dev/null 1>&2
+/flags=/
+c
+flags=${flgs},nofsck
+.
+w
+q
+EOF
+        echo "config: ${cfg}" 1>&3
+        ${SU_p} ${usr} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --mount target${idx}" 1>&3 2>&3
+        stat=$?
+        if [ \( "$stat" -eq 0 -a "$exp" != "pass" \) -o \( "$stat" -ne 0 -a "$exp" != "fail" \) ]; then
+            test_fail bad-mount
+            return
+        fi
+        wait_udev
+        ${SU_p} ${usr} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --unmount target${idx}" 2>&3
+        stat=$?
+        if [ \( "$stat" -eq 0 -a "$exp" != "pass" \) -o \( "$stat" -ne 0 -a "$exp" != "fail" \) ]; then
+            test_fail bad-unmount
+            return
+        fi
+    done
+
+    test_pass
+};
+
+
+function test_mountsynonyms() {
+    # Test for synonyms of (un)mount
+    if test_start "mount synonyms"; then true; else return; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        flags=user,nofsck
+        dev=${TMPDIR}/devfile
+        dir=${TMPDIR}/mnt
+        fstype=ext3 mountoptions=,,,noatime cipher=blowfish
+        keyfile=${TMPDIR}/keyfile keyformat=raw
+    }
+EOF
+    rm -f ${TMPDIR}/keyfile
+    if ${CM} --config-dir ${TMPDIR} --generate-key 12 --newpassword ${PASSWD} target${idx} 2>&3; then true; else test_fail make-key; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+    if mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    wait_udev
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+    for mntopt in "" "-m" "--mount"
+    do
+        for unmopt in "-u" "--unmount"
+        do
+            echo "mount[${mntopt}] unmount[${unmopt}]" 1>&3
+            if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} ${mntopt} target${idx}" 2>&3; then true; else test_fail mount; return; fi
+            wait_udev
+            if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} ${unmopt} target${idx}" 2>&3; then true; else test_fail unmount; return; fi
+
+        done
+    done
+    test_pass
+};
+
+
+function test_offsets() {
+    # check if startsector/numsectors parameters operate correctly
+    if test_start "block offsets"; then true; else return; fi
+    rm -f ${TMPDIR}/keyfile
+    for offset in 0 16 256
+    do
+        for length in 128 512 2048
+        do
+            idx=`mkrandshort`
+            cat <<EOF > ${TMPDIR}/cmtab
+                target${idx} {
+                    flags=user,nofsck
+                    dev=${TMPDIR}/devfile
+                    startsector=${offset}
+                    numsectors=${length}
+                    dir=${TMPDIR}/mnt
+                    fstype=ext2 mountoptions=defaults
+                    cipher=aes ivoffset=61
+                    keyfile=${TMPDIR}/keyfile
+                }
+EOF
+            test -f ${TMPDIR}/keyfile || ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3
+            ${DD} if=/dev/zero of=${LOOPDEV} 2>/dev/null
+            sync
+            if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then
+                cleanup="${CM} --config-dir ${TMPDIR} --release target${idx}"
+                ${DD} if=/dev/zero of=/dev/mapper/target${idx} bs=1b count=`expr ${length} + 16` 2>&3
+                wait_udev
+                ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3
+                wait_udev
+                sync
+                locs=`${TMPDIR}/bingrep < ${LOOPDEV}`
+                first=`echo $locs | awk '{printf"%d",($1 / 512)}'`
+                extent=`echo $locs | awk '{printf"%d", ($2 - $1) / 512}'`
+                echo "offset=${offset}  length=${length}  vs  first=${first}  extent=${extent}" 1>&3
+                if [ "${first}" -ne "${offset}" -o "${extent}" -ne "${length}" ]; then
+                    test_fail "offset/length mismatch (${first}/${extent} != ${offset}/${length})" "${cleanup}"
+                    return
+                fi
+            else
+                test_fail prepare
+                return
+            fi
+        done
+    done
+    test_pass
+};
+
+
+function test_swap() {
+    # Basic test of swapon/swapoff on raw device
+    if test_start "swapon (device)"; then true; else return; fi
+    for cfg in  ext2,rand,mkswap,fail       swap,rand,mkswap,pass \
+                swap,rand,nomkswap,fail     swap,zero,mkswap,pass \
+                swap,blank,mkswap,fail      swap,data,mkswap,fail
+    do
+        tupelize $cfg fstype format flg exp
+
+        idx=`mkrandshort`
+        prio=`od -An -N1 -t u1 /dev/urandom | sed 's% *%%g'`
+        cat <<EOF > ${TMPDIR}/cmtab
+        swap${idx} {
+            dev=${LOOPDEV} mountoptions=pri=${prio}
+            fstype=${fstype} flags=${flg} cipher=twofish-cbc-plain
+            keyformat=raw keyfile=/dev/urandom keymaxlen=32
+        }
+EOF
+        echo "config: $cfg - prio=${prio}" 1>&3
+        case $format in
+            zero)
+                ${DD} if=/dev/zero of=${LOOPDEV} bs=1M count=4 2>/dev/null ;;
+            blank)
+                mke2fs -q ${LOOPDEV} ;;
+            rand)
+                ${DD} if=/dev/urandom of=${LOOPDEV} bs=1M count=4 2>/dev/null ;;
+            data)
+                ${DD} if=$0 of=${LOOPDEV} bs=1M count=4 2>/dev/null ;;
+        esac
+        wait_udev; sync
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} --swapon swap${idx}" 2>&3; then test_fail privilege; return; fi
+        if grep -q swap${idx} /proc/swaps; then test_fail pre-existing; return; fi
+        ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --swapon swap${idx} 2>&3;
+        stat=$?
+        echo "stat: $stat" 1>&3
+        if [ \( "$stat" -eq 0 -a "$exp" != "pass" \) -o \( "$stat" -ne 0 -a "$exp" != "fail" \) ]; then
+            test_fail "swapon"
+            return
+        fi
+        wait_udev
+        if [ "$stat" -eq 0 ]; then
+            cat /proc/swaps >&3
+            if grep -q "\<${prio}\>" /proc/swaps; then true; else test_fail "proc+swaps"; return; fi
+            # Beware that udev may rename our swap device within /proc/swaps!
+        fi
+        ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --swapoff swap${idx} 2>&3;
+        if [ \( "$stat" -eq 0 -a "$exp" != "pass" \) -o \( "$stat" -ne 0 -a "$exp" != "fail" \) ]; then
+            test_fail swapoff
+            return
+        fi
+        if [ "$stat" -eq 0 ]; then
+            if grep -q swap${idx} /proc/swaps; then test_fail proc-swaps; return; fi
+        fi
+        wait_udev
+    done
+
+    test_pass
+};
+
+
+function test_fdconfig() {
+    # Test usage of configuration via file-descriptor
+    if test_start "command-line config-file"; then true; else return; fi
+    if [ -f ${TMPDIR}/keyfile ]; then rm ${TMPDIR}/keyfile; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        dev=${LOOPDEV}
+        dir=${TMPDIR}/mnt
+        fstype=ext2 flags=defaults cipher=twofish
+        keyfile=${TMPDIR}/keyfile
+    }
+EOF
+    COMMAND="${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx}"
+    if ${COMMAND} 2>&3; then true; else test_fail "key-generation (priv)"; return; fi
+
+    cp ${TMPDIR}/cmtab ${TMPDIR}/cmstrm
+    cat /dev/null > ${TMPDIR}/cmtab
+    COMMAND="${CM} --config-dir ${TMPDIR} --password ${PASSWD} --config-fd 5 --prepare target${idx}"
+    if ${SU_p} ${USER1} -c "${COMMAND}" 5< ${TMPDIR}/cmstrm 2>&3; then test_fail "config-fd"; return; fi
+    if ${COMMAND} 5< ${TMPDIR}/cmstrm 2>&3; then true; else test_fail "config-fd (priv)"; return; fi
+    wait_udev
+    COMMAND="${CM} --config-dir ${TMPDIR} --password ${PASSWD} --config-fd 7 --release target${idx}"
+    if ${SU_p} ${USER1} -c "${COMMAND}" 7< ${TMPDIR}/cmstrm 2>&3; then test_fail "config-fd"; return; fi
+    if ${COMMAND} 7< ${TMPDIR}/cmstrm 2>&3; then true; else test_fail "config-fd (priv)"; return; fi
+    rm ${TMPDIR}/cmstrm
+
+    test_pass
+};
+
+
+function test_privblock() {
+    # Test blockage of privileged actions
+    if test_start "privilege checks"; then true; else return; fi
+    if [ -f ${TMPDIR}/keyfile ]; then rm ${TMPDIR}/keyfile; fi
+    if [ -f ${TMPDIR}/keyfile_ ]; then rm ${TMPDIR}/keyfile_; fi
+    ${DD} if=/dev/zero of=${LOOPDEV} bs=1M count=4 2>/dev/null; sync
+    idx=`mkrandshort`
+    NEWPASSWD="${PASSWD}-new${idx}"
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        dev=${LOOPDEV}
+        dir=${TMPDIR}/mnt
+        fstype=swap flags=mkswap cipher=twofish
+        keyfile=${TMPDIR}/keyfile keyhash=sha1 keycipher=aes-192-cbc
+    }
+    target${idx}_ {
+        dev=${LOOPDEV}
+        dir=${TMPDIR}/mnt
+        fstype=swap flags=mkswap cipher=twofish
+        keyfile=${TMPDIR}/keyfile_ keyhash=sha1 keycipher=aes-192-cbc
+    }
+EOF
+    COMMAND="${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx}"
+    if ${SU_p} ${USER1} -c "${COMMAND}" 2>&3; then test_fail "key-generation"; return; fi
+    if ${COMMAND} 2>&3; then true; else test_fail "key-generation (priv)"; return; fi
+    COMMAND="${CM} --config-dir ${TMPDIR} --password ${PASSWD} --newpassword ${NEWPASSWD} --reuse-key target${idx} target${idx}_"
+    if ${SU_p} ${USER1} -c "${COMMAND}" 2>&3; then test_fail "key-reuse"; return; fi
+    if ${COMMAND} 2>&3; then true; else test_fail "key-reuse (priv)"; return; fi
+    wait_udev
+
+    for action in --prepare --release --swapon --swapoff --safetynet
+    do
+        COMMAND="${CM} --config-dir ${TMPDIR} --password ${PASSWD} ${action} target${idx}"
+        if ${SU_p} ${USER1} -c "${COMMAND}" 2>&3; then test_fail "${action}"; return; fi
+        if ${COMMAND} 2>&3; then true; else test_fail "${action} (priv)"; return; fi
+        wait_udev
+    done
+    rm ${TMPDIR}/keyfile_
+
+    test_pass
+};
+
+
+function test_voverride() {
+    # Test file-format overrides
+    if test_start "version overrides"; then true; else return; fi
+    for config in 0,pass 1,pass 2,fail;
+    do
+        echo "config=${config}" >&3
+        tupelize ${config} fversion exp
+        idx=`mkrandshort`
+        cat <<EOF > ${TMPDIR}/cmtab
+            target${idx} {
+                dev=${LOOPDEV} dir=${TMPDIR}/mnt
+                fstype=ext2 mountoptions=defaults
+                keyformat=builtin:${fversion}
+                keyfile=${TMPDIR}/keyfile }
+EOF
+        rm -f ${TMPDIR}/keyfile
+        ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 1>&3 2>&3
+        stat=$?
+        if [ "$stat" -eq 0 -a "${exp}" == "pass" ]; then
+            obsv=`od -j 7 -N 1 -t d1 ${TMPDIR}/keyfile | sed -n '1s/^[0-9]* *//p'`
+            if [ "$obsv" -ne "$fversion" ]; then
+                test_fail "Version mismatch (${obsv} vs ${fversion})";
+                return;
+            fi
+        elif [ "${exp}" != "fail" ]; then
+            test_fail "Bad version"
+            return
+        fi
+    done
+    test_pass
+};
+
+
+function test_cryptsetup_compat() {
+    # Check compatibility with (plain old) cryptsetup
+    if test_start "cryptsetup compatibility"; then true; else return; fi
+    if which cryptsetup 1>&3; then true; else test_fail "cryptsetup not available"; return; fi
+    if ${CM} --key-managers 2>/dev/null | grep -q openssl; then true; else test_fail "No OpenSSL support"; return; fi
+    mk_ssl_keyfile 32 md5 aes192 > ${TMPDIR}/keyfile
+    openssl enc -d -aes192 -md md5 -in ${TMPDIR}/keyfile -pass pass:${PASSWD} -out ${TMPDIR}/keymat
+
+    for cipher in blowfish serpent
+    do
+        for length in 4096 8192
+        do
+            for startsec in 0 32
+            do
+                for ivoffset in 0 172 932
+                do
+                    idx=`mkrandshort`
+                    echo "${cipher},${length},${startsec},${ivoffset}" 1>&3
+                    cryptsetup --key-file ${TMPDIR}/keymat -c ${cipher} -b ${length} -o ${startsec} -p ${ivoffset} create cstarget${idx} ${LOOPDEV} 2>&3
+                    if [ -b /dev/mapper/cstarget${idx} ]; then
+                        cs_size=`blockdev --getsize /dev/mapper/cstarget${idx}`
+                        ${DD} if=/dev/zero of=/dev/mapper/cstarget${idx} \
+                            bs=16k count=16 2>/dev/null
+                        mke2fs -q -j /dev/mapper/cstarget${idx}
+                        wait_udev
+                        cryptsetup remove cstarget${idx}
+                    else
+                        test_fail "cryptsetup creation"; return
+                    fi
+                    if [ "${cs_size}" -ne "${length}" ]; then
+                        # Beware non-functioning '--size' option in cryptsetup-1.2
+                        test_fail "cryptsetup incorrect sizing ($cs_size vs $length)"; return;
+                    fi
+                    cat <<EOF > ${TMPDIR}/cmtab
+                    target${idx} {
+                        flags=user,nofsck
+                        dev=${LOOPDEV}
+                        startsector=${startsec} numsectors=${length}
+                        dir=${TMPDIR}/mnt
+                        fstype=ext3 mountoptions=defaults
+                        cipher=${cipher} ivoffset=${ivoffset}
+                        keyformat=openssl keyfile=${TMPDIR}/keyfile
+                        keyhash=md5 keycipher=aes192
+                    }
+EOF
+                    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} target${idx} 2>&3; then true; else test_fail "mount"; return; fi
+                    wait_udev
+                    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --unmount target${idx} 2>&3; then true; else test_fail "unmount"; return; fi
+                done
+            done
+        done
+    done
+    rm ${TMPDIR}/keymat
+    test_pass
+};
+
+
+function test_luks_loopdev() {
+    # Check operation of LUKS container via loopback device
+    if test_start "LUKS loopback"; then true; else return; fi
+    if ${CM} --key-managers 2>/dev/null | grep -q luks; then true; else test_fail "No LUKS support"; return; fi
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        keyformat=luks              loop=auto
+        dev=${TMPDIR}/loopfile      dir=${TMPDIR}/mnt
+        fstype=ext3                 flags=nofsck
+    }
+EOF
+    if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 32 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+    if mke2fs -t ext3 -q /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    wait_udev
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+    wait_udev
+    if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} target${idx}" 2>&3; then true; else test_fail "mount"; return; fi
+    wait_udev; sleep 1
+    if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail "unmount"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --newpassword ${NEWPASSWD} --change-password target${idx} 1>&3 2>&3; then true; else test_fail "changing password"; return; fi
+    test_pass
+};
+
+
+function test_luks_compat() {
+    # Check compatibility with cryptsetup-luks, importing into cryptmount
+    if test_start "LUKS compatibility"; then true; else return; fi
+    if which cryptsetup 1>&3; then true; else test_fail "cryptsetup not available"; return; fi
+    if ${CM} --key-managers 2>/dev/null | grep -q luks; then true; else test_fail "No LUKS support"; return; fi
+
+    echo -n "keyslot0-password" > ${TMPDIR}/keymat0
+    echo -n "${PASSWD}" > ${TMPDIR}/keymat
+    for CipherLen in aes,128 blowfish,288 twofish-ecb,128 serpent-cbc-plain,96
+    do
+        tupelize $CipherLen cipher len
+        echo "config: $CipherLen" 1>&3
+
+        # Setup partition with cryptsetup-luks:
+        TMPTGT="mudslinger-`mkrandshort`"
+        if ${DD} if=/dev/zero of=${LOOPDEV} bs=1k count=1 conv=notrunc 2>/dev/null; then true; else test_fail "purging"; return; fi
+        cryptsetup --batch-mode --cipher ${cipher} --key-size ${len} luksFormat "${LOOPDEV}" ${TMPDIR}/keymat0 1>&3 2>&3
+        cryptsetup --key-file ${TMPDIR}/keymat0 --cipher ${cipher} --key-slot 2 luksAddKey "${LOOPDEV}" ${TMPDIR}/keymat 1>&3 2>&3
+        wait_udev
+        cryptsetup --key-file ${TMPDIR}/keymat luksOpen "${LOOPDEV}" "${TMPTGT}" 1>&3 2>&3
+        if [ ! -b /dev/mapper/${TMPTGT} ]; then test_fail "luksOpen"; return; fi
+        if mke2fs -q -j "/dev/mapper/${TMPTGT}"; then true; else test_fail mke2fs; return; fi
+        wait_udev
+        cryptsetup luksClose "${TMPTGT}" 2>&3
+        sync
+
+        idx=`mkrandshort`
+        cat <<EOF > ${TMPDIR}/cmtab
+        target${idx} {
+            dev=${LOOPDEV}      dir=${TMPDIR}/mnt
+            fstype=ext3         flags=nofsck
+            keyformat=luks
+            cipher=aes          # This should be overridden by LUKS header
+        }
+EOF
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password ${PASSWD} target${idx}" 2>&3; then true; else test_fail "mount"; return; fi
+        wait_udev; sleep 1
+        if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail "unmount"; return; fi
+        if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then test_fail "re-formatting"; fi
+        wait_udev
+    done
+    rm ${TMPDIR}/keymat0 ${TMPDIR}/keymat
+    test_pass
+};
+
+
+function test_luks_tapmoc() {
+    # Check inverse-compatibility with cryptsetup-luks, as cryptmount export
+    if test_start "LUKS inverse-compatibility"; then true; else return; fi
+    if which cryptsetup 1>&3; then true; else test_fail "cryptsetup not available"; return; fi
+    if ${CM} --key-managers 2>/dev/null | grep -q luks; then true; else test_fail "No LUKS support"; return; fi
+
+    echo -n "${PASSWD}" > ${TMPDIR}/keymat
+    for CipherMode in aes,ecb blowfish,cbc-plain twofish,cbc-essiv:md5
+    do
+        tupelize $CipherMode cipher mode
+        echo "config: $CipherMode" 1>&3
+
+        # Setup partition with cryptmount:
+        idx=`mkrandshort`
+        cat <<EOF > ${TMPDIR}/cmtab
+        target${idx} {
+            dev=${LOOPDEV}      dir=${TMPDIR}/mnt
+            fstype=ext3         flags=nofsck
+            keyformat=luks      keyfile=${LOOPDEV}
+            cipher=${cipher}-${mode}
+        }
+EOF
+        if ${DD} if=/dev/zero of=${LOOPDEV} bs=1k count=1 conv=notrunc 2>/dev/null; then true; else test_fail "purging"; return; fi
+        sync
+        if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 32 target${idx} 1>&3 2>&3; then true; else test_fail "key-generation"; return; fi
+        if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail "prepare"; return; fi
+        if mke2fs -q /dev/mapper/target${idx}; then true; else test_fail "mke2fs"; return; fi
+        wait_udev
+        if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; return; fi
+        wait_udev
+
+        # Attempt to mount with cryptsetup-luks:
+        TMPTGT="mudslinger-`mkrandshort`"
+        cryptsetup --key-file ${TMPDIR}/keymat luksOpen "${LOOPDEV}" "${TMPTGT}" 1>&3 2>&3
+        if [ ! -b /dev/mapper/${TMPTGT} ]; then test_fail "luksOpen"; return; fi
+        if mount -t ext2 /dev/mapper/${TMPTGT} ${TMPDIR}/mnt; then true; else test_fail "mount"; return; fi
+        wait_udev
+        lukscipher=`cryptsetup luksDump "${LOOPDEV}" | sed -n '/^Cipher name/s/^[^:]*:\s*//p'`
+        luksmode=`cryptsetup luksDump "${LOOPDEV}" | sed -n '/^Cipher mode/s/^[^:]*:\s*//p'`
+        echo "LUKSheader: $lukscipher + $luksmode" 1>&3
+        umount /dev/mapper/${TMPTGT}
+        cryptsetup luksClose "${TMPTGT}" 2>&3
+        if [ "$cipher" != "$lukscipher" ]; then test_fail "cipher mismatch ($lukscipher)"; return; fi
+        if [ "$mode" != "$luksmode" ]; then test_fail "mode mismatch ($luksmode)"; return; fi
+
+        # Check that re-formatting is blocked:
+        if ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3; then test_fail "re-formatting"; fi
+        wait_udev
+    done
+    rm ${TMPDIR}/keymat
+    test_pass
+};
+
+
+function test_loopset() {
+    # Check that 'loopdev' parameter correctly targets specific loopback dev
+    if test_start "loopdev specification"; then true; else return; fi
+    rm -f ${TMPDIR}/keyfile
+    idx=`mkrandshort`
+    for ldev in /dev/loop{3,6,1,0,7,4,2,5}
+    do
+        if ${LOSETUP} $ldev >/dev/null 2>&1; then
+            # loop-device is already in use
+            true
+        else
+            cat <<EOF > ${TMPDIR}/cmtab
+                target${idx} {
+                    dev=${TMPDIR}/loopfile
+                    loop=${ldev}
+                    dir=${TMPDIR}/mnt
+                    fstype=ext2 mountoptions=,,,ro,,,noatime cipher=twofish
+                    keyfile=${TMPDIR}/keyfile keyformat=raw
+                }
+EOF
+            test -f ${TMPDIR}/keyfile || ${CM} --config-dir ${TMPDIR} --newpassword ${PASSWD} --generate-key 16 target${idx} 2>&3
+            if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
+            wait_udev
+            if ${LOSETUP} $ldev 1>&3 2>&3; then
+                if ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+            else
+                ${CM} --config-dir ${TMPDIR} --password ${PASSWD} --release target${idx} 2>&3
+                test_fail "loopback unconfigured";
+                return
+            fi
+        fi
+    done
+    test_pass
+};
+
+
+function test_residues() {
+    # Check if any zombie device-mapper targets have been created
+    if test_start "device-mapper residue targets"; then true; else return; fi
+    sleep 1     # give time for old targets to die
+    dmsetup ls | grep '^target' > "${TMPDIR}/dm-list1"
+    if cmp -s "${TMPDIR}/dm-list0" "${TMPDIR}/dm-list1"; then
+        test_pass
+    else
+        test_fail
+        echo "BEFORE:" 1>&3
+        cat "${TMPDIR}/dm-list0" 1>&3
+        echo "AFTER:" 1>&3
+        cat "${TMPDIR}/dm-list1" 1>&3
+    fi
+    rm "${TMPDIR}/dm-list1"
+};
+
+
+#
+# Main program
+#
+
+
+# Prepare log-file:
+logfile="mudslinger-@PKG_VERSION@-`date +'%H%M:%d%b%y'`.log"
+exec 3> ${logfile}
+chgrp --reference=$0 ${logfile} || true
+cat >&3 <<EOF
+Cryptmount mudslinger logfile
+  package-version: @PKG_VERSION@
+  modules: @CM_KEYMODS@
+  date: `date`
+  system: `uname -a`
+
+EOF
+ls -l ${CM} >&3 2>&1
+lsb_release -a >&3 2>&1 || echo "(No lsb_release info)" >&3
+if [ -r /usr/include/linux/version.h ]; then
+    cat /usr/include/linux/version.h >&3
+fi
+
+if [ ! -d ${TMPDIR} ]; then
+    mkdir ${TMPDIR} ${TMPDIR}/mnt
+else
+    echo "${TMPDIR} already exists - exiting"
+    exit 1
+fi
+
+for usr in ${USER1} ${USER2}; do
+    if ${SU_p} ${usr} -c "ls /bin > /dev/null"; then true; else
+        echo "${usr} may not be a valid user"
+        exit 1
+    fi
+done
+
+if [ ! -u ${CM} ]; then
+    chown root ${CM}
+    chmod u+xs,go+rx ${CM}
+fi
+
+# Prepare loopback file & pseudo device file:
+set -e
+touch ${TMPDIR}/keyfile
+${DD} if=/dev/zero of=${TMPDIR}/loopfile bs=1M count=64 2>&3 1>&2
+${DD} if=/dev/zero of=${TMPDIR}/devfile bs=1M count=64 2>&3 1>&2
+if ${LOSETUP} ${LOOPDEV} ${TMPDIR}/devfile; then true; else echo "Failed to setup ${LOOPDEV}"; exit 2; fi
+LOOPDEV2=`${LOSETUP} -f`
+set +e
+
+# Keep record of existing device-mapper targets
+dmsetup ls | grep '^target' > ${TMPDIR}/dm-list0
+
+# Prepare binary-search tool:
+mkbingrep ${TMPDIR}/bingrep
+
+# attempt to cleanup if interrupted:
+trap 'cleanup_devmap; ${LOSETUP} -d ${LOOPDEV} || true; ${LOSETUP} -d ${LOOPDEV2} || true; exit 5' SIGHUP SIGINT SIGQUIT
+
+# Run all tests:
+test_version
+test_binary
+test_keygen
+test_setup_dev
+test_setup_loop
+test_setup_roloop
+test_null
+test_passchange
+test_mtab
+test_listing
+test_defaults
+test_bad_passwd
+test_fdpasswd
+test_bad_keyfmt
+test_bad_keyhash
+test_mountlock
+test_userflags
+test_envvars
+test_frenzy
+test_cipher_algs
+test_purepw
+test_ssl_algs
+test_gcry_algs
+test_gcryossl
+test_mountsynonyms
+test_offsets
+test_loopset
+test_swap
+test_fdconfig
+test_privblock
+test_voverride
+test_cryptsetup_compat
+test_luks_loopdev
+test_luks_compat
+test_luks_tapmoc
+test_residues
+
+test_summary
+
+cleanup_devmap
+wait_udev
+${LOSETUP} -d ${LOOPDEV}
+rm -f ${TMPDIR}/loopfile ${TMPDIR}/devfile ${TMPDIR}/keyfile \
+    ${TMPDIR}/cmtab ${TMPDIR}/cryptmount.status \
+    ${TMPDIR}/dm-list0 ${TMPDIR}/bingrep
+rmdir ${TMPDIR}/mnt* ${TMPDIR}
+
+exit 0
+
+# vim: set ts=4 sw=4 et:

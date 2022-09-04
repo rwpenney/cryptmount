@@ -1,0 +1,312 @@
+cryptmount (5.3-1) unstable; urgency=low
+
+  * New upstream release:
+    - better support of LUKS plain files for cryptsetup 2.x (Closes: bug#888444)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 17 Mar 2018 18:00:00 +0000
+
+cryptmount (5.2.4-1) unstable; urgency=low
+
+  * Updated to Debian Standards Version 4.1.3, and debhelper-10
+
+  * Added e2fsprogs as recommended package (Closes: bug#887286)
+
+  * New upstream (minor) release - documentation corrections.
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Fri, 19 Jan 2018 06:00:00 +0000
+
+cryptmount (5.2.3-1) unstable; urgency=low
+
+  * Updated to Debian Standards Version 4.1.2
+
+  * New upstream release:
+    - better support for cryptsetup 2.x versions,
+    - better GCC 7.2 support.
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 16 Dec 2017 16:30:00 +0000
+
+cryptmount (5.2.2-1) unstable; urgency=low
+
+  * Improved error-handling with '--all' command-line option
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 02 Oct 2016 06:00:00 +0000
+
+cryptmount (5.2.1-1) unstable; urgency=low
+
+  * Updated to Debian Standards Version 3.9.8
+
+  * Improved logging output of LSB init.d script (Closes: bug#823076)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Tue, 07 Jun 2016 19:00:00 +0000
+
+cryptmount (5.2-1) unstable; urgency=low
+
+  * Improved handling of mistyped password in setup script (Closes: bug#795440)
+
+  * Allow setup of PATH before invoking fsck (Closes: bug#779851)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 25 Oct 2015 15:00:00 +0000
+
+cryptmount (5.1-3) unstable; urgency=medium
+
+  * Delegated setup in postinst/postrm to dh-systemd (Closes: bug#798358)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Tue, 08 Sep 2015 16:00:00 +0000
+
+cryptmount (5.1-2) unstable; urgency=medium
+
+  * Patched installation path for cryptmount.service to be beneath /lib/systemd
+
+  * Improved postinst/postrm support for systemd
+
+  * Removed duplicated example configuration file
+
+  * Rebuilt debian/rules script to use debhelper v7 and dh_autoreconf
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 26 Jul 2015 12:00:00 +0000
+
+cryptmount (5.1-1) unstable; urgency=low
+
+  * Updated to version 5.1 of upstream package
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 20 Jun 2015 15:00:00 +0000
+
+cryptmount (5.0-2) unstable; urgency=medium
+
+  * Fixed unprivileged access to LUKS partitions
+    under libcryptsetup-1.6.6 (Closes: bug#759263)
+
+  * Added cryptographic signature verification to uscan watch file
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 30 Aug 2014 15:40:00 +0000
+
+cryptmount (5.0-1) unstable; urgency=low
+
+  * Updated to version 5.0 of upstream package
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Wed, 30 Apr 2014 18:30:00 +0000
+
+cryptmount (4.5.1-1) unstable; urgency=medium
+
+  * Patched unexpanded @ETCDIR@ in cryptmount-setup script (Closes: bug#738736)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 16 Feb 2014 06:30:00 +0000
+
+cryptmount (4.5-1) unstable; urgency=low
+
+  * Updated to version 4.5 of upstream package
+
+  * Updated Debian standards version to 3.9.5
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Tue, 14 Jan 2014 20:30:00 +0000
+
+cryptmount (4.4.1-1) unstable; urgency=low
+
+  * Updated to version 4.4.1 of upstream package
+
+  * Fixes lintian systemd-related warnings
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Fri, 25 Oct 2013 20:00:00 +0000
+
+cryptmount (4.4-1) unstable; urgency=low
+
+  * Updated to version 4.4 of upstream package
+
+  * Fixes lintian hardening-no-fortify-functions & hardening-no-relro warnings
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 19 May 2013 20:00:00 +0000
+
+cryptmount (4.3.1-1) unstable; urgency=low
+
+  * Patched version-specific dependency on libdevmapper (Closes: bug#672678)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 13 May 2012 20:00:00 +0000
+
+cryptmount (4.3-1) unstable; urgency=low
+
+  * Added support for setting ownership of vfat partitions (Closes: bug#641476)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 18 Mar 2012 08:00:00 +0000
+
+cryptmount (4.2.1-1) unstable; urgency=low
+
+  * Added 'build-arch' and 'build-indep' rules
+
+  * Updated use of /dev/.udev to first try /run/udev (Closes: bug#644311)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 09 Oct 2011 12:00:00 +0000
+
+cryptmount (4.2-1) unstable; urgency=low
+
+  * Updated Debian standards version to 3.9.2
+
+  * Fixed wrong fileystem size on optical media (Closes: bug#615865)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Fri, 17 Jun 2011 19:30:00 +0000
+
+cryptmount (4.1-3) unstable; urgency=low
+
+  * Updated Debian standards version to 3.9.0
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 01 Aug 2010 20:00:00 +0000
+
+cryptmount (4.1-2) unstable; urgency=low
+
+  * Updated Debian packaging format to "3.0 (quilt)"
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 20 Jun 2010 20:00:00 +0000
+
+cryptmount (4.1-1) unstable; urgency=low
+
+  * Updated to version 4.1 of upstream package
+
+  * Fixed modprobe to work within chroot environment (Closes: bug#562680)
+
+  * Fixed missing /sbin/udevsettle for LUKS target (Closes: bug#570877)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Thu, 03 Jun 2010 20:00:00 +0000
+
+cryptmount (4.0.2-1) unstable; urgency=low
+
+  * Updated to version 4.0.2 of upstream package
+
+  * Fixed deconfiguring targets during system shutdown (Closes: bug#558347)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 13 Dec 2009 08:00:00 +0000
+
+cryptmount (4.0.1-1) unstable; urgency=low
+
+  * Updated to version 4.0.1 of upstream package
+
+  * Patched incorrect dependencies with /etc/init.d scripts (Closes: bug#546502)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Mon, 14 Sep 2009 20:00:00 +0000
+
+cryptmount (4.0-1) unstable; urgency=low
+
+  * Updated to version 4.0 of upstream package
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Mon, 04 May 2009 08:00:00 +0000
+
+cryptmount (3.1.2-1) unstable; urgency=low
+
+  * Minor update to version 3.1.2 of upstream package
+
+  * Closes: bug#516922 (Initialization of libgcrypt library)
+
+  * Clears lintian warnings about sourceforge-redirector in watch-file,
+    and redirection of output of updaterc.d
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 28 Feb 2009 09:00:00 +0000
+
+cryptmount (3.1.1-1) unstable; urgency=low
+
+  * Minor update to version 3.1.1 of upstream package
+
+  * Closes: bug#507899 (Latest upstream version not in 'sid')
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Fri, 05 Dec 2008 21:00:00 +0000
+
+cryptmount (3.1-1) unstable; urgency=low
+
+  * Initial release of 3.1-series
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Fri, 03 Oct 2008 14:00:00 +0000
+
+cryptmount (3.0.1-1) unstable; urgency=low
+
+  * Minor update to version 3.0.1 of upstream package
+
+  * Closes: bug#486687 (Updating German localization)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 07 Aug 2008 11:00:00 +0000
+
+cryptmount (3.0-1) unstable; urgency=low
+
+  * Initial release of 3.0-series.
+
+  * Closes: bug#436676 (Handling of nostrip build-option)
+
+  * Closes: bug#479682 (Clarifying translation query)
+
+  * Closes: bug#484727 (Adding German localization)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 07 Jun 2008 11:00:00 +0000
+
+cryptmount (2.2-1) unstable; urgency=low
+
+  * Initial release of 2.2-series.
+
+  * Uploading closes: bug#436676
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 20 Jan 2008 10:00:00 +0000
+
+cryptmount (2.1-1) unstable; urgency=low
+
+  * Initial release of 2.1-series.
+
+  * Uploading closes: bug#420066
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 05 Aug 2007 10:00:00 +0000
+
+cryptmount (2.0-1) unstable; urgency=low
+
+  * Initial release of 2.0-series.
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Tue, 10 Apr 2007 08:00:00 +0000
+
+cryptmount (1.2.1-1) unstable; urgency=low
+
+  * Updated to include upstream version 1.2.1
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Fri, 06 Apr 2007 08:00:00 +0000
+
+cryptmount (1.2-3) unstable; urgency=low
+
+  * Patched /etc/init.d script to ensure dm-crypt kernel-module is loaded
+
+  * Patched documentation to explain devmapper error messages for bad key-size
+
+  * Incorporated minor robustness improvements from upstream version 1.2.1
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 23 Jun 2007 14:00:00 +0000
+
+cryptmount (1.2-2) unstable; urgency=low
+
+  * Patched postinst script to update rc.d more sensibly
+
+  * Incorporated Dan O'Huiginn's patch for installation of cmtab.example
+
+  * Uploading closes: bug#415054
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Fri, 16 Mar 2007 21:00:00 +0000
+
+cryptmount (1.2-1) unstable; urgency=low
+
+  * Initial release of 1.2-series.
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 15 Oct 2006 16:00:00 +0000
+
+cryptmount (1.1-2) unstable; urgency=low
+
+  * Added Erich Schubert's patch for init-script to improve POSIX compliance
+    closes: bug#385157
+
+  * Added basic LSB headers to init-script
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Thu, 31 Aug 2006 19:00:00 +0000
+
+cryptmount (1.1-1) unstable; urgency=low
+
+  * Initial release of 1.1-series.
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Tue, 15 Aug 2006 20:00:00 +0000
+
+cryptmount (1.0.2-1) unstable; urgency=low
+
+  * Initial release.
+
+  * Uploading closes: bug#375008
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Tue, 18 Jul 2006 22:00:00 +0000
+

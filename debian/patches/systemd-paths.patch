@@ -1,0 +1,17 @@
+Change systemd installation directory to /lib/systemd
+--- a/sysinit/Makefile.am
++++ b/sysinit/Makefile.am
+@@ -26,10 +26,10 @@
+ 
+ install-inits:	cryptmount.service initscript
+ if USE_SYSTEMD
+-	test -d "${DESTDIR}/usr/lib/systemd/system" || ${mkdir_p} "${DESTDIR}/usr/lib/systemd/system"
++	test -d "${DESTDIR}/lib/systemd/system" || ${mkdir_p} "${DESTDIR}/lib/systemd/system"
+ endif	# USE_SYSTEMD
+-	if test -d "${DESTDIR}/usr/lib/systemd/system" ; then \
+-	    ${INSTALL_PROGRAM_ENV} ${INSTALL_DATA} cryptmount.service "${DESTDIR}/usr/lib/systemd/system"; \
++	if test -d "${DESTDIR}/lib/systemd/system" ; then \
++	    ${INSTALL_PROGRAM_ENV} ${INSTALL_DATA} cryptmount.service "${DESTDIR}/lib/systemd/system"; \
+ 	fi
+ 	test -d "${DESTDIR}/etc/modules-load.d" || ${mkdir_p} "${DESTDIR}/etc/modules-load.d"
+ 	${INSTALL_PROGRAM_ENV} ${INSTALL_DATA} modules-load.conf "${DESTDIR}/etc/modules-load.d/cryptmount.conf";
