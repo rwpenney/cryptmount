@@ -1,10 +1,10 @@
-cryptmount (6.0.0-1) unstable; urgency=low
+cryptmount (6.0-1) unstable; urgency=low
 
   * New upstream release
     - changed default fileformat in cryptmount-setup to LUKS
     - broadened support for libgcrypt cipher modes
 
- -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 03 Sep 2022 09:30:00 +0000
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 03 Sep 2022 14:45:00 +0000
 
 cryptmount (5.3.3-1) unstable; urgency=low
 

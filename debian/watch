@@ -9,4 +9,4 @@ version=4
 http://sf.net/cryptmount/ cryptmount-([\d\.]*)\.tar\.gz
 
 # Location of cryptographic signature of upstream package:
-opts=pgpsigurlmangle=s/$/.sig/ http://sf.net/cryptmount/ cryptmount-([\d\.]*)\.tar\.gz
+opts=pgpsigurlmangle=s/$/.sig/ http://sf.net/cryptmount/ cryptmount-(\d\S*)@ARCHIVE_EXT@
