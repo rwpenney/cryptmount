@@ -12,7 +12,7 @@
 ..
 
 
-.TH CMTAB 5 "2019-01-05" "@PACKAGE_VERSION@" "User commands"
+.TH CMTAB 5 "2019-10-06" "@PACKAGE_VERSION@" "User commands"
 .SH NAME
 cmtab \- static information about filesystems managed by cryptmount
 
@@ -25,11 +25,16 @@ Information about the encrypted filesystems managed by
 is contained in the file @CM_SYSCONF_DIR@/cmtab.
 Each filesystem is labelled by a target name which can be used as an argument to
 .B cryptmount
-and which appears in @CM_SYSCONF_DIR@/cmtab in front of a list of parameters describing where that filesystem is stored, and how it is encrypted.
+and which appears in @CM_SYSCONF_DIR@/cmtab in front of a list of parameters
+describing where that filesystem is stored, and how it is encrypted.
 
-The format of the cmtab is flexible, with the description of each target being delimited by braces, parameters being specified by KEY=VALUE pairs, and white-space being freely usable.
-Comments are prefixed by a `#' character, and can start at any point in a line, lasting to the end of the line.
-The backslash character `\\' can be used to ignore any special significance of the following character, for example to include a space in a filename.
+The format of the cmtab is flexible, with the description of each target
+being delimited by braces, parameters being specified by KEY=VALUE pairs,
+and white-space being freely usable.
+Comments are prefixed by a `#' character, and can start at any point in a line,
+lasting to the end of the line.
+The backslash character `\\' can be used to ignore any special significance
+of the following character, for example to include a space in a filename.
 
 @CM_SYSCONF_DIR@/cmtab contains entries of the following form:
 
@@ -40,7 +45,7 @@ The backslash character `\\' can be used to ignore any special significance of t
         startsector=STARTSECTOR
         numsectors=NUMSECTORS
         loop=LOOPDEV
-        dir=MOUNT_POINT
+        dir=MOUNT_POINT                 # REQUIRED
         fstype=TYPE                     # REQUIRED
         mountoptions=MOPT,MOPT,...
         fsckoptions=FOPT;FOPT;...
@@ -94,7 +99,7 @@ each will undo the effects of previous default values -
 i.e. this pseudo-target does not operate incrementally.
 .\" ----
 .TP
-.B dev=DEVICE
+.B dev=DEVICE\t(required)
 sets the name of the raw device (e.g. /dev/hdb63)
 or ordinary file (e.g. /home/secretiveuser/private.fs)
 that contains the encrypted filesystem.
@@ -137,11 +142,11 @@ can be used to specify a particular loopback device (e.g. /dev/loop0)
 to be used when DEVICE is an ordinary file.
 This parameter is optional and defaults to "auto".
 .TP
-.B dir=MOUNT_POINT
+.B dir=MOUNT_POINT\t(required)
 specifies the directory onto which the encrypted filesystem will be mounted.
 .\" ----
 .TP
-.B fstype=TYPE
+.B fstype=TYPE\t(required)
 sets the filesystem type (as used by
 .B mount
 (8)).
@@ -175,7 +180,8 @@ By default, this PATH is set to @CM_DEFAULT_SUPATH@.
 .B bootaction=BOOTACTION
 indicates what action, if any, should be taken
 for this target on system bootup.
-BOOTACTION can be one of "none", "mount", "swap" or "prepare".
+BOOTACTION can be one of "none", "mount", "swap" or "prepare",
+with the default being "none".
 .TP
 .B cipher=CIPHER
 sets the encryption algorithm used on the
@@ -199,7 +205,7 @@ if absent, "builtin" will be used on first generating the key,
 with an automatic choice being made when reading a pre-existing key.
 .\" ----
 .TP
-.B keyfile=KEYFILE
+.B keyfile=KEYFILE\t(required)
 gives the name of an ordinary file that contains the key used by the
 .B CIPHER
 algorithm to decrypt the filesystem. This key is itself encrypted in a way specified by the

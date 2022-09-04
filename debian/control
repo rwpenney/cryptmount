@@ -6,7 +6,7 @@ Homepage: http://cryptmount.sourceforge.net
 Build-Depends: automake, debhelper (>= 10), libcryptsetup-dev (>= 1.6),
             libdevmapper-dev, libgcrypt20-dev (>= 1.5), pkg-config
 Rules-Requires-Root: binary-targets
-Standards-Version: 4.3.0
+Standards-Version: 4.4.1
 
 Package: cryptmount
 Architecture: linux-any

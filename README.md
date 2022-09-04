@@ -40,7 +40,7 @@ supplied with cryptmount.
 
 cryptmount has been tested (using the "mudslinger" script
 in the 'testing' sub-directory) on a variety of GNU/Linux platforms including:
-Debian 9.0, Ubuntu 16.04, Fedora 27, SuSE 13.2 etc.
+Debian 9.0, Ubuntu 18.04, CentOS 7.6, ArchLinux etc.
 
 For the most recent version of cryptmount, please see
 http://www.sourceforge.net/projects/cryptmount

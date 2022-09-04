@@ -1,5 +1,13 @@
 ChangeLog for cryptmount (http://cryptmount.sourceforge.net)
 
+16Nov19	- Refined handling of passwords in "mudslinger" testing script
+
+06Oct19	- Improved documentation of default values in cmtab manual page
+
+28Sep19	- Removed use of 'minix' filesystem in testing script
+
+06Jan19	- Fixed various memory leaks in mount/unmount pathways
+
 05Jan19	- Fixed memory cleanup error on closedown when using multiple targets
 
 17Mar18	- *** cryptmount-5.3 released

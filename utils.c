@@ -235,11 +235,11 @@ int cm_path(char **buff, cm_path_prefix_t prefix_code, const char *file)
 
 char *cm_strdup(const char *orig)
     /** Make duplicate of existing string, allocating memory for copy */
-{   char *cpy;
+{   char *cpy = NULL;
 
     if (orig == NULL) return NULL;
 
-    cpy = (char*)malloc((size_t)(strlen(orig) + 1));
+    cpy = (char*)malloc(strlen(orig) + 1);
 
     return strcpy(cpy, orig);
 }

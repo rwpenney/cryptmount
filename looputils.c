@@ -47,6 +47,7 @@
 #include "cryptmount.h"
 #include "looputils.h"
 
+char *cm_strdup(const char *orig);
 
 
 /**
@@ -248,7 +249,7 @@ int blockify_file(const char *filename, int fmode, const char *prefdev,
 
     if (S_ISBLK(sbuff.st_mode)) {
         /* Keyfile is block-special already: */
-        *devname = filename;
+        *devname = cm_strdup(filename);
         *isloop = 0;
     } else if (S_ISREG(sbuff.st_mode)) {
         /* Create loopback device around ordinary file: */

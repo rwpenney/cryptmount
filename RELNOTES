@@ -1,6 +1,6 @@
-		    Release notes for cryptmount-5.3.1
+		    Release notes for cryptmount-5.3.2
 
-			RW Penney, January 2019
+			RW Penney, November 2019
 
 Introduction
 ============
@@ -9,9 +9,9 @@ an ordinary user to mount an encrypted filing system without requiring
 superuser privileges, and which assists the system-administrator in
 creating and managing encrypted filesystems & swap-partitions.
 
-cryptmount was written to address differences between the capabilities of
-the loopback device of the 2.4/2.6 kernel series and the newer, preferred,
-device-mapper mechanisms of kernels since linux-2.6.
+cryptmount was originally written because of differences between
+the capabilities of the loopback device of the 2.4/2.6 kernel series
+and the newer, preferred, device-mapper mechanisms of kernels since linux-2.6.
 cryptmount automatically performs the various stages of configuring
 any supporting loopback and device-mapper targets needed to access
 an encrypted filing system before actually mounting it, but
@@ -38,21 +38,21 @@ This (stable) release offers the following enhancements:
 
 It has been tested on the following systems:
 
-  * Arch Linux (early-Jan-2019) (x86_64)
+  * Arch Linux (mid-Nov-2019) (x86_64)
 
-  * CentOS 7.4 (x86_64)
+  * CentOS 8.0.1905 (x86_64)
 
-  * Debian GNU/Linux 10.x ("buster"/"testing", early-Jan-2019) (x86)
+  * Debian GNU/Linux 11.x ("bullseye"/"testing", mid_Nov-2019) (x86)
 
-  * Debian GNU/Linux 9.6 ("stretch") (x86)
+  * Debian GNU/Linux 10.2 ("buster") (amd64, x86)
 
-  * Debian GNU/Linux 8.10 ("jessie") (x86)
+  * Debian GNU/Linux 9.11 ("stretch") (x86)
 
-  * Fedora 27 (x86_64)
+  * Debian GNU/Linux 8.11 ("jessie") (x86)
 
-  * Gentoo (early-Jan-2019) (x86)
+  * Gentoo (mid-Nov-2019) (x86)
 
-  * Ubuntu 18.04 ("bionic") (x86_64)
+  * Ubuntu 19.10 ("eoan") (x86_64)
 
 
 Summary of new features in cryptmount-5.2

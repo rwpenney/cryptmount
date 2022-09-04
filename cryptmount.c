@@ -458,6 +458,7 @@ static int do_devsetup(const km_pw_context_t *pw_ctxt,
   bail_out:
 
     if (killloop) unblockify_file(&tgtdev, isloop);   /* mounting failed? */
+    if (tgtdev) free((void*)tgtdev);
     sec_free(dmparams);
     sec_free(key);
 
@@ -593,8 +594,8 @@ static int do_unmount(const bound_tgtdefn_t *boundtgt)
 {   const tgtdefn_t *tgt = boundtgt->tgt;
     int eflag=ERR_NOERROR;
     struct passwd *pwent;
-    char *mntdev=NULL;
-    tgtstat_t *tstat;
+    char *mntdev = NULL;
+    tgtstat_t *tstat = NULL;
 
     /* Check if filing system has been configured at all: */
     if (!is_mounted(tgt) || (tstat = get_tgtstatus(tgt)) == NULL) {
@@ -637,6 +638,7 @@ static int do_unmount(const bound_tgtdefn_t *boundtgt)
   bail_out:
 
     if (mntdev != NULL) free((void*)mntdev);
+    if (tstat != NULL) free_tgtstatus(tstat);
 
     return eflag;
 }

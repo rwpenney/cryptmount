@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
-"POT-Creation-Date: 2019-01-05 14:15+0000\n"
+"POT-Creation-Date: 2019-10-19 08:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,32 +87,37 @@ msgstr ""
 msgid "Checksum mismatch in keyfile (openssl-compat, ofs=%u,idx=%u)\n"
 msgstr ""
 
-#: armour-luks.c:308 armour-luks.c:392
+#: armour-luks.c:217
+#, c-format
+msgid "Failed to acquire privileges for LUKS container"
+msgstr ""
+
+#: armour-luks.c:310 armour-luks.c:394
 #, c-format
 msgid "Failed to initialize device for LUKS keyfile\n"
 msgstr ""
 
-#: armour-luks.c:318
+#: armour-luks.c:320
 #, c-format
 msgid "Failed to extract LUKS key for \"%s\" (errno=%d)\n"
 msgstr ""
 
-#: armour-luks.c:379
+#: armour-luks.c:381
 #, c-format
 msgid "Formatting \"%s\", will probably destroy all existing data"
 msgstr ""
 
-#: armour-luks.c:408
+#: armour-luks.c:410
 #, c-format
 msgid "Failed to create LUKS header for \"%s\"\n"
 msgstr ""
 
-#: armour-luks.c:418
+#: armour-luks.c:420
 #, c-format
 msgid "Failed to create LUKS key for \"%s\"\n"
 msgstr ""
 
-#: armour-luks.c:431
+#: armour-luks.c:433
 #, c-format
 msgid "Setting password on LUKS keyslot-%u\n"
 msgstr ""
@@ -178,32 +183,32 @@ msgstr ""
 msgid "Device-mapper target-creation failed for \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:487 cryptmount.c:720
+#: cryptmount.c:488 cryptmount.c:722
 #, c-format
 msgid "Target \"%s\" does not appear to be configured\n"
 msgstr ""
 
-#: cryptmount.c:502
+#: cryptmount.c:503
 #, c-format
 msgid "Cannot stat \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:510
+#: cryptmount.c:511
 #, c-format
 msgid "Failed to remove device-mapper target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:543
+#: cryptmount.c:544
 #, c-format
 msgid "Target \"%s\" is already mounted\n"
 msgstr ""
 
-#: cryptmount.c:601
+#: cryptmount.c:602
 #, c-format
 msgid "Target \"%s\" does not appear to be mounted\n"
 msgstr ""
 
-#: cryptmount.c:611
+#: cryptmount.c:612
 #, c-format
 msgid "Only \"%s\" can unmount \"%s\"\n"
 msgstr ""
@@ -211,122 +216,122 @@ msgstr ""
 #. TRANSLATORS: the following expands to include
 #. the *numerical* user-identity in place of '%lu',
 #. e.g. giving 'only user-16 can unmount "target"':
-#: cryptmount.c:617
+#: cryptmount.c:618
 #, c-format
 msgid "Only user-%lu can unmount \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:661
+#: cryptmount.c:663
 #, c-format
 msgid "Target \"%s\" is already configured\n"
 msgstr ""
 
-#: cryptmount.c:684 cryptmount.c:740
+#: cryptmount.c:686 cryptmount.c:742
 #, c-format
 msgid "Crypto-swap is not supported by this installation of cryptmount\n"
 msgstr ""
 
-#: cryptmount.c:772
+#: cryptmount.c:774
 #, c-format
 msgid "Key-file for \"%s\" isn't password-protected\n"
 msgstr ""
 
-#: cryptmount.c:798 cryptmount.c:919
+#: cryptmount.c:800 cryptmount.c:921
 #, c-format
 msgid "Cannot open \"%s\" for writing\n"
 msgstr ""
 
-#: cryptmount.c:813
+#: cryptmount.c:815
 #, c-format
 msgid "Retiring old key (%s -> %s) failed\n"
 msgstr ""
 
-#: cryptmount.c:821
+#: cryptmount.c:823
 #, c-format
 msgid "Installing new key (%s -> %s) failed\n"
 msgstr ""
 
-#: cryptmount.c:828
+#: cryptmount.c:830
 #, c-format
 msgid "Backup of previous key is in \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:868 cryptmount.c:1545
+#: cryptmount.c:870 cryptmount.c:1547
 #, c-format
 msgid "Target name \"%s\" is not recognized\n"
 msgstr ""
 
-#: cryptmount.c:874
+#: cryptmount.c:876
 #, c-format
 msgid "Bad key-length parameter"
 msgstr ""
 
-#: cryptmount.c:886
+#: cryptmount.c:888
 #, c-format
 msgid "Key-file \"%s\" already exists for target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:896
+#: cryptmount.c:898
 #, c-format
 msgid "Generating random key; please be patient...\n"
 msgstr ""
 
-#: cryptmount.c:900
+#: cryptmount.c:902
 #, c-format
 msgid "Failed to generate new key\n"
 msgstr ""
 
-#: cryptmount.c:933
+#: cryptmount.c:935
 #, c-format
 msgid "Installation of new keyfile \"%s\" failed"
 msgstr ""
 
-#: cryptmount.c:1069
+#: cryptmount.c:1071
 #, c-format
 msgid "Only root can use option \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1082
+#: cryptmount.c:1084
 #, c-format
 msgid "Only root can configure \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1146
+#: cryptmount.c:1148
 #, c-format
 msgid "Cannot find key-manager to match target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1413
+#: cryptmount.c:1415
 #, c-format
 msgid "Multiple operating modes not supported\n"
 msgstr ""
 
-#: cryptmount.c:1468
+#: cryptmount.c:1470
 #, c-format
 msgid "Memory-locking failed...\n"
 msgstr ""
 
-#: cryptmount.c:1496
+#: cryptmount.c:1498
 #, c-format
 msgid "Bad file-descriptor (%d)\n"
 msgstr ""
 
-#: cryptmount.c:1506
+#: cryptmount.c:1508
 #, c-format
 msgid "Security failure\n"
 msgstr ""
 
-#: cryptmount.c:1525
+#: cryptmount.c:1527
 #, c-format
 msgid "Trailing command-line arguments given with '--all' option\n"
 msgstr ""
 
-#: cryptmount.c:1557
+#: cryptmount.c:1559
 #, c-format
 msgid "Target security failure for \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1566
+#: cryptmount.c:1568
 #, c-format
 msgid "No targets specified\n"
 msgstr ""
@@ -343,17 +348,17 @@ msgid ""
 "mkswap manually\n"
 msgstr ""
 
-#: looputils.c:225
+#: looputils.c:226
 #, c-format
 msgid "Failed to free device (%d,%d)\n"
 msgstr ""
 
-#: looputils.c:261
+#: looputils.c:262
 #, c-format
 msgid "No available loopback devices\n"
 msgstr ""
 
-#: looputils.c:275
+#: looputils.c:276
 #, c-format
 msgid "Bad device type (%x) for \"%s\" (need block/file)\n"
 msgstr ""

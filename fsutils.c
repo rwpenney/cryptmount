@@ -447,8 +447,8 @@ int do_rmvmntent(const tgtdefn_t *tgt)
  *  to swap partitions, even if they are active.
  */
 int is_mounted(const tgtdefn_t *tgt)
-{   int mounted=0;
-    char *mntdev=NULL;
+{   int mounted = 0;
+    char *mntdev = NULL;
     struct mntent *mntinfo;
     struct stat st_mtb, st_tgt;
     FILE *fp;
@@ -458,12 +458,17 @@ int is_mounted(const tgtdefn_t *tgt)
 
     /* find path to device that would have been mounted & device info: */
     devmap_path(&mntdev, tgt->ident);
-    if (stat(mntdev, &st_tgt) != 0) return 0;
+    if (stat(mntdev, &st_tgt) != 0) {
+      mounted = 0;
+      goto bail_out;
+    }
 
     /* check entries in /etc/mtab: */
     fp = setmntent(ETCMTAB, "r");
     if (fp == NULL) {
-        return 0;       /* indeterminate case - assume not mounted */
+        /* indeterminate case - assume not mounted */
+        mounted = 0;
+        goto bail_out;
     }
     while ((mntinfo = getmntent(fp)) != NULL && !mounted) {
         if (stat(mntinfo->mnt_fsname, &st_mtb) != 0) continue;
@@ -475,6 +480,9 @@ int is_mounted(const tgtdefn_t *tgt)
         }
     }
     endmntent(fp);
+
+  bail_out:
+    if (mntdev) free((void*)mntdev);
 
     return mounted;
 }
