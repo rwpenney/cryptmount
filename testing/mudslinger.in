@@ -22,8 +22,8 @@ function listLoopDevs() {
     losetup -f > /dev/null
     losetup -l -O NAME | \
         sed '1d' > ${TMPDIR}/usedLoops
-    ls /dev/loop[0-9] | \
-        grep -v -f ${TMPDIR}/usedLoops | \
+    ls /dev/loop[0-9]* | \
+        grep -v -x -f ${TMPDIR}/usedLoops | \
         sort -r > ${TMPDIR}/availableLoops
 };
 
@@ -119,7 +119,7 @@ function wait_udev() {
 function mk_ssl_keyfile() {
     # Syntax: mk_ssl_keyfile <bytes> <message_digest> <cipher>
     ${DD} if=/dev/urandom bs=${1}c count=1 2>/dev/null | \
-    openssl enc -e -pass pass:"${PASSWD}" -md $2 -${3} 2>/dev/null
+    openssl enc -e -pass pass:"${PASSWD}" -md $2 -${3} 2>&3
 };
 
 function mkrandshort() {
@@ -772,10 +772,9 @@ function test_ssl_algs() {
     # Test usability of OpenSSL key & hashing algorithms
     if test_start "OpenSSL-algorithm availability"; then true; else return; fi
     if ${CM} --key-managers 2>/dev/null | grep -q openssl; then true; else test_fail "No OpenSSL support"; return; fi
-    for keycipher in aes-128-cbc des cast
-    do
-        for keyhash in md5 sha1
-        do
+    for keycipher in aes-128-ecb aes-256-cbc camellia-128-cbc; do
+        # Beware cfb*, ofb modes seem incompatible for unknown reasons
+        for keyhash in md5 sha1 sha256; do
             echo "keycipher=${keycipher} keyhash=${keyhash}" 1>&3
 
             mk_ssl_keyfile 16 ${keyhash} ${keycipher} > ${TMPDIR}/keyfile
@@ -811,7 +810,7 @@ function test_gcry_algs() {
     # Test usability of libgcrypt key & hashing algorithms
     if test_start "libgcrypt-algorithm availability"; then true; else return; fi
     if ${CM} --key-managers 2>/dev/null | grep -q -w libgcrypt; then true; else test_fail "No libgcrypt support"; return; fi
-    for keycipher in blowfish cast5-ecb aes192 3des-cbc
+    for keycipher in aes192 blowfish cast5-ecb camellia-256-xts
     do
         for keyhash in ripemd160 tiger192 sha512
         do
@@ -851,10 +850,11 @@ function test_gcryossl() {
     # Test usability of libgcrypt OpenSSL-compatibility layer
     if test_start "libgcrypt OpenSSL-emulator"; then true; else return; fi
     if ${CM} --key-managers 2>/dev/null | grep -q -w openssl-compat; then true; else test_fail "No openssl-compat support"; return; fi
-    configs="aes128:rmd160:aes128:ripemd160 aes-128-cbc:md5:aes-cbc:md5 \
-            aes-192-ecb:md4:aes192-ecb:md4 aes-256-cbc:md5:aes256-cbc:md5 \
-            bf-cbc:sha1:blowfish-cbc:sha1 cast:rmd160:cast5-cbc:ripemd160 \
-            des:sha1:des:sha1"
+    configs="aes-128-cbc:md5:aes-cbc:md5 \
+             aes-192-ecb:sha224:aes192-ecb:sha224 \
+             aes-256-cbc:md5:aes256-cbc:md5 \
+             camellia-256-cbc:sha1:camellia256-cbc:sha1 \
+             des3:sha384:3des-cbc:sha384"
     for config in ${configs}
     do
         echo "config=${config}" 1>&3
@@ -1320,7 +1320,7 @@ function test_luks_compat() {
 
     echo -n "keyslot0-password" > ${TMPDIR}/keymat0
     echo -n "${PASSWD}" > ${TMPDIR}/keymat
-    for CipherLen in aes,128 blowfish,288 twofish-xts-plain64,256 serpent-cbc-essiv:sha256,96
+    for CipherLen in aes,128 twofish-xts-plain64,256 serpent-cbc-essiv:sha256,96
     do
         tupelize $CipherLen cipher len
         echo "config: $CipherLen" 1>&3
@@ -1333,6 +1333,7 @@ function test_luks_compat() {
         cryptsetup --key-file ${TMPDIR}/keymat0 --cipher ${cipher} --key-slot 2 luksAddKey "${LOOPDEV}" ${TMPDIR}/keymat 1>&3 2>&3
         sync; wait_udev
         cryptsetup --key-file ${TMPDIR}/keymat luksOpen "${LOOPDEV}" "${TMPTGT}" 1>&3 2>&3
+        sync; wait_udev
         if [ ! -b /dev/mapper/${TMPTGT} ]; then test_fail "luksOpen"; return; fi
         if mke2fs -q -j "/dev/mapper/${TMPTGT}"; then true; else test_fail mke2fs; return; fi
         wait_udev

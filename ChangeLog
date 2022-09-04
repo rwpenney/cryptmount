@@ -1,5 +1,14 @@
 ChangeLog for cryptmount (http://cryptmount.sourceforge.net)
 
+03Sep22	- *** cryptmount-6.0 released
+
+14Aug22	- Revised algorithm test-cases in mudslinger script to align to OpenSSL-3.0
+
+06Aug22	- Refreshed cipher algorithm names to match OpenSSL/libgcrypt conventions
+	Converted default libgcrypt keycipher to aes256-xts and keyhash to sha256
+
+24Jul22	- Converted setup-script to use LUKS format by default
+
 27Dec20	- Incorporated updated German translations from Helge Kreutzmann
 
 06Sep20	- Refreshed cipher-mode and loop-device selection in "mudslinger" testing script

@@ -1,6 +1,6 @@
-		    Release notes for cryptmount-5.3.3
+		    Release notes for cryptmount-6.0
 
-			RW Penney, December 2020
+			RW Penney, September 2022
 
 Introduction
 ============
@@ -9,9 +9,6 @@ an ordinary user to mount an encrypted filing system without requiring
 superuser privileges, and which assists the system-administrator in
 creating and managing encrypted filesystems & swap-partitions.
 
-cryptmount was originally written because of differences between
-the capabilities of the loopback device of the 2.4/2.6 kernel series
-and the newer, preferred, device-mapper mechanisms of kernels since linux-2.6.
 cryptmount automatically performs the various stages of configuring
 any supporting loopback and device-mapper targets needed to access
 an encrypted filing system before actually mounting it, but
@@ -27,6 +24,30 @@ the system administrator whenever the system is booted.
 cryptmount also provides an aid to the system manager in allowing easier
 control over the configuration and mounting of encrypted filesystems,
 especially within system start-up scripts.
+
+
+Summary of new features in cryptmount-6.0
+=========================================
+
+This (stable) release offers the following enhancements:
+
+  * cryptmount-setup script uses LUKS format by default
+
+  * Support for wider range of libgcrypt & OpenSSL cipher algorithms
+
+It has been tested on the following systems:
+
+  * Arch Linux (mid-Aug-2022) (x86_64)
+
+  * Debian GNU/Linux 12.x ("bookworm"/"testing", early-Sep-2020) (amd64)
+
+  * Debian GNU/Linux 11.4 ("bullseye") (amd64)
+
+  * Debian GNU/Linux 10.12 ("buster") (amd64)
+
+  * Fedora 36 (x86_64)
+
+  * Ubuntu 22.04 ("jammy") (x86_64)
 
 
 Summary of new features in cryptmount-5.3

@@ -1,6 +1,6 @@
 /*
  *  Miscellaneous utility functions for cryptmount
- *  (C)Copyright 2005-2021, RW Penney
+ *  (C)Copyright 2005-2022, RW Penney
  */
 
 /*
@@ -1035,5 +1035,5 @@ int ut_pwfort()
 #endif  /* TESTING */
 
 /*
- *  (C)Copyright 2005-2021, RW Penney
+ *  (C)Copyright 2005-2022, RW Penney
  */

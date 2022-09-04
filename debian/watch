@@ -3,7 +3,7 @@
 # See uscan(1) for format
 
 # Compulsory format-version line:
-version=3
+version=4
 
 # Search sourceforge.net webpage (via qa.debian.org redirector):
 http://sf.net/cryptmount/ cryptmount-([\d\.]*)\.tar\.gz

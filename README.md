@@ -24,12 +24,12 @@ installed to successfully build and use cryptmount:
  *  kernel-headers
  *  libdevmapper (e.g. version 1.02 or later)
 
-The following packages are optional, and allow a wider choice
+The following additional packages are recommended, and allow a wider choice
 of protection schemes for the keyfiles which govern access
 to the protected filesystems:
 
- *  libcryptsetup (version 1.6 or later)
- *  libgcrypt (e.g. version 1.6.0 or later)
+ *  libcryptsetup (version 1.6 or later, essential for LUKS support)
+ *  libgcrypt (e.g. version 1.8.0 or later)
  *  pkg-config
 
 You will also need to ensure that your system has support for the
@@ -41,7 +41,7 @@ supplied with cryptmount.
 
 cryptmount has been tested (using the "mudslinger" script
 in the 'testing' sub-directory) on a variety of GNU/Linux platforms including:
-Debian 9.0, Ubuntu 18.04, CentOS 7.6, ArchLinux etc.
+Debian 11.0, Ubuntu 20.04, CentOS 7.6, ArchLinux etc.
 
 For the most recent version of cryptmount, please see
 http://www.sourceforge.net/projects/cryptmount
@@ -59,7 +59,7 @@ and the encryption algorithms available to the kernel.
 The following is an example based on housing a 128Mb AES-encrypted
 filing system in an ordinary file ("/home/crypt.fs")
 which will be mounted below /mnt/crypt, and where the 256-bit decryption key
-is protected by the builtin SHA1/Blowfish encryption engine.
+is protected by the LUKS encryption engine.
 
 First create a configuration file (by default "/usr/local/etc/cryptmount/cmtab")
 that describes the encrypted filing system that we are about to create,
@@ -67,9 +67,8 @@ containing:
 ```
     crypt {
         dev=/home/crypt.fs dir=/mnt/crypt
-        fstype=ext2 mountoptions=defaults cipher=aes
-        keyfile=/usr/local/etc/cryptmount/crypt.key
-        keyformat=builtin
+        fstype=ext4 mountoptions=defaults
+        keyformat=luks
     }
 ```
 Then prepare the key-file and filing system as follows:
@@ -78,7 +77,7 @@ Then prepare the key-file and filing system as follows:
     dd if=/dev/zero of=/home/crypt.fs bs=1M count=128
     mkdir /mnt/crypt
     cryptmount --prepare crypt
-    mke2fs /dev/mapper/crypt
+    mke2fs -t ext4 /dev/mapper/crypt
     cryptmount --release crypt
 ```
 A very similar process can be used to setup an encrypted filing system using

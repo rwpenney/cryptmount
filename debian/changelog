@@ -1,7 +1,15 @@
+cryptmount (6.0.0-1) unstable; urgency=low
+
+  * New upstream release
+    - changed default fileformat in cryptmount-setup to LUKS
+    - broadened support for libgcrypt cipher modes
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 03 Sep 2022 09:30:00 +0000
+
 cryptmount (5.3.3-1) unstable; urgency=low
 
   * New upstream release
-    - -Updated German translations (Closes: bug#978114)
+    - updated German translations (Closes: bug#978114)
 
   * Updated to Debian Standards Version 4.5.1
 

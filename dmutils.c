@@ -1,6 +1,6 @@
 /*
  *  Device-mapper utilities for cryptmount
- *  (C)Copyright 2005-2021, RW Penney
+ *  (C)Copyright 2005-2022, RW Penney
  */
 
 /*
@@ -377,5 +377,5 @@ int udev_active_dir(const char *path, time_t starttime, double timeout)
 }
 
 /*
- *  (C)Copyright 2005-2021, RW Penney
+ *  (C)Copyright 2005-2022, RW Penney
  */

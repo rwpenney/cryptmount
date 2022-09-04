@@ -55,6 +55,17 @@ CheckPrivileges() {
 }
 
 
+CheckLuksSupport() {
+    if `${CM_BINEXE} --key-managers | egrep -q '\<luks\>'`; then
+        has_luks_keymgr="yes"
+    else
+        has_luks_keymgr="no"
+        echo ""
+        eval_gettext "No LUKS support available - using built-in key manager"; echo
+    fi
+}
+
+
 SectionBreak() {
     echo ""
     case "$1" in
@@ -185,6 +196,11 @@ GetContainerInfo() {
 
 
 GetKeyInfo() {
+    if [ "${has_luks_keymgr}" = "yes" ]; then
+        cmtab_keyspec="keyformat=luks"
+        return
+    fi
+
     eval_gettext "Access to your encrypted filesystem is protected by a key that is kept in a separate small file. The key is locked by a password that you must enter whenever you mount the filesystem." | FoldLines; echo
 
     key_file=""
@@ -197,6 +213,7 @@ GetKeyInfo() {
             key_file=""
         fi
     done
+    cmtab_keyspec="keyformat=builtin keyfile=`echo "${key_file}" | sed 's, ,\\\\ ,g'`"
 }
 
 
@@ -208,8 +225,10 @@ BuildFS() {
     eval_gettext " - Creating the directory \"\${mount_dir}\""; echo
     eval_gettext " - Creating a \${fs_size}MB file, \"\${crypto_dev}\""; echo
     eval_gettext " - Adding an extra entry (\"\${TargetName}\") in \${CM_CFGDIR}/cmtab"; echo
-    eval_gettext " - Creating a key-file (\"\${key_file}\")"; echo
-    eval_gettext " - Creating an ext3 filingsystem on \"\${crypto_dev}\""; echo
+    if [ -n "${key_file}" ]; then
+        eval_gettext " - Creating a key-file (\"\${key_file}\")"; echo
+    fi
+    eval_gettext " - Creating an ext4 filingsystem on \"\${crypto_dev}\""; echo
 
     if [ -f "${bckp_cmtab}" ]; then
         eval_gettext " - Overwriting the backup configuration-file \"\${bckp_cmtab}\""; echo
@@ -244,14 +263,13 @@ BuildFS() {
 `echo "${TargetName}" | sed 's, ,\\\\ ,g'` {
     dev=`echo "${crypto_dev}" | sed 's, ,\\\\ ,g'`
     dir=`echo "${mount_dir}" | sed 's, ,\\\\ ,g'`
-    fstype=ext3
+    fstype=ext4
     mountoptions=defaults
     cipher=aes
-    keyformat=builtin
-    keyfile=`echo "${key_file}" | sed 's, ,\\\\ ,g'`
+    ${cmtab_keyspec}
 }
 EOF
-    eval_gettext "Generating filesystem access key (\${key_file})..."; echo
+    eval_gettext "Generating filesystem access key..."; echo
     until  ${CM_BINEXE} --generate-key 32 "${TargetName}"; do
         cmerrno=$?
         if [ ${cmerrno} -ne 33 ]; then
@@ -267,7 +285,7 @@ EOF
             exit 4
         fi
     done
-    mke2fs -j "/dev/mapper/${TargetName}" >/dev/null 2>&1
+    mke2fs -t ext4 "/dev/mapper/${TargetName}" >/dev/null 2>&1
     if [ "${user_owner}" != "" ]; then
         chown "${user_owner}" "${mount_dir}" "${crypto_dev}"
         chmod 0500 "${mount_dir}"
@@ -292,12 +310,13 @@ eval_gettext "cryptmount setup script"; echo; echo
 
 eval_gettext "This program will allow you to setup a secure filing-system that will be managed by \"cryptmount\". You will be able to select basic features such as the location and size of the filesystem - if you want more advanced features, you should consult the cryptmount manual page." | FoldLines; echo; echo
 
-echo "cryptmount version @PKG_VERSION@, (C)Copyright 2007-2021 RW Penney"
+echo "cryptmount version @PKG_VERSION@, (C)Copyright 2007-2022 RW Penney"
 eval_gettext "cryptmount comes with ABSOLUTELY NO WARRANTY."; echo
 eval_gettext "This is free software, and you are welcome to redistribute it under certain conditions - see the file 'COPYING' in the source directory." | FoldLines; echo
 
 
 CheckPrivileges
+CheckLuksSupport
 modprobe -q -a loop dm-mod dm-crypt || true
 trap TrapCleanup INT QUIT HUP
 
@@ -328,7 +347,9 @@ echo "    cd"
 echo "    cryptmount --unmount ${TargetName}"
 
 echo
-eval_gettext "Please take great care NOT to delete or damage your keyfile (\"${key_file}\"). Without that file, and the associated password, it will be virtually impossible to access your encrypted filesystem. You may want to keep a separate backup copy of the keyfile." | FoldLines; echo
+if [ -n "${key_file}" ]; then
+    eval_gettext "Please take great care NOT to delete or damage your keyfile (\"${key_file}\"). Without that file, and the associated password, it will be virtually impossible to access your encrypted filesystem. You may want to keep a separate backup copy of the keyfile." | FoldLines; echo
+fi
 
 exit 0
 

@@ -1,9 +1,9 @@
 dnl autoconf script for cryptmount
-dnl (C)Copyright 2005-2021, RW Penney
+dnl (C)Copyright 2005-2022, RW Penney
 
 dnl run 'aclocal; autoconf; automake -a -c -i; ./configure; make'
 
-AC_INIT(cryptmount, 5.3.3, cryptmount@rwpenney.uk)
+AC_INIT(cryptmount, 6.0, cryptmount@rwpenney.uk)
 AC_PREREQ(2.59)
 
 test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
@@ -17,7 +17,7 @@ LIBS_LUKS=""
 
 AM_INIT_AUTOMAKE([foreign no-dependencies])
 
-AC_GNU_SOURCE
+AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
@@ -34,7 +34,7 @@ AC_SEARCH_LIBS(tcgetattr, termios,
     [AC_DEFINE(HAVE_TERMIOS,[0],[Define to 1 if you have tcgetattr()])])
 
 
-AC_STDC_HEADERS
+AC_HEADER_STDC
 AC_CHECK_HEADERS([errno.h getopt.h mntent.h \
                   linux/fs.h linux/loop.h sys/sysmacros.h])
 

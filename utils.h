@@ -1,6 +1,6 @@
 /*
  *  Declarations for miscellaneous utilities for cryptmount
- *  (C)Copyright 2005-2021, RW Penney
+ *  (C)Copyright 2005-2022, RW Penney
  */
 
 /*
@@ -135,5 +135,5 @@ static inline int cm_fwrite(const void *buff, size_t nbytes, FILE *stream) {
 #endif  /* _UTILS_H */
 
 /*
- *  (C)Copyright 2005-2021, RW Penney
+ *  (C)Copyright 2005-2022, RW Penney
  */

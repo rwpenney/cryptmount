@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
-"POT-Creation-Date: 2019-10-19 08:27+0100\n"
+"POT-Creation-Date: 2022-09-03 09:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: armour.c:154 armour-builtin.c:300 armour-gcry.c:546 armour-gcry.c:702
+#: armour.c:154 armour-builtin.c:300 armour-gcry.c:562 armour-gcry.c:718
 #, c-format
 msgid "Key-extraction failed for \"%s\"\n"
 msgstr ""
@@ -47,42 +47,47 @@ msgstr ""
 msgid "Specification for target \"%s\" contains non-absolute pathname\n"
 msgstr ""
 
-#: armour-builtin.c:282 armour-gcry.c:528 armour-gcry.c:683
+#: armour-builtin.c:282 armour-gcry.c:544 armour-gcry.c:699
 #, c-format
 msgid "Password mismatch when extracting key\n"
 msgstr ""
 
-#: armour-builtin.c:398 armour-gcry.c:607 armour-gcry.c:761
+#: armour-builtin.c:398 armour-gcry.c:623 armour-gcry.c:777
 #, c-format
 msgid "Failed to create new key file\n"
 msgstr ""
 
-#: armour-gcry.c:166
+#: armour-gcry.c:175
 #, c-format
 msgid "Couldn't find libgcrypt cipher \"%s\"\n"
 msgstr ""
 
-#: armour-gcry.c:178
+#: armour-gcry.c:184
+#, c-format
+msgid "Couldn't find libgcrypt cipher mode \"%s\" - using fallback\n"
+msgstr ""
+
+#: armour-gcry.c:190
 #, c-format
 msgid "Couldn't find libgcrypt digest \"%s\"\n"
 msgstr ""
 
-#: armour-gcry.c:489
+#: armour-gcry.c:505
 #, c-format
 msgid "Bad keyfile format (libgcrypt)\n"
 msgstr ""
 
-#: armour-gcry.c:532
+#: armour-gcry.c:548
 #, c-format
 msgid "Checksum mismatch in keyfile (gcry, %x != %x)\n"
 msgstr ""
 
-#: armour-gcry.c:648
+#: armour-gcry.c:664
 #, c-format
 msgid "Bad keyfile format (openssl-compat)\n"
 msgstr ""
 
-#: armour-gcry.c:687
+#: armour-gcry.c:703
 #, c-format
 msgid "Checksum mismatch in keyfile (openssl-compat, ofs=%u,idx=%u)\n"
 msgstr ""
@@ -122,7 +127,7 @@ msgstr ""
 msgid "Setting password on LUKS keyslot-%u\n"
 msgstr ""
 
-#: cryptmount.c:127
+#: cryptmount.c:126
 msgid ""
 "usage: cryptmount [OPTION [target ...]]\n"
 "\n"
@@ -153,62 +158,62 @@ msgstr ""
 #. some localizations may require the mount-point and filesystem type
 #. to be printed in a different order, but the untranslated string needs
 #. to remain an ordinary string that can be printed without gettext.
-#: cryptmount.c:262
+#: cryptmount.c:261
 #, no-c-format
 msgid "%-16s  [to mount on \"%s\" as \"%s\"]\n"
 msgstr ""
 
-#: cryptmount.c:394
+#: cryptmount.c:393
 #, c-format
 msgid "Failed to extract cipher key\n"
 msgstr ""
 
-#: cryptmount.c:403
+#: cryptmount.c:402
 #, c-format
 msgid "Cannot open device \"%s\" for target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:411
+#: cryptmount.c:410
 #, c-format
 msgid "Failed to get size of \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:421
+#: cryptmount.c:420
 #, c-format
 msgid "Bad device-mapper start/length"
 msgstr ""
 
-#: cryptmount.c:448
+#: cryptmount.c:447
 #, c-format
 msgid "Device-mapper target-creation failed for \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:488 cryptmount.c:722
+#: cryptmount.c:487 cryptmount.c:721
 #, c-format
 msgid "Target \"%s\" does not appear to be configured\n"
 msgstr ""
 
-#: cryptmount.c:503
+#: cryptmount.c:502
 #, c-format
 msgid "Cannot stat \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:511
+#: cryptmount.c:510
 #, c-format
 msgid "Failed to remove device-mapper target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:544
+#: cryptmount.c:543
 #, c-format
 msgid "Target \"%s\" is already mounted\n"
 msgstr ""
 
-#: cryptmount.c:602
+#: cryptmount.c:601
 #, c-format
 msgid "Target \"%s\" does not appear to be mounted\n"
 msgstr ""
 
-#: cryptmount.c:612
+#: cryptmount.c:611
 #, c-format
 msgid "Only \"%s\" can unmount \"%s\"\n"
 msgstr ""
@@ -216,122 +221,122 @@ msgstr ""
 #. TRANSLATORS: the following expands to include
 #. the *numerical* user-identity in place of '%lu',
 #. e.g. giving 'only user-16 can unmount "target"':
-#: cryptmount.c:618
+#: cryptmount.c:617
 #, c-format
 msgid "Only user-%lu can unmount \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:663
+#: cryptmount.c:662
 #, c-format
 msgid "Target \"%s\" is already configured\n"
 msgstr ""
 
-#: cryptmount.c:686 cryptmount.c:742
+#: cryptmount.c:685 cryptmount.c:741
 #, c-format
 msgid "Crypto-swap is not supported by this installation of cryptmount\n"
 msgstr ""
 
-#: cryptmount.c:774
+#: cryptmount.c:773
 #, c-format
 msgid "Key-file for \"%s\" isn't password-protected\n"
 msgstr ""
 
-#: cryptmount.c:800 cryptmount.c:921
+#: cryptmount.c:799 cryptmount.c:920
 #, c-format
 msgid "Cannot open \"%s\" for writing\n"
 msgstr ""
 
-#: cryptmount.c:815
+#: cryptmount.c:814
 #, c-format
 msgid "Retiring old key (%s -> %s) failed\n"
 msgstr ""
 
-#: cryptmount.c:823
+#: cryptmount.c:822
 #, c-format
 msgid "Installing new key (%s -> %s) failed\n"
 msgstr ""
 
-#: cryptmount.c:830
+#: cryptmount.c:829
 #, c-format
 msgid "Backup of previous key is in \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:870 cryptmount.c:1547
+#: cryptmount.c:869 cryptmount.c:1546
 #, c-format
 msgid "Target name \"%s\" is not recognized\n"
 msgstr ""
 
-#: cryptmount.c:876
+#: cryptmount.c:875
 #, c-format
 msgid "Bad key-length parameter"
 msgstr ""
 
-#: cryptmount.c:888
+#: cryptmount.c:887
 #, c-format
 msgid "Key-file \"%s\" already exists for target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:898
+#: cryptmount.c:897
 #, c-format
 msgid "Generating random key; please be patient...\n"
 msgstr ""
 
-#: cryptmount.c:902
+#: cryptmount.c:901
 #, c-format
 msgid "Failed to generate new key\n"
 msgstr ""
 
-#: cryptmount.c:935
+#: cryptmount.c:934
 #, c-format
 msgid "Installation of new keyfile \"%s\" failed"
 msgstr ""
 
-#: cryptmount.c:1071
+#: cryptmount.c:1070
 #, c-format
 msgid "Only root can use option \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1084
+#: cryptmount.c:1083
 #, c-format
 msgid "Only root can configure \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1148
+#: cryptmount.c:1147
 #, c-format
 msgid "Cannot find key-manager to match target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1415
+#: cryptmount.c:1414
 #, c-format
 msgid "Multiple operating modes not supported\n"
 msgstr ""
 
-#: cryptmount.c:1470
+#: cryptmount.c:1469
 #, c-format
 msgid "Memory-locking failed...\n"
 msgstr ""
 
-#: cryptmount.c:1498
+#: cryptmount.c:1497
 #, c-format
 msgid "Bad file-descriptor (%d)\n"
 msgstr ""
 
-#: cryptmount.c:1508
+#: cryptmount.c:1507
 #, c-format
 msgid "Security failure\n"
 msgstr ""
 
-#: cryptmount.c:1527
+#: cryptmount.c:1526
 #, c-format
 msgid "Trailing command-line arguments given with '--all' option\n"
 msgstr ""
 
-#: cryptmount.c:1559
+#: cryptmount.c:1558
 #, c-format
 msgid "Target security failure for \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1568
+#: cryptmount.c:1567
 #, c-format
 msgid "No targets specified\n"
 msgstr ""
@@ -419,7 +424,7 @@ msgstr ""
 msgid "Password mismatch\n"
 msgstr ""
 
-#: utils.c:578 sysinit/setupscript.sh.in:218
+#: utils.c:578 sysinit/setupscript.sh.in:237
 #, sh-format
 msgid "yes"
 msgstr ""
@@ -446,12 +451,17 @@ msgid ""
 "using one of the following:"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:112
+#: sysinit/setupscript.sh.in:64
+#, sh-format
+msgid "No LUKS support available - using built-in key manager"
+msgstr ""
+
+#: sysinit/setupscript.sh.in:123
 #, sh-format
 msgid "opaque"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:113
+#: sysinit/setupscript.sh.in:124
 #, sh-format
 msgid ""
 "Each cryptmount filesystem is identifed by a short name which is used when "
@@ -459,22 +469,22 @@ msgid ""
 "(without spaces), such as \"${DefaultTargetName}\"."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:114
+#: sysinit/setupscript.sh.in:125
 #, sh-format
 msgid "The following target names have already been used:"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:121
+#: sysinit/setupscript.sh.in:132
 #, sh-format
 msgid "Please enter a target name for your filesystem"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:125
+#: sysinit/setupscript.sh.in:136
 #, sh-format
 msgid "The target-name \"${TargetName}\" has already been used"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:133
+#: sysinit/setupscript.sh.in:144
 #, sh-format
 msgid ""
 "The ${TargetName} filesystem can be configured to be owned by a nominated "
@@ -482,63 +492,63 @@ msgid ""
 "needing to involve the superuser."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:135
+#: sysinit/setupscript.sh.in:146
 #, sh-format
 msgid "Which user should own the filesystem (leave blank for \"root\")"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:141
+#: sysinit/setupscript.sh.in:152
 #, sh-format
 msgid ""
 "In order to access the ${TargetName} filesystem, it must be mounted on top "
 "of an empty directory."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:145
+#: sysinit/setupscript.sh.in:156
 #, sh-format
 msgid "Please specify where \"${TargetName}\" should be mounted"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:149
+#: sysinit/setupscript.sh.in:160
 #, sh-format
 msgid "${mount_dir} is not a valid directory name"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:157
+#: sysinit/setupscript.sh.in:168
 #, sh-format
 msgid ""
 "The maximum available size of your filesystem needs to be chosen so that "
 "enough space can be reserved on your disk."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:161
+#: sysinit/setupscript.sh.in:172
 #, sh-format
 msgid "Enter the filesystem size (in MB)"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:166
+#: sysinit/setupscript.sh.in:177
 #, sh-format
 msgid "${fs_size} is not a valid number"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:172
+#: sysinit/setupscript.sh.in:183
 #, sh-format
 msgid ""
 "The actual encrypted filesystem will be stored in a special file, which "
 "needs to be large enough to contain your entire encrypted filesystem."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:176
+#: sysinit/setupscript.sh.in:187
 #, sh-format
 msgid "Enter a filename for your encrypted container"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:180
+#: sysinit/setupscript.sh.in:191
 #, sh-format
 msgid "WARNING: ${crypto_dev} already exists"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:188
+#: sysinit/setupscript.sh.in:204
 #, sh-format
 msgid ""
 "Access to your encrypted filesystem is protected by a key that is kept in a "
@@ -546,108 +556,108 @@ msgid ""
 "whenever you mount the filesystem."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:192
+#: sysinit/setupscript.sh.in:208
 #, sh-format
 msgid "Enter a location for the keyfile"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:196
+#: sysinit/setupscript.sh.in:212
 #, sh-format
 msgid "WARNING: ${key_file} already exists"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:207
+#: sysinit/setupscript.sh.in:224
 #, sh-format
 msgid "Your filing system is now ready to be built - this will involve:"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:208
+#: sysinit/setupscript.sh.in:225
 #, sh-format
 msgid " - Creating the directory \"${mount_dir}\""
 msgstr ""
 
-#: sysinit/setupscript.sh.in:209
+#: sysinit/setupscript.sh.in:226
 #, sh-format
 msgid " - Creating a ${fs_size}MB file, \"${crypto_dev}\""
 msgstr ""
 
-#: sysinit/setupscript.sh.in:210
+#: sysinit/setupscript.sh.in:227
 #, sh-format
 msgid " - Adding an extra entry (\"${TargetName}\") in ${CM_CFGDIR}/cmtab"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:211
+#: sysinit/setupscript.sh.in:229
 #, sh-format
 msgid " - Creating a key-file (\"${key_file}\")"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:212
+#: sysinit/setupscript.sh.in:231
 #, sh-format
-msgid " - Creating an ext3 filingsystem on \"${crypto_dev}\""
+msgid " - Creating an ext4 filingsystem on \"${crypto_dev}\""
 msgstr ""
 
-#: sysinit/setupscript.sh.in:215
+#: sysinit/setupscript.sh.in:234
 #, sh-format
 msgid " - Overwriting the backup configuration-file \"${bckp_cmtab}\""
 msgstr ""
 
-#: sysinit/setupscript.sh.in:217
+#: sysinit/setupscript.sh.in:236
 #, sh-format
 msgid "If you do not wish to proceed, no changes will be made to your system."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:219
+#: sysinit/setupscript.sh.in:238
 #, sh-format
 msgid "no"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:220
+#: sysinit/setupscript.sh.in:239
 #, sh-format
 msgid ""
 "Please confirm that you want to proceed (enter \"${AffirmativeResponse}\")"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:223
+#: sysinit/setupscript.sh.in:242
 #, sh-format
 msgid "Installation abandoned"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:227
+#: sysinit/setupscript.sh.in:246
 #, sh-format
 msgid "done"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:229
+#: sysinit/setupscript.sh.in:248
 #, sh-format
 msgid "Making mount-point (${mount_dir})..."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:232
+#: sysinit/setupscript.sh.in:251
 #, sh-format
 msgid "Creating filesystem container (${crypto_dev})..."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:237
+#: sysinit/setupscript.sh.in:256
 #, sh-format
 msgid "Taking backup of cryptmount master config-file (${bckp_cmtab})..."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:254
+#: sysinit/setupscript.sh.in:272
 #, sh-format
-msgid "Generating filesystem access key (${key_file})..."
+msgid "Generating filesystem access key..."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:262
+#: sysinit/setupscript.sh.in:280
 #, sh-format
 msgid "Formatting encrypted filesystem..."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:291
+#: sysinit/setupscript.sh.in:309
 #, sh-format
 msgid "cryptmount setup script"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:293
+#: sysinit/setupscript.sh.in:311
 #, sh-format
 msgid ""
 "This program will allow you to setup a secure filing-system that will be "
@@ -656,24 +666,24 @@ msgid ""
 "features, you should consult the cryptmount manual page."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:296
+#: sysinit/setupscript.sh.in:314
 #, sh-format
 msgid "cryptmount comes with ABSOLUTELY NO WARRANTY."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:297
+#: sysinit/setupscript.sh.in:315
 #, sh-format
 msgid ""
 "This is free software, and you are welcome to redistribute it under certain "
 "conditions - see the file 'COPYING' in the source directory."
 msgstr ""
 
-#: sysinit/setupscript.sh.in:323
+#: sysinit/setupscript.sh.in:342
 #, sh-format
 msgid "Your new encrypted filesystem is now ready for use - to access, try:"
 msgstr ""
 
-#: sysinit/setupscript.sh.in:326
+#: sysinit/setupscript.sh.in:345
 #, sh-format
 msgid "After you have finished using the filesystem, try:"
 msgstr ""

@@ -1,5 +1,5 @@
 .\" cryptmount-setup manual page
-.\" Copyright (c) 2007-2018 RW Penney
+.\" Copyright (c) 2007-2022 RW Penney
 .\"
 .TH CRYPTMOUNT-SETUP 8 "2018-01-18" "@PACKAGE_VERSION@" "User commands"
 .SH NAME
@@ -39,7 +39,7 @@ For more advanced options, please see the manual page for
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-is Copyright 2005-2018 RW Penney
+is Copyright 2005-2022 RW Penney
 .br
 and is supplied with NO WARRANTY.
 Licencing terms are as described in the file "COPYING"

@@ -1,10 +1,10 @@
 #
 # rpm spec-file for cryptmount
-# Copyright 2006-2021, Holger Mueller, Eriks Zelenka & RW Penney
+# Copyright 2006-2022, Holger Mueller, Eriks Zelenka & RW Penney
 #
 Summary:	Let ordinary users mount an encrypted file system
 Name:		cryptmount
-Version: 	5.3.3
+Version: 	6.0
 Release:	1%{?dist}
 License:	GPL
 URL:		http://cryptmount.sourceforge.net
@@ -100,6 +100,8 @@ fi
 
 
 %changelog
+* Sat Sep 03 2022 RW Penney <cryptmount@rwpenney.uk> - 6.0
+    -- Refreshed default ciphers and keymanager
 * Wed Feb 07 2018 RW Penney <cryptmount@rwpenney.uk> - 5.3
     -- Improved support for cryptsetup-2.x
 * Thu Oct 08 2015 RW Penney <cryptmount@rwpenney.org.uk> - 5.2

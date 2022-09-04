@@ -1,6 +1,6 @@
 /*
  *  Methods for encryption/security mechanisms for cryptmount
- *  (C)Copyright 2005-2021, RW Penney
+ *  (C)Copyright 2005-2022, RW Penney
  */
 
 /*
@@ -73,11 +73,18 @@ enum {
 static struct kmgcry_mode {
     const char *name;
     unsigned mode; } kmgcry_modes[] = {
-    { "ecb",    GCRY_CIPHER_MODE_ECB },
-    { "cfb",    GCRY_CIPHER_MODE_CFB },
-    { "cbc",    GCRY_CIPHER_MODE_CBC },
-    { "ofb",    GCRY_CIPHER_MODE_OFB },
-    { "cfb",    GCRY_CIPHER_MODE_CFB },
+    { "aeswrap",  GCRY_CIPHER_MODE_AESWRAP },
+    { "cbc",      GCRY_CIPHER_MODE_CBC },
+    { "cfb",      GCRY_CIPHER_MODE_CFB },
+    { "cfb8",     GCRY_CIPHER_MODE_CFB8 },
+    { "ccm",      GCRY_CIPHER_MODE_CCM },
+    { "ctr",      GCRY_CIPHER_MODE_CTR },
+    { "ecb",      GCRY_CIPHER_MODE_ECB },
+    { "gcm",      GCRY_CIPHER_MODE_GCM },
+    { "ocb",      GCRY_CIPHER_MODE_OCB },
+    { "ofb",      GCRY_CIPHER_MODE_OFB },
+    { "poly1305", GCRY_CIPHER_MODE_POLY1305 },
+    { "xts",      GCRY_CIPHER_MODE_XTS },
     { NULL, GCRY_CIPHER_MODE_NONE }
 };
 
@@ -86,25 +93,28 @@ static void kmgcry_tx_algnames(const keyinfo_t *keyinfo,
         char **algstr, char **modestr, char **dgststr)
     /* Parse/translate algorithm string into cipher/mode/digest fields */
 {   char *buff=NULL, *pos;
-    struct map_t {
-        const char *src, *dst; }    /* map OpenSSL name to libgcrypt name */
+    struct map_t {  /* map OpenSSL name to libgcrypt name, if different */
+        const char *ssl_name, *gcy_name; }
         *mapent;
     struct map_t ctable[] = {
-        { "aes-128",    "aes" },
-        { "aes128",     "aes" },
-        { "aes-192",    "aes192" },
-        { "aes-256",    "aes256" },
-        { "bf",         "blowfish" },
-        { "cast",       "cast5" },
-        { "des3",       "3des" },
+        { "aes-128",        "aes" },
+        { "aes128",         "aes" },
+        { "aes-192",        "aes192" },
+        { "aes-256",        "aes256" },
+        { "bf",             "blowfish" },
+        { "camellia-128",   "camellia128" },
+        { "camellia-192",   "camellia192" },
+        { "camellia-256",   "camellia256" },
+        { "cast",           "cast5" },
+        { "des3",           "3des" },
         { NULL, NULL }
     };
     struct map_t htable[] = {
         { "rmd160",     "ripemd160" },
         { NULL, NULL }
     };
-    const char *default_cipher="blowfish", *default_mode="cbc",
-                *default_hash="md5";
+    const char *default_cipher="aes256", *default_mode="cbc",
+               *default_hash="sha256";
 
     *algstr = NULL;
     *modestr = NULL;
@@ -120,9 +130,9 @@ static void kmgcry_tx_algnames(const keyinfo_t *keyinfo,
             *pos = '\0';
         }
         /* Translate cipher-name to canonical libgcrypt name: */
-        for (mapent=ctable; mapent->src!=NULL; ++mapent) {
-            if (cm_strcasecmp(buff, mapent->src) == 0) {
-                *algstr = cm_strdup(mapent->dst);
+        for (mapent=ctable; mapent->ssl_name!=NULL; ++mapent) {
+            if (cm_strcasecmp(buff, mapent->ssl_name) == 0) {
+                *algstr = cm_strdup(mapent->gcy_name);
                 break;
             }
         }
@@ -137,9 +147,9 @@ static void kmgcry_tx_algnames(const keyinfo_t *keyinfo,
 
     if (keyinfo->digestalg != NULL && keyinfo->digestalg[0] != '\0') {
         /* Translate digest-name to canonical libgcrypt name: */
-        for (mapent=htable; mapent->src!=NULL; ++mapent) {
-            if (cm_strcasecmp(mapent->src, keyinfo->digestalg) == 0) {
-                *dgststr = cm_strdup(mapent->dst);
+        for (mapent=htable; mapent->ssl_name!=NULL; ++mapent) {
+            if (cm_strcasecmp(mapent->ssl_name, keyinfo->digestalg) == 0) {
+                *dgststr = cm_strdup(mapent->gcy_name);
                 break;
             }
         }
@@ -158,7 +168,6 @@ static int kmgcry_get_algos(const keyinfo_t *keyinfo,
     struct kmgcry_mode *cmd;
     int eflag=ERR_NOERROR;
 
-
     kmgcry_tx_algnames(keyinfo, &algstr, &mdstr, &dgststr);
 
     *cipher = gcry_cipher_map_name(algstr);
@@ -169,7 +178,10 @@ static int kmgcry_get_algos(const keyinfo_t *keyinfo,
     }
 
     for (cmd=kmgcry_modes; cmd->name!=NULL; ++cmd) {
-        if (cm_strcasecmp(cmd->name,mdstr) == 0) break;
+        if (cm_strcasecmp(cmd->name, mdstr) == 0) break;
+    }
+    if (cmd->name == NULL) {
+      fprintf(stderr, _("Couldn't find libgcrypt cipher mode \"%s\" - using fallback\n"), mdstr);
     }
     *ciphermode = cmd->mode;
 
@@ -207,6 +219,10 @@ static int kmgcry_test_getalgos()
             GCRY_CIPHER_BLOWFISH, GCRY_CIPHER_MODE_CBC, GCRY_MD_RMD160 },
         { "CAST5-CFB",  "ripemd160",
             GCRY_CIPHER_CAST5, GCRY_CIPHER_MODE_CFB, GCRY_MD_RMD160 },
+        { "Camellia-128-cfb8",  "sha256",
+            GCRY_CIPHER_CAMELLIA128, GCRY_CIPHER_MODE_CFB8, GCRY_MD_SHA256 },
+        { "ChaCha20-xts",  "blake2b_512",
+            GCRY_CIPHER_CHACHA20, GCRY_CIPHER_MODE_XTS, GCRY_MD_BLAKE2B_512 },
         { "DES-ofb",  "md5",
             GCRY_CIPHER_DES, GCRY_CIPHER_MODE_OFB, GCRY_MD_MD5 },
         { "twofish",    "sha1",
@@ -412,11 +428,11 @@ static int kmgcry_bind(bound_tgtdefn_t *bound, FILE *fp_key)
 
     if (compat) {
         if (keyinfo->digestalg == NULL) {
-            keyinfo->digestalg = cm_strdup("md5");
+            keyinfo->digestalg = cm_strdup("sha256");
         }
 
         if (keyinfo->cipheralg == NULL) {
-            keyinfo->cipheralg = cm_strdup("blowfish");
+            keyinfo->cipheralg = cm_strdup("aes256-xts");
         }
     }
 
@@ -864,5 +880,5 @@ keymanager_t *kmgcry_gethandle()
 /**  @} */
 
 /*
- *  (C)Copyright 2005-2021, RW Penney
+ *  (C)Copyright 2005-2022, RW Penney
  */

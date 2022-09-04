@@ -1,6 +1,6 @@
 /*
  *  cryptmount - a utility for user-level mounting of encrypted filesystems
- *  (C)Copyright 2005-2021, RW Penney
+ *  (C)Copyright 2005-2022, RW Penney
  */
 
 /*
@@ -41,7 +41,6 @@
 #ifdef HAVE_SYSLOG
 #  include <syslog.h>
 #endif
-#include <linux/fs.h>       /* Beware ordering conflict with sys/mount.h */
 
 
 #include "armour.h"
@@ -1587,5 +1586,5 @@ int main(int argc, char *argv[])
 }
 
 /*
- *  (C)Copyright 2005-2021, RW Penney
+ *  (C)Copyright 2005-2022, RW Penney
  */
