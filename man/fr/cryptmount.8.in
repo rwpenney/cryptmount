@@ -158,9 +158,9 @@ Sinon, on peut conserver le syst\[`e]me de fichiers chiffr\['e] dans
 un fichier ordinaire, si on reserve de l'espace-disque
 avec par exemple la commande suivante:
 
-.nf
+.EX
     dd if=/dev/zero of=/home/opaque.fs bs=1M count=512
-.fi
+.EE
 
 et ensuite, on doit remplacer toutes les instances de \[Fo]/dev/hdb63\[Fc]
 dans ce qui suit par \[Fo]/home/opaque.fs\[Fc].
@@ -169,14 +169,14 @@ D'abord, on doit cr\['e]er un inscription dans @CM_SYSCONF_DIR@/cmtab,
 qui d\['e]crit le chiffrage qui sera utilis\['e] pour prot\[`e]ger le syst\[`e]me de fichiers,
 ainsi:
 
-.nf
+.EX
     opaque {
         dev=/dev/hdb63 dir=/home/crypt
         fstype=ext2 mountoptions=defaults cipher=twofish
         keyfile=@CM_SYSCONF_DIR@/opaque.key
         keyformat=builtin
     }
-.fi
+.EE
 
 Ici, on utilisera l'algorithme "twofish"
 pour chiffrer le syst\[`e]me de fichiers lui-m\[^e]me,
@@ -187,18 +187,18 @@ va conserver le securit\['e] de la clef de d\['e]chiffrage dans
 Pour g\['e]n\['e]rer une clef de d\['e]chiffrage secr\[`e]te (dans @CM_SYSCONF_DIR@/opaque.key),
 on peut ex\['e]cuter, en tant que super-utilisateur:
 
-.nf
+.EX
     cryptmount \-\-generate\-key 32 opaque
-.fi
+.EE
 
 Cette commande produit une clef de 32 octets (256 bits),
 et on sait que le chiffre Twofish accepte les clefs de 256 bits.
 
 Si on ex\['e]cute la commande suivante, en tant que super-utilisateur:
 
-.nf
+.EX
     cryptmount \-\-prepare opaque
-.fi
+.EE
 
 on doit produire le mot de passe qu'on a donn\['e]
 lors de l'\['e]criture du @CM_SYSCONF_DIR@/opaque.key.
@@ -209,36 +209,36 @@ de pr\['e]parer une cible device-mapper (/dev/mapper/opaque).
 Maintenant, les outils standards sont disponibles
 pour mettre un syst\[`e]me de fichiers sur /dev/mapper/opaque:
 
-.nf
+.EX
     mke2fs /dev/mapper/opaque
-.fi
+.EE
 
 Apr\[`e]s avoir ex\['e]cut\['e]
 
-.nf
+.EX
     cryptmount \-\-release opaque
     mkdir /home/crypt
-.fi
+.EE
 
 le syst\[`e]me de fichiers chiffr\['e] est pr\[^e]t.
 
 Les utilisateurs ordinaires pouvent monter le syst\[`e]me de fichiers en tapant
 
-.nf
+.EX
     cryptmount \-m opaque
-.fi
+.EE
 
 ou
 
-.nf
+.EX
     cryptmount opaque
-.fi
+.EE
 
 et pouvent d\['e]monter avec
 
-.nf
+.EX
     cryptmount \-u opaque
-.fi
+.EE
 
 .B cryptmount
 maintenit un rapport sur lequel utilisateur a mont\['e] chaque cible
@@ -254,9 +254,9 @@ Apr\[`e]s avoir utilis\['e] un syst\[`e]me de fichiers pendant un certain temps,
 on peut vouloir changer le mot de passe.
 Par exemple, si on a une cible appel\['e]e "opaque", on peut ex\['e]cuter:
 
-.nf
+.EX
     cryptmount \-\-change\-password opaque
-.fi
+.EE
 
 On doit donner l'ancien mot de passe,
 et ensuite choisir un nouveau mot de passe
@@ -279,20 +279,20 @@ Par example, si le partition /dev/hdb62 sur le disque dur
 contient un syst\[`e]me de fichiers du type `ext3', chiffr\['e]e avec LUKS,
 on peut ecrire:
 
-.nf
+.EX
     LUKS {
         keyformat=luks
         dev=/dev/hdb62          keyfile=/dev/hdb62
         dir=/home/luks-dir      fstype=ext3
     }
-.fi
+.EE
 
 Apr\[`e]s avoir faire \[,c]a, c'est possible de monter cette syst\[`e]me de fichiers
 sous /home/luks-dir avec
 
-.nf
+.EX
     cryptmount LUKS
-.fi
+.EE
 
 
 .\" --------------------------------
@@ -315,13 +315,13 @@ sous /home/luks-dir avec
 .SH BOGUES
 L'auteur accueille les suggestions
 .B constructives
-\[`a] <rwpenney@users.sourceforge.net>
+\[`a] https://github.com/rwpenney/cryptmount/issues
 
 
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-est Copyright 2005-2018 RW Penney
+est Copyright 2005-2022 RW Penney
 .br
 et il n'y a point de garantie.
 Les termes de sa licence sont d\['e]crits dans le fichier "COPYING"

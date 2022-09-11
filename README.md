@@ -18,7 +18,7 @@ or raw disk partitions.
 ## Installation
 
 To build cryptmount from source, please follow the instructions in
-the file 'INSTALL' in the same directory as this file.
+the file 'INSTALL.md' in the same directory as this file.
 
 cryptmount has been tested (using the ["mudslinger"](testing/mudslinger.in) script
 on a variety of GNU/Linux platforms including:
@@ -48,9 +48,9 @@ and which will be mounted beneath `/mnt/crypt`.
 
 Such a filesystem could be initialized as follows:
 ```
-    cryptmount --generate-key 32 crypt
     test -e /home/crypt.fs || dd if=/dev/zero of=/home/crypt.fs bs=1M count=128
     mkdir /mnt/crypt
+    cryptmount --generate-key 32 crypt
     cryptmount --prepare crypt
     mke2fs -t ext4 /dev/mapper/crypt
     cryptmount --release crypt

@@ -18,6 +18,7 @@ cm-*.so
 config.h
 config.log
 config.status
+debian/*-debtx
 debian/patches/docfiles-pathnames.patch
 delegates.h
 doxygen.conf

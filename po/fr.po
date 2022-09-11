@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cryptmount 4.0-1\n"
 "Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
-"POT-Creation-Date: 2022-09-03 09:39+0100\n"
+"POT-Creation-Date: 2022-09-17 09:43+0100\n"
 "PO-Revision-Date: 2006-04-21 07:51+0100\n"
 "Last-Translator: RW Penney <rwpenney@users.sourceforge.net>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -62,9 +62,9 @@ msgid "Couldn't find libgcrypt cipher \"%s\"\n"
 msgstr "Chiffre \"%s\" n'est pas reconnu dans libgcrypt\n"
 
 #: armour-gcry.c:184
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't find libgcrypt cipher mode \"%s\" - using fallback\n"
-msgstr "Chiffre \"%s\" n'est pas reconnu dans libgcrypt\n"
+msgstr "Mode de chiffrage \"%s\" n'est pas reconnu dans libgcrypt\n"
 
 #: armour-gcry.c:190
 #, c-format
@@ -92,14 +92,14 @@ msgid "Checksum mismatch in keyfile (openssl-compat, ofs=%u,idx=%u)\n"
 msgstr "Mauvais fichier-clef (openssl-compat, ofs=%u,idx=%u)\n"
 
 #: armour-luks.c:217
-#, fuzzy, c-format
-msgid "Failed to acquire privileges for LUKS container"
-msgstr "Création du périphérique-loop pour le fichier-clef LUKS a echouée\n"
+#, c-format
+msgid "Failed to acquire privileges for LUKS container\n"
+msgstr "Échec de l'acquisition des privilèges pour le fichier-clef LUKS\n"
 
 #: armour-luks.c:310 armour-luks.c:394
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to initialize device for LUKS keyfile\n"
-msgstr "Création du périphérique-loop pour le fichier-clef LUKS a echouée\n"
+msgstr "Échec de l'initialisation des appareils pour le fichier-clef LUKS\n"
 
 #: armour-luks.c:320
 #, c-format
@@ -127,7 +127,6 @@ msgid "Setting password on LUKS keyslot-%u\n"
 msgstr ""
 
 #: cryptmount.c:126
-#, fuzzy
 msgid ""
 "usage: cryptmount [OPTION [target ...]]\n"
 "\n"
@@ -157,10 +156,12 @@ msgstr ""
 "\n"
 "  les options disponible sont les suivants:\n"
 "\n"
+"    -h | --help\n"
 "    -a | --all\n"
 "    -c | --change-password <cible>\n"
 "    -k | --key-managers\n"
 "    -l | --list\n"
+"    -S | --status\n"
 "    -m | --mount <cible>\n"
 "    -u | --unmount <cible>\n"
 "    --generate-key <taille> <cible>\n"
@@ -248,9 +249,9 @@ msgid "Only user-%lu can unmount \"%s\"\n"
 msgstr "Seulement utilisateur-%lu peut démonter \"%s\"\n"
 
 #: cryptmount.c:662
-#, fuzzy, c-format
+#, c-format
 msgid "Target \"%s\" is already configured\n"
-msgstr "La cible \"%s\" est déjà montée\n"
+msgstr "La cible \"%s\" est déjà configurée\n"
 
 #: cryptmount.c:685 cryptmount.c:741
 #, c-format

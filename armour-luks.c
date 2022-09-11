@@ -214,7 +214,7 @@ static uid_t luks_patch_uid(const bound_tgtdefn_t* boundtgt)
     if (stat(filename, &sbuff) == 0
         && S_ISREG(sbuff.st_mode)) {
         if (setuid(geteuid()) != 0) {
-          fprintf(stderr, _("Failed to acquire privileges for LUKS container"));
+          fprintf(stderr, _("Failed to acquire privileges for LUKS container\n"));
         }
     }
 

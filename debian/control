@@ -12,7 +12,7 @@ Package: cryptmount
 Architecture: linux-any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Recommends: e2fsprogs (>= 1.42.12), udev
-Suggests: openssl, dmsetup
+Suggests: dmsetup
 Description: Management of encrypted file systems
  cryptmount is a utility for creating encrypted filesystems & swap partitions
  and which allows an ordinary user to mount/unmount filesystems
@@ -31,4 +31,3 @@ Description: Management of encrypted file systems
     * temporary filesystems can be setup via command-line,
       for use in shell-scripts;
     * transparent configuration of dm-crypt & loopback devices during mounting;
-    * access keys can optionally be made compatible with OpenSSL.

@@ -38,7 +38,7 @@ of the following character, for example to include a space in a filename.
 
 @CM_SYSCONF_DIR@/cmtab contains entries of the following form:
 
-.nf
+.EX
     TARGET_NAME {
         dev=DEVICE                      # REQUIRED
         flags=FLAG,FLAG,...
@@ -60,7 +60,7 @@ of the following character, for example to include a space in a filename.
         keymaxlen=KEYMAXLEN
         passwdretries=NUMATTEMPTS
     }
-.fi
+.EE
 
 Some fields, such as \(aqdev' and \(aqfstype' are mandatory,
 although many fields have sensible default values.
@@ -73,13 +73,13 @@ can contain references to environmental variables of the form $(HOME).
 The following variables are recognized,
 all based on the characteristics of the user currently running
 .B cryptmount :
-.nf
+.NF
   * $(HOME) - the home directory, as obtained from /etc/passwd
   * $(UID) - the numerical identifier of the user
   * $(USERNAME) - the printable name of the user
   * $(GID) - the numerical identifier of the user's current group
   * $(GROUPNAME) - the printable name of the user's current group
-.fi
+.FI
 
 
 .\" --------------------------------
@@ -100,7 +100,7 @@ i.e. this pseudo-target does not operate incrementally.
 .\" ----
 .TP
 .B dev=DEVICE\t(required)
-sets the name of the raw device (e.g. /dev/hdb63)
+sets the name of the raw device (e.g. /dev/sdb63)
 or ordinary file (e.g. /home/secretiveuser/private.fs)
 that contains the encrypted filesystem.
 Note that it may be useful to use a symbolic name based on
@@ -111,7 +111,7 @@ are added to the system, etc.
 .TP
 .B flags=FLAG,FLAG,...
 sets configuration switches, such as
-.nf
+.NF
   * "user" (any user can mount),
   * "nouser" (only root can mount),
   * "fsck" (automatically check filesystem before mounting),
@@ -120,7 +120,7 @@ sets configuration switches, such as
   * "nomkswap" (don't format swap partition)
   * "trim" (enable TRIM/discard support on solid-state disks),
   * "notrim" (disable SSD TRIM/discard support)
-.fi
+.FI
 This parameter is optional and defaults to "user,fsck,nomkswap,notrim".
 .\" ----
 .TP
@@ -348,13 +348,13 @@ Ideally @CM_SYSCONF_DIR@/cmtab should be managed only by the system administrato
 makes basic checks on the security of @CM_SYSCONF_DIR@/cmtab
 each time it runs, and will refuse to operate
 unless the following conditions are met:
-.nf
+.NF
   * cmtab must be owned by root
   * cmtab must be a regular file
   * cmtab must not be globally writable
   * the directory containing cmtab must be owned by root
   * the directory containing cmtab must not be globally writable
-.fi
+.FI
 In addition, for each target within @CM_SYSCONF_DIR@/cmtab,
 all paths must be absolute (i.e. starting with '/').
 
@@ -414,13 +414,19 @@ using a variety of encryption algorithms and storing
 their filesystems in different ways,
 including a target representing an encrypted swap partition:
 
-.nf
-
+.EX
     # @CM_SYSCONF_DIR@/cmtab
     # example file \- please modify before use
 
     _DEFAULTS_ {
         passwdretries=3     # allow 3 password attempts by default
+    }
+
+    luks {                          # partition created by cryptsetup-luks
+        dev=/dev/sdb63
+        dir=/mnt/luks-partition-$(USERNAME)
+        keyformat=luks
+        fstype=ext3
     }
 
     basic {
@@ -435,26 +441,26 @@ including a target representing an encrypted swap partition:
     }
 
     partition {
-        dev=/dev/hdb62                      # use whole disk partition
+        dev=/dev/sdb62                      # use whole disk partition
         dir=/mnt/crypt62
         fstype=ext3     mountoptions=nosuid,noexec
         cipher=serpent-cbc-plain
 
         # information about file used to store decryption key:
-        keyfile=@CM_SYSCONF_DIR@/crypt_hdb62.key
+        keyfile=@CM_SYSCONF_DIR@/crypt_sdb62.key
         keyformat=openssl                   # use OpenSSL key-encryption
         keyhash=md5 keycipher=bf\-cbc        # encryption of key file
     }
 
     subset {
-        dev=/dev/hdb63
+        dev=/dev/sdb63
         startsector=512 numsectors=16384    # use subset of partition
-        dir=/mnt/encrypted\\ subset\\ of\\ hdb
+        dir=/mnt/encrypted\\ subset\\ of\\ sdb
         fstype=reiserfs     mountoptions=defaults
         cipher=twofish-cbc-plain            # filesystem encryption
 
         # information about file used to store decryption key:
-        keyfile=@CM_SYSCONF_DIR@/crypt_hdb63.key
+        keyfile=@CM_SYSCONF_DIR@/crypt_sdb63.key
         keyformat=libgcrypt
         keyhash=md5 keycipher=blowfish\-cbc # encryption of key file
     }
@@ -469,16 +475,8 @@ including a target representing an encrypted swap partition:
         keyfile=/dev/random        keymaxlen=16     keyformat=raw
     }
 
-    luks {                          # partition created by cryptsetup-luks
-        dev=/dev/hdb63
-        dir=/mnt/luks-partition-$(USERNAME)
-        keyformat=luks
-        keyfile=/dev/hdb63
-        fstype=ext3
-    }
-
     # end of cmtab
-.fi
+.EE
 
 The 'basic' target uses an ordinary file "/home/secretiveuser/crypt.fs"
 to store the encrypted filesystem,

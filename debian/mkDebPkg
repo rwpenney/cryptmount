@@ -1,0 +1,96 @@
+#!/bin/sh
+# Construct debianized package for cryptmount
+# RW Penney, June 2010
+
+PACKAGE=cryptmount
+VERSION=`sed -n 's/^AC_INIT[^,]*, *\([^,)]*\).*/\1/p' ../configure.ac`
+PSEUDO_VERSION=""
+UPSDIR=..
+
+# $VERSION refers to the true version number associated with a *.tar.gz file
+# $PSEUDO_VERSION is the stable release number for which a .deb should be generated
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -d|--upstream-dir)
+            UPSDIR="$2"
+            shift ;;
+        --pseudo-version)
+            PSEUDO_VERSION="$2"
+            shift ;;
+        -u|--upstream-version)
+            VERSION="$2"
+            shift ;;
+        -*)
+            echo "Unrecognized option \"$1\"" ;;
+    esac
+    shift
+done
+
+if [ -z "${PSEUDO_VERSION}" ]; then
+    PSEUDO_VERSION="${VERSION}"
+fi
+
+SRCPKG="${UPSDIR}/${PACKAGE}-${VERSION}.tar.gz"
+if [ ! -r "${SRCPKG}" ]; then
+    echo "Upstream package ${SRCPKG} is not readable"
+    exit 1
+fi
+
+echo "Building Debian version ${PSEUDO_VERSION} from ${SRCPKG} ..."
+
+
+DEBFILES="changelog control copyright \
+            docs cryptmount.lintian-overrides \
+            rules preinst postinst postrm watch \
+            patches/ source/ upstream/"
+
+debtransform="s,/usr/local/etc/,/etc/,g; \
+            s,/usr/local/bin/,/usr/bin/,g; \
+            s,/usr/local/sbin/,/usr/sbin/,g"
+TXFILES="INSTALL.md README.md README.sshfs cmtab.example"
+
+TMPDIR=/tmp/cm-deb-${VERSION}
+CURDIR=`pwd`
+PKGDIR="${TMPDIR}/${PACKAGE}-${PSEUDO_VERSION}"
+
+
+export QUILT_PATCHES=debian/patches
+export QUILT_PATCH_OPTS="--reject-format=unified"
+export QUILT_DIFF_ARGS="-p ab --no-timestamps --no-index --color=auto"
+export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
+
+
+test -d "${TMPDIR}" || mkdir "${TMPDIR}"
+tar -C "${TMPDIR}" -zxf ${SRCPKG}
+if [ "${PSEUDO_VERSION}" != "${VERSION}" ]; then
+    mv "${TMPDIR}/${PACKAGE}-${VERSION}" "${PKGDIR}"
+fi
+
+test -d patches || mkdir patches
+(cd "${PKGDIR}"; test -d debian || mkdir debian)
+if [ -n "${DEBFILES}" ]; then
+    tar -cf - ${DEBFILES} | \
+    tar -C "${PKGDIR}/debian" -xpf -
+fi
+
+cd "${PKGDIR}"
+quilt new docfiles-pathnames.patch
+for fl in ${TXFILES}; do
+    quilt add "${fl}"
+    sed "${debtransform}" ${fl} > ${fl}-debtx && mv ${fl}-debtx ${fl}
+    echo "Correct installation pathnames in documentation" | quilt header -r
+done
+quilt refresh
+
+
+cd "${TMPDIR}"
+cp ${SRCPKG} ${TMPDIR}/${PACKAGE}_${PSEUDO_VERSION}.orig.tar.gz
+test -e ${SRCPKG}.sig && cp ${SRCPKG}.sig ${TMPDIR}/${PACKAGE}_${PSEUDO_VERSION}.orig.tar.gz.sig
+dpkg-source -b ${TMPDIR}/${PACKAGE}-${PSEUDO_VERSION}
+
+cd "${CURDIR}"
+mv ${TMPDIR}/${PACKAGE}_* ./
+rm -rf ${TMPDIR}
+
+# vim: set ts=4 sw=4 et:

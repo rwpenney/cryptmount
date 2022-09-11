@@ -24,7 +24,7 @@ endif
 localedir=$(datadir)/locale
 AM_CPPFLAGS += -DLOCALEDIR=\"$(localedir)\"
 EXTRA_DIST = config.rpath mkinstalldirs cmtab.example \
-	README.md  README.sshfs RELNOTES cryptmount.spec \
+	INSTALL.md README.md  README.sshfs RELNOTES cryptmount.spec \
 	debian/changelog debian/control \
 	debian/copyright debian/docs \
 	debian/rules debian/cryptmount.lintian-overrides \

@@ -176,19 +176,19 @@ which can be used by the superuser to interactively configure a basic setup.
 Alternatively, a manual setup allows more control of configuration settings.
 Before doing so, one should ensure that kernel support for /dev/loop
 and /dev/mapper is available, e.g. via
-.nf
+.EX
     modprobe \-a loop dm\-crypt
-.fi
+.EE
 Now suppose that we wish to setup a new encrypted filesystem,
 that will have a target-name of "opaque".
-If we have a free disk partition available, say /dev/hdb63, then we can use this directly to store the encrypted filesystem.
+If we have a free disk partition available, say /dev/sdb63, then we can use this directly to store the encrypted filesystem.
 Alternatively, if we want to store the encrypted filesystem within an ordinary file, we need to create space using a recipe such as:
 
-.nf
+.EX
     dd if=/dev/zero of=/home/opaque.fs bs=1M count=512
-.fi
+.EE
 
-and then replace all occurrences of '/dev/hdb63' in the following
+and then replace all occurrences of '/dev/sdb63' in the following
 with '/home/opaque.fs'.
 (/dev/urandom can be used in place of /dev/zero, debatably for extra security,
 but is rather slower.)
@@ -197,14 +197,14 @@ First, we need to add an entry in @CM_SYSCONF_DIR@/cmtab,
 which describes the encryption that will be used
 to protect the filesystem itself and the access key, as follows:
 
-.nf
+.EX
     opaque {
-        dev=/dev/hdb63 dir=/home/crypt
+        dev=/dev/sdb63 dir=/home/crypt
         fstype=ext2 mountoptions=defaults cipher=twofish
         keyfile=@CM_SYSCONF_DIR@/opaque.key
         keyformat=builtin
     }
-.fi
+.EE
 
 Here, we will be using the "twofish" algorithm to encrypt
 the filesystem itself,
@@ -215,9 +215,9 @@ In order to generate a secret decryption key (in @CM_SYSCONF_DIR@/opaque.key)
 that will be used to encrypt the filesystem itself,
 we can execute, as root:
 
-.nf
+.EX
     cryptmount \-\-generate\-key 32 opaque
-.fi
+.EE
 
 This will generate a 32-byte (256-bit) key,
 which is known to be supported by the Twofish cipher algorithm,
@@ -226,9 +226,9 @@ after asking the system administrator for a password.
 
 If we now execute, as root:
 
-.nf
+.EX
     cryptmount \-\-prepare opaque
-.fi
+.EE
 
 we will then be asked for the password that we used when setting up
 @CM_SYSCONF_DIR@/opaque.key, which will enable
@@ -245,9 +245,9 @@ by checking the output from "more /proc/crypto", and looking at the
 
 We can now use standard tools to create the actual filesystem on /dev/mapper/opaque:
 
-.nf
+.EX
     mke2fs /dev/mapper/opaque
-.fi
+.EE
 
 (It may be advisable, after the filesystem is first mounted,
 to check that the permissions of the top-level directory
@@ -255,29 +255,29 @@ created by mke2fs are appropriate for your needs.)
 
 After executing
 
-.nf
+.EX
     cryptmount \-\-release opaque
     mkdir /home/crypt
-.fi
+.EE
 
 the encrypted filesystem is ready for use.
 Ordinary users can mount it by typing
 
-.nf
+.EX
     cryptmount \-m opaque
-.fi
+.EE
 
 or
 
-.nf
+.EX
     cryptmount opaque
-.fi
+.EE
 
 and unmount it using
 
-.nf
+.EX
     cryptmount \-u opaque
-.fi
+.EE
 
 .B cryptmount
 keeps a record of which user mounted each filesystem
@@ -292,9 +292,9 @@ After a filesystem has been in use for a while,
 one may want to change the access password.
 For an example target called "opaque", this can be performed by executing:
 
-.nf
+.EX
     cryptmount \-\-change\-password opaque
-.fi
+.EE
 
 After successfully supplying the old password, one can then choose
 a new password which will be used to re-encrypt the access key for the
@@ -313,34 +313,34 @@ application.
 
 In order to access an existing LUKS partition,
 an entry needs to be created within @CM_SYSCONF_DIR@/cmtab.
-For example, if the hard-disk partition /dev/hdb62
+For example, if the hard-disk partition /dev/sdb62
 is used to contain a LUKS encrypted ext3 filesystem,
 an entry of the form:
 
-.nf
+.EX
     LUKS {
         keyformat=luks
-        dev=/dev/hdb62          keyfile=/dev/hdb62
+        dev=/dev/sdb62          keyfile=/dev/sdb62
         dir=/home/luks-dir      fstype=ext3
     }
-.fi
+.EE
 
 would allow this to be mounted via
 .B cryptmount
 beneath /home/luks-dir
 by executing
 
-.nf
+.EX
     cryptmount LUKS
-.fi
+.EE
 
 .B cryptmount
 will also allow any user that knows one of the access-passwords
 to change their password via
 
-.nf
+.EX
     cryptmount \-\-change-password LUKS
-.fi
+.EE
 
 .B cryptmount
 also provides basic support for creating new LUKS encrypted filesystems,
@@ -379,21 +379,21 @@ Suppose that we wish to check the filesystem associated with
 .B cryptmount
 target 'opaque', we first need to prepare the decryption devices:
 
-.nf
+.EX
     cryptmount \-\-prepare opaque
-.fi
+.EE
 
 this will create a device-mapper target accessible via '/dev/mapper/opaque', on which we can then run standard checking utilities:
 
-.nf
+.EX
     fsck \-t auto /dev/mapper/opaque
-.fi
+.EE
 
 After these tests have been completed, we can then release the devices:
 
-.nf
+.EX
     cryptmount \-\-release opaque
-.fi
+.EE
 
 and continue using the filesystem as before.
 ___END_FSCK_1
@@ -422,7 +422,7 @@ ___END_FSCK_1
 .SH BUGS
 The author would be grateful for any
 .B constructive
-suggestions and bug-reports, via <rwpenney@users.sourceforge.net>
+suggestions and bug-reports, via https://github.com/rwpenney/cryptmount/issues
 
 
 .\" --------------------------------

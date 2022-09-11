@@ -42,7 +42,7 @@ comme par exemple si on veut incorporer un espace dans le nom d'un fichier.
 
 @CM_SYSCONF_DIR@/cmtab contient des inscriptions de la forme suivante:
 
-.nf
+.EX
     NOM_CIBLE {
         dev=PERIPHERIQUE
         flags=DRAPEAU,DRAPEAU,...
@@ -63,7 +63,7 @@ comme par exemple si on veut incorporer un espace dans le nom d'un fichier.
         keymaxlen=MAX_CLEF
         passwdretries=NUMESSAYES
     }
-.fi
+.EE
 
 Ici, les param\[`e]tres \(aqflags', \(aqstartsector', \(aqnumsectors',
 \(aqloop', \(aqivoffset', \(aqkeyformat', \(aqkeymaxlen'
@@ -86,7 +86,7 @@ qui range le syst\[`e]me de fichiers chiffr\['e].
 .TP
 .BI DRAPEAU
 est un bouton de configuration, comme par exemple
-.nf
+.NF
   * "user" (n'importe quel utilisateur peut monter),
   * "nouser" (seulement le super-utilisateur peut monter),
   * "fsck" (v\['e]rifier automatiquement le syst\[`e]me de fichiers avant de monter),
@@ -95,7 +95,7 @@ est un bouton de configuration, comme par exemple
   * "nomkswap" (ne formater pas la cible),
   * "trim" (activer SSD TRIM/discard),
   * "notrim" (d\['e]sactiver SSD TRIM/discard).
-.fi
+.FI
 Ce param\[`e]tre est optionnel,
 et le d\['e]faut est "user,fsck,nomkswap,notrim".
 .\" ----
@@ -280,13 +280,13 @@ devraient \[^e]tre seulement lisibles par leurs utilisateurs propres.
 cryptmount
 v\['e]rifie la s\['e]curit\['e] du @CM_SYSCONF_DIR@/cmtab
 chaque fois qu'il est execut\['e], et se terminera \[`a] moins que:
-.nf
+.NF
   * cmtab ne soit poss\['e]d\['e] par le super-utilisateur
   * cmtab ne soit un fichier r\['e]gulier
   * les permissions de cmtab ne contiennent pas d'\['e]criture universelle
   * le r\['e]pertoire, qui contient cmtab, ne soit poss\['e]d\['e] par le super-utilisateur
   * les permissions du r\['e]pertoire, qui contient cmtab, ne contiennent pas d'\['e]criture universelle.
-.fi
+.FI
 De plus, pour toutes les cibles dans @CM_SYSCONF_DIR@/cmtab,
 tous les fichiers doivent avoir des nom absolus
 (c'est\-\[`a]\-dire commencent avec '/').
@@ -340,13 +340,20 @@ qui utilisent un m\['e]lange d'algorithmes de chiffrage
 et qui rangent leurs syst\[`e]mes de fichiers de mani\[`e]res differentes.
 Il y en a aussi un cible qui represent une partition de pagination.
 
-.nf
-
+.EX
     # @CM_SYSCONF_DIR@/cmtab
     # fichier exemplaire \- modifiez avant d'utiliser SVP
 
     _DEFAULTS_ {
         passwdretries=3     # permet 3 essayes de mot de passe par d\['e]faut
+    }
+
+    luks {                          # partition cre\['e] avec cryptsetup-luks
+        dev=/dev/hdb63
+        dir=/mnt/partition-luks
+        keyformat=luks
+        keyfile=/dev/hdb63
+        fstype=ext3
     }
 
     basic {
@@ -394,16 +401,8 @@ Il y en a aussi un cible qui represent une partition de pagination.
         keyfile=/dev/random        keymaxlen=16     keyformat=raw
     }
 
-    luks {                          # partition cre\['e] avec cryptsetup-luks
-        dev=/dev/hdb63
-        dir=/mnt/partition-luks
-        keyformat=luks
-        keyfile=/dev/hdb63
-        fstype=ext3
-    }
-
     # fin de cmtab
-.fi
+.EE
 
 La cible \(aqbasic' utilise le fichier ordinaire "/home/secretiveuser/crypt.fs"
 pour ranger le syst\[`e]me de fichiers chiffr\['e].
