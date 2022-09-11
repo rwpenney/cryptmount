@@ -355,7 +355,7 @@ unless the following conditions are met:
   * the directory containing cmtab must be owned by root
   * the directory containing cmtab must not be globally writable
 .fi
-In addition, for each target within @CM_SYSCONFDIR@/cmtab,
+In addition, for each target within @CM_SYSCONF_DIR@/cmtab,
 all paths must be absolute (i.e. starting with '/').
 
 When using unencrypted keyfiles (i.e. when
@@ -381,7 +381,7 @@ in some form.
 .SH ENCRYPTED SWAP PARTITIONS & AUTO-FORMATTING
 
 When the 'mkswap' option is selected for a particular target
-within @CM_SYSCONFDIR@/cmtab,
+within @CM_SYSCONF_DIR@/cmtab,
 .B cryptmount
 will attempt to automatically format an encrypted swap partition
 whenever you run "cryptmount \-\-swapon <target>".
@@ -409,14 +409,14 @@ for any target on which you select the 'mkswap' option.
 .\" --------------------------------
 .SH EXAMPLE FILE
 
-The following example of @CM_SYSCONFDIR@/cmtab consists of five targets,
+The following example of @CM_SYSCONF_DIR@/cmtab consists of five targets,
 using a variety of encryption algorithms and storing
 their filesystems in different ways,
 including a target representing an encrypted swap partition:
 
 .nf
 
-    # @CM_SYSCONFDIR@/cmtab
+    # @CM_SYSCONF_DIR@/cmtab
     # example file \- please modify before use
 
     _DEFAULTS_ {
@@ -441,7 +441,7 @@ including a target representing an encrypted swap partition:
         cipher=serpent-cbc-plain
 
         # information about file used to store decryption key:
-        keyfile=@CM_SYSCONFDIR@/crypt_hdb62.key
+        keyfile=@CM_SYSCONF_DIR@/crypt_hdb62.key
         keyformat=openssl                   # use OpenSSL key-encryption
         keyhash=md5 keycipher=bf\-cbc        # encryption of key file
     }
@@ -454,7 +454,7 @@ including a target representing an encrypted swap partition:
         cipher=twofish-cbc-plain            # filesystem encryption
 
         # information about file used to store decryption key:
-        keyfile=@CM_SYSCONFDIR@/crypt_hdb63.key
+        keyfile=@CM_SYSCONF_DIR@/crypt_hdb63.key
         keyformat=libgcrypt
         keyhash=md5 keycipher=blowfish\-cbc # encryption of key file
     }

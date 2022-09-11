@@ -52,7 +52,7 @@ install-etcdir:
 	    ${INSTALL_PROGRAM_ENV} ${INSTALL_DATA} cmtab.example "${DESTDIR}${CM_SYSCONF_DIR}" ; \
 	fi
 	if test ! -f "${DESTDIR}${CM_SYSCONF_DIR}/cmtab" ; then \
-	    echo -e "# ${CM_SYSCONF_DIR}/cmtab - encrypted filesystem information for cryptmount\n# try 'man 8 cryptmount' or 'man 5 cmtab' for more details\n" >> "${DESTDIR}${CM_SYSCONF_DIR}/cmtab"; \
+	    echo -e "# ${CM_SYSCONF_DIR}/cmtab - encrypted filesystem information for cryptmount\n# try 'man 8 cryptmount' or 'man 5 cmtab' for more details\n# or refer to ${CM_SYSCONF_DIR}/cmtab.example\n" >> "${DESTDIR}${CM_SYSCONF_DIR}/cmtab"; \
 	fi
 
 

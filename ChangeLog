@@ -1,5 +1,7 @@
 ChangeLog for cryptmount (http://cryptmount.sourceforge.net)
 
+11Sep22	- Revised installation instructions and top-level README
+
 03Sep22	- *** cryptmount-6.0 released
 
 14Aug22	- Revised algorithm test-cases in mudslinger script to align to OpenSSL-3.0

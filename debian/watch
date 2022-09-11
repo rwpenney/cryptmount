@@ -5,8 +5,5 @@
 # Compulsory format-version line:
 version=4
 
-# Search sourceforge.net webpage (via qa.debian.org redirector):
-http://sf.net/cryptmount/ cryptmount-([\d\.]*)\.tar\.gz
-
 # Location of cryptographic signature of upstream package:
 opts=pgpsigurlmangle=s/$/.sig/ http://sf.net/cryptmount/ cryptmount-(\d\S*)@ARCHIVE_EXT@
