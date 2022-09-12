@@ -1,14 +1,14 @@
 # German translation of the cryptmount language file resulting in de.po
 # Copyright © 2008-2014 Kai Wasserbäch <curan@debian.org>
-#             2020 Helge Kreutzmann <debian@helgefjell.de>
+#             2020,2022 Helge Kreutzmann <debian@helgefjell.de>
 # This file is distributed under the same license as the cryptmount package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: cryptmount 5.3.2-1\n"
+"Project-Id-Version: cryptmount 6.0-1\n"
 "Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
 "POT-Creation-Date: 2022-09-03 09:39+0100\n"
-"PO-Revision-Date: 2020-12-26 08:33+0100\n"
+"PO-Revision-Date: 2022-09-11 20:18+0200\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -62,9 +62,9 @@ msgid "Couldn't find libgcrypt cipher \"%s\"\n"
 msgstr "Konnte libgcrypt-Chiffre »%s« nicht finden.\n"
 
 #: armour-gcry.c:184
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't find libgcrypt cipher mode \"%s\" - using fallback\n"
-msgstr "Konnte libgcrypt-Chiffre »%s« nicht finden.\n"
+msgstr "Konnte libgcrypt-Chiffrenmodus »%s« nicht finden - Rückfalloption wird verwandt\n"
 
 #: armour-gcry.c:190
 #, c-format
@@ -488,7 +488,7 @@ msgstr ""
 #: sysinit/setupscript.sh.in:64
 #, sh-format
 msgid "No LUKS support available - using built-in key manager"
-msgstr ""
+msgstr "Keine LUKS-Unterstützung verfügbar - eingebauter Schlüsselverwalter wird verwandt"
 
 #: sysinit/setupscript.sh.in:123
 #, sh-format
