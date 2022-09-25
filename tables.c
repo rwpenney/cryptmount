@@ -814,6 +814,9 @@ void statfile_write(struct statfile *sf, const tgtstat_t *stat)
 
 void statfile_close(struct statfile *sf)
 {
+#if HAVE_SYNCFS
+    syncfs(fileno(sf->fp));
+#endif
     fclose(sf->fp);
     free((void*)sf);
 }

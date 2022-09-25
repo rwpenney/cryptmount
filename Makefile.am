@@ -24,7 +24,7 @@ endif
 localedir=$(datadir)/locale
 AM_CPPFLAGS += -DLOCALEDIR=\"$(localedir)\"
 EXTRA_DIST = config.rpath mkinstalldirs cmtab.example \
-	INSTALL.md README.md  README.sshfs RELNOTES cryptmount.spec \
+	INSTALL.md README.md README.sshfs RELNOTES cryptmount.spec \
 	debian/changelog debian/control \
 	debian/copyright debian/docs \
 	debian/rules debian/cryptmount.lintian-overrides \
@@ -89,6 +89,8 @@ cmtest:	CFLAGS = -Wall -g -DTESTING -DCM_SRCDIR=\"${abs_srcdir}\"
 cmtest:	${bin_PROGRAMS}
 	${MAKE} -C testing autokeys mudslinger
 
+test:	cmtest
+	cd testing && sudo ./mudslinger
 
 .PHONY:	depend
 depend:

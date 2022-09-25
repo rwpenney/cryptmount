@@ -4,7 +4,7 @@
 #
 Summary:	Let ordinary users mount an encrypted file system
 Name:		cryptmount
-Version: 	6.0
+Version: 	6.1-beta
 Release:	1%{?dist}
 License:	GPL
 URL:		http://cryptmount.sourceforge.net

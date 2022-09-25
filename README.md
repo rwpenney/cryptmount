@@ -18,14 +18,20 @@ or raw disk partitions.
 ## Installation
 
 To build cryptmount from source, please follow the instructions in
-the file 'INSTALL.md' in the same directory as this file.
+the [INSTALL.md](https://github.com/rwpenney/cryptmount/blob/master/INSTALL.md)
+file in the top directory of the source package.
 
-cryptmount has been tested (using the ["mudslinger"](testing/mudslinger.in) script
-on a variety of GNU/Linux platforms including:
-Debian 11.0, Ubuntu 20.04, CentOS 7.6, ArchLinux etc.
+cryptmount has been tested on a wide variety of GNU/Linux platforms including:
+[ArchLinux](https://aur.archlinux.org/packages/cryptmount),
+CentOS, [Debian](https://packages.debian.org/stable/cryptmount), Fedora,
+[Gentoo](https://packages.gentoo.org/packages/sys-fs/cryptmount),
+[Mageia](https://madb.mageia.org/package/show/source/1/application/0/release/cauldron/name/cryptmount),
+[Ubuntu](https://packages.ubuntu.com/jammy/cryptmount) etc.
 
 For the most recent source-bundles of cryptmount, please see
-[Sourceforge](http://www.sourceforge.net/projects/cryptmount).
+[Sourceforge](http://www.sourceforge.net/projects/cryptmount),
+or find the latest developer versions
+on [GitHub](https://github.com/rwpenney/cryptmount).
 
 An encrypted filing system must initially be created by the superuser.
 A basic setup can be created interactively by running the `cryptmount-setup`
@@ -34,8 +40,8 @@ use the [LUKS](https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup)
 encryption format by default.
 
 More elaborate situations can be handled by manual editing of the
-filesystem definition, typically in `/etc/cryptmount/cmtab`
-or `/usr/local/etc/cryptmount/cmtab`. For example, an entry of the form:
+filesystem definition, typically in `/etc/cryptmount/cmtab`.
+For example, an entry of the form:
 ```
     crypt {
         dev=/home/crypt.fs dir=/mnt/crypt

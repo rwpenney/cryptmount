@@ -1,6 +1,6 @@
 		    Release notes for cryptmount-6.0
 
-			RW Penney, September 2022
+			RW Penney, October 2022
 
 Introduction
 ============
@@ -24,6 +24,18 @@ the system administrator whenever the system is booted.
 cryptmount also provides an aid to the system manager in allowing easier
 control over the configuration and mounting of encrypted filesystems,
 especially within system start-up scripts.
+
+
+Summary of new features in cryptmount-6.1
+=========================================
+
+This (beta) release is still under development
+
+It has been tested on the following systems:
+
+  * Debian GNU/Linux 11.4 ("bullseye") (amd64)
+
+  * Fedora 36 (x86_64)
 
 
 Summary of new features in cryptmount-6.0

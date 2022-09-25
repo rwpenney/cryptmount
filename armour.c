@@ -400,6 +400,15 @@ int cm_put_key(bound_tgtdefn_t *boundtgt, const km_pw_context_t *pw_ctxt,
 
     eflag = boundtgt->keymgr->put_key(boundtgt, pw_ctxt, key, keylen, fp_key);
 
+    if (fp_key != NULL) {
+      int fd = fileno(fp_key);
+#if HAVE_SYNCFS
+      syncfs(fd);
+#else
+      fsync(fd);
+#endif
+    }
+
     return eflag;
 }
 
@@ -794,17 +803,19 @@ static const char *cm_lock_filename = "_cryptmount_lock_";
 int cm_mutex_lock(void)
     /** Try to acquire lock on configuration directory (via symlink marker) */
 {   char *fname=NULL, ident[64];
-    int tries=10, eflag=ERR_BADMUTEX;
+    int eflag=ERR_BADMUTEX;
 #if HAVE_NANOSLEEP
-    int ticks;
+    int delay_ms;
+    unsigned dither = ((size_t)&fname % 250) + 1;
     struct timespec delay;
 #endif
+    const unsigned MAX_ATTEMPTS = 10;
 
     (void)cm_path(&fname, CM_SYSRUN_PFX, cm_lock_filename);
     snprintf(ident, sizeof(ident), "%u-%u",
              (unsigned)getpid(), (unsigned)getuid());
 
-    while (tries-->0) {
+    for (unsigned attempt=0; attempt<MAX_ATTEMPTS; ++attempt) {
         errno = 0;
         if (symlink(ident, fname) == 0) {
             /* Lock acquired */
@@ -813,9 +824,10 @@ int cm_mutex_lock(void)
             if (errno == EEXIST) {
                 /* Try again later */
 #if HAVE_NANOSLEEP
-                ticks = (53 * tries + 97 * (long)&tries) % 11;
-                delay.tv_sec = (ticks / 10);
-                delay.tv_nsec = (ticks % 10) * 1000L * 1000L * 1000L;
+                delay_ms = 53 + attempt * (dither + attempt * 19);
+                dither = (dither * 213) % 251;
+                delay.tv_sec = (delay_ms / 1000);
+                delay.tv_nsec = (delay_ms % 1000) * 1000L * 1000L;
                 nanosleep(&delay, NULL);
 #else
                 sleep(1);

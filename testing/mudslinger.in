@@ -687,7 +687,7 @@ EOF
 
 function test_cipher_algs() {
     # Test usability of different encryption algorithms
-    if test_start "cipher-algorithm availability"; then true; else return; fi
+    if test_start "cipher algorithm availability"; then true; else return; fi
     for CipherLen in aes,32 blowfish,48 twofish,32 serpent,12
     do
         tupelize $CipherLen cipher len
@@ -770,7 +770,7 @@ EOF
 
 function test_ssl_algs() {
     # Test usability of OpenSSL key & hashing algorithms
-    if test_start "OpenSSL-algorithm availability"; then true; else return; fi
+    if test_start "OpenSSL algorithm availability"; then true; else return; fi
     if ${CM} --key-managers 2>/dev/null | grep -q openssl; then true; else test_fail "No OpenSSL support"; return; fi
     for keycipher in aes-128-ecb aes-256-cbc camellia-128-cbc; do
         # Beware cfb*, ofb modes seem incompatible for unknown reasons
@@ -808,7 +808,7 @@ EOF
 
 function test_gcry_algs() {
     # Test usability of libgcrypt key & hashing algorithms
-    if test_start "libgcrypt-algorithm availability"; then true; else return; fi
+    if test_start "libgcrypt algorithm availability"; then true; else return; fi
     if ${CM} --key-managers 2>/dev/null | grep -q -w libgcrypt; then true; else test_fail "No libgcrypt support"; return; fi
     for keycipher in aes192 blowfish cast5-ecb camellia-256-xts
     do
@@ -848,7 +848,7 @@ EOF
 
 function test_gcryossl() {
     # Test usability of libgcrypt OpenSSL-compatibility layer
-    if test_start "libgcrypt OpenSSL-emulator"; then true; else return; fi
+    if test_start "libgcrypt OpenSSL emulator"; then true; else return; fi
     if ${CM} --key-managers 2>/dev/null | grep -q -w openssl-compat; then true; else test_fail "No openssl-compat support"; return; fi
     configs="aes-128-cbc:md5:aes-cbc:md5 \
              aes-192-ecb:sha224:aes192-ecb:sha224 \
@@ -1254,7 +1254,8 @@ function test_cryptsetup_compat() {
                             bs=16k count=16 2>/dev/null
                         mke2fs -q -j /dev/mapper/cstarget${idx}
                         wait_udev
-                        cryptsetup remove cstarget${idx}
+                        cryptsetup remove cstarget${idx} 2>&3
+                        wait_udev
                     else
                         test_fail "cryptsetup creation"; return
                     fi
@@ -1353,7 +1354,7 @@ EOF
         sync; wait_udev
         if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail "unmount"; return; fi
         if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3; then test_fail "re-formatting"; fi
-        wait_udev
+        sync; wait_udev
     done
     rm ${TMPDIR}/keymat0 ${TMPDIR}/keymat
     test_pass
@@ -1407,7 +1408,7 @@ EOF
 
         # Check that re-formatting is blocked:
         if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3; then test_fail "re-formatting"; fi
-        wait_udev
+        sync; wait_udev
     done
     rm ${TMPDIR}/keymat
     test_pass

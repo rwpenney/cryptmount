@@ -1,5 +1,11 @@
 ChangeLog for cryptmount (http://cryptmount.sourceforge.net)
 
+01Oct22	- Improved udev settling schedule and filesystem syncs
+	Added partial support for compiling against libgcrypt-1.7
+
+25Sep22	- Improved waiting schedule for inter-process status locks
+	Improved stability of tests against legacy cryptsetup
+
 11Sep22	- Revised installation instructions and top-level README
 
 03Sep22	- *** cryptmount-6.0 released

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cryptmount 6.0-1\n"
 "Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
-"POT-Creation-Date: 2022-09-03 09:39+0100\n"
+"POT-Creation-Date: 2022-10-01 12:52+0100\n"
 "PO-Revision-Date: 2022-09-11 20:18+0200\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: armour.c:154 armour-builtin.c:300 armour-gcry.c:562 armour-gcry.c:718
+#: armour.c:154 armour-builtin.c:300 armour-gcry.c:570 armour-gcry.c:726
 #, c-format
 msgid "Key-extraction failed for \"%s\"\n"
 msgstr "Auslesen des Schlüssels für »%s« schlug fehl.\n"
@@ -41,53 +41,55 @@ msgstr "Schlüsseldatei für Ziel »%s« fehlt.\n"
 msgid "Missing output keyfile for target \"%s\"\n"
 msgstr "Schlüsselausgabedatei für Ziel »%s« fehlt.\n"
 
-#: armour.c:780
+#: armour.c:789
 #, c-format
 msgid "Specification for target \"%s\" contains non-absolute pathname\n"
 msgstr "Die Zielangabe für »%s« enthält eine nicht-absolute Pfadangabe.\n"
 
-#: armour-builtin.c:282 armour-gcry.c:544 armour-gcry.c:699
+#: armour-builtin.c:282 armour-gcry.c:552 armour-gcry.c:707
 #, c-format
 msgid "Password mismatch when extracting key\n"
 msgstr "Fehlerhaftes Passwort während des Auslesens des Schlüssels.\n"
 
-#: armour-builtin.c:398 armour-gcry.c:623 armour-gcry.c:777
+#: armour-builtin.c:398 armour-gcry.c:631 armour-gcry.c:785
 #, c-format
 msgid "Failed to create new key file\n"
 msgstr "Erstellen einer neuen Schlüsseldatei schlug fehl.\n"
 
-#: armour-gcry.c:175
+#: armour-gcry.c:177
 #, c-format
 msgid "Couldn't find libgcrypt cipher \"%s\"\n"
 msgstr "Konnte libgcrypt-Chiffre »%s« nicht finden.\n"
 
-#: armour-gcry.c:184
+#: armour-gcry.c:186
 #, c-format
 msgid "Couldn't find libgcrypt cipher mode \"%s\" - using fallback\n"
-msgstr "Konnte libgcrypt-Chiffrenmodus »%s« nicht finden - Rückfalloption wird verwandt\n"
+msgstr ""
+"Konnte libgcrypt-Chiffrenmodus »%s« nicht finden - Rückfalloption wird "
+"verwandt\n"
 
-#: armour-gcry.c:190
+#: armour-gcry.c:192
 #, c-format
 msgid "Couldn't find libgcrypt digest \"%s\"\n"
 msgstr "Konnte libgcrypt-Hash »%s« nicht finden.\n"
 
-#: armour-gcry.c:505
+#: armour-gcry.c:513
 #, c-format
 msgid "Bad keyfile format (libgcrypt)\n"
 msgstr "Falsches Schlüsseldateiformat (libgcrypt).\n"
 
-#: armour-gcry.c:548
+#: armour-gcry.c:556
 #, c-format
 msgid "Checksum mismatch in keyfile (gcry, %x != %x)\n"
 msgstr ""
 "Nicht übereinstimmende Prüfsumme in der Schlüsseldatei (gcry, %x != %x).\n"
 
-#: armour-gcry.c:664
+#: armour-gcry.c:672
 #, c-format
 msgid "Bad keyfile format (openssl-compat)\n"
 msgstr "Falsches Schlüsseldateiformat (openssl-compat).\n"
 
-#: armour-gcry.c:703
+#: armour-gcry.c:711
 #, c-format
 msgid "Checksum mismatch in keyfile (openssl-compat, ofs=%u,idx=%u)\n"
 msgstr ""
@@ -488,7 +490,9 @@ msgstr ""
 #: sysinit/setupscript.sh.in:64
 #, sh-format
 msgid "No LUKS support available - using built-in key manager"
-msgstr "Keine LUKS-Unterstützung verfügbar - eingebauter Schlüsselverwalter wird verwandt"
+msgstr ""
+"Keine LUKS-Unterstützung verfügbar - eingebauter Schlüsselverwalter wird "
+"verwandt"
 
 #: sysinit/setupscript.sh.in:123
 #, sh-format

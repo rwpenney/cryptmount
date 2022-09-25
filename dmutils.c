@@ -93,7 +93,7 @@ int devmap_path(char **buff, const char *ident)
 
 
 int devmap_create(const char *ident, uint64_t blk0, uint64_t blklen,
-                const char *tgttype, const char *params)
+                  const char *tgttype, const char *params)
     /* create new device-mapper target & associated device node: */
 {   struct dm_task *dmt=NULL;
     struct dm_info dmi;
@@ -249,13 +249,13 @@ int is_configured(const char *ident, struct dm_info *dminfo)
 int udev_settle()
     /*! Allow time for udev events to be processed */
 {   struct udev_queue_loc *udev_mode;
-    double totdelay = 0.0, inc;
+    double totdelay = 0.0;
     time_t starttime;
     struct stat sbuff;
 #if HAVE_NANOSLEEP
     struct timespec delay;
 #endif
-    int settling;
+    int inc_ms = 250, settling = 1;
     const double timeout = 10.0;
 #if HAVE_LIBUDEV
     struct udev *udev_ctx;
@@ -286,22 +286,17 @@ int udev_settle()
         ++udev_mode;
     }
 
-#if HAVE_NANOSLEEP
-    delay.tv_sec = 0.0;
-    delay.tv_nsec = 100e6;
-    inc = delay.tv_sec + delay.tv_nsec * 1e-9;
-#else
-    inc = 1.0;
-#endif
-
     /* Keep waiting until there are no more queued udev events: */
     do {
 #if HAVE_NANOSLEEP
+        delay.tv_sec = inc_ms / 1000;
+        delay.tv_nsec = (inc_ms % 1000) * 1000 * 1000;
         nanosleep(&delay, NULL);
 #else
-        sleep((unsigned)floor(inc + 0.5));
+        sleep((unsigned)ceil(inc_ms * 1e-3));
 #endif
-        totdelay += inc;
+        totdelay += inc_ms * 1e-3;
+        inc_ms += inc_ms / 3;
 
 #if HAVE_LIBUDEV
         settling = !udev_queue_get_queue_is_empty(udev_qu);
@@ -336,7 +331,7 @@ int udev_queue_size(const char *path)
 
     fp = fopen(path, "rb");
     if (fp == NULL) return 0;
-    if (fread((void*)&seqnum, sizeof(seqnum), (size_t)1, fp) != 1) return 0;
+    if (fread((void*)&seqnum, sizeof(seqnum), (size_t)1, fp) != 1) goto bail_out;
 
     for (;;) {
         skiplen = 0;
@@ -351,6 +346,8 @@ int udev_queue_size(const char *path)
             --nqueued;
         }
     }
+
+  bail_out:
     fclose(fp);
 
     return nqueued;

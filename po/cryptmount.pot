@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
-"POT-Creation-Date: 2022-09-17 09:43+0100\n"
+"POT-Creation-Date: 2022-10-01 12:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: armour.c:154 armour-builtin.c:300 armour-gcry.c:562 armour-gcry.c:718
+#: armour.c:154 armour-builtin.c:300 armour-gcry.c:570 armour-gcry.c:726
 #, c-format
 msgid "Key-extraction failed for \"%s\"\n"
 msgstr ""
@@ -42,52 +42,52 @@ msgstr ""
 msgid "Missing output keyfile for target \"%s\"\n"
 msgstr ""
 
-#: armour.c:780
+#: armour.c:789
 #, c-format
 msgid "Specification for target \"%s\" contains non-absolute pathname\n"
 msgstr ""
 
-#: armour-builtin.c:282 armour-gcry.c:544 armour-gcry.c:699
+#: armour-builtin.c:282 armour-gcry.c:552 armour-gcry.c:707
 #, c-format
 msgid "Password mismatch when extracting key\n"
 msgstr ""
 
-#: armour-builtin.c:398 armour-gcry.c:623 armour-gcry.c:777
+#: armour-builtin.c:398 armour-gcry.c:631 armour-gcry.c:785
 #, c-format
 msgid "Failed to create new key file\n"
 msgstr ""
 
-#: armour-gcry.c:175
+#: armour-gcry.c:177
 #, c-format
 msgid "Couldn't find libgcrypt cipher \"%s\"\n"
 msgstr ""
 
-#: armour-gcry.c:184
+#: armour-gcry.c:186
 #, c-format
 msgid "Couldn't find libgcrypt cipher mode \"%s\" - using fallback\n"
 msgstr ""
 
-#: armour-gcry.c:190
+#: armour-gcry.c:192
 #, c-format
 msgid "Couldn't find libgcrypt digest \"%s\"\n"
 msgstr ""
 
-#: armour-gcry.c:505
+#: armour-gcry.c:513
 #, c-format
 msgid "Bad keyfile format (libgcrypt)\n"
 msgstr ""
 
-#: armour-gcry.c:548
+#: armour-gcry.c:556
 #, c-format
 msgid "Checksum mismatch in keyfile (gcry, %x != %x)\n"
 msgstr ""
 
-#: armour-gcry.c:664
+#: armour-gcry.c:672
 #, c-format
 msgid "Bad keyfile format (openssl-compat)\n"
 msgstr ""
 
-#: armour-gcry.c:703
+#: armour-gcry.c:711
 #, c-format
 msgid "Checksum mismatch in keyfile (openssl-compat, ofs=%u,idx=%u)\n"
 msgstr ""

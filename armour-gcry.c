@@ -84,7 +84,9 @@ static struct kmgcry_mode {
     { "ocb",      GCRY_CIPHER_MODE_OCB },
     { "ofb",      GCRY_CIPHER_MODE_OFB },
     { "poly1305", GCRY_CIPHER_MODE_POLY1305 },
+#if GCRYPT_VERSION_NUMBER >= 0x010800
     { "xts",      GCRY_CIPHER_MODE_XTS },
+#endif
     { NULL, GCRY_CIPHER_MODE_NONE }
 };
 
@@ -221,8 +223,10 @@ static int kmgcry_test_getalgos()
             GCRY_CIPHER_CAST5, GCRY_CIPHER_MODE_CFB, GCRY_MD_RMD160 },
         { "Camellia-128-cfb8",  "sha256",
             GCRY_CIPHER_CAMELLIA128, GCRY_CIPHER_MODE_CFB8, GCRY_MD_SHA256 },
+#if GCRYPT_VERSION_NUMBER >= 0x010800
         { "ChaCha20-xts",  "blake2b_512",
             GCRY_CIPHER_CHACHA20, GCRY_CIPHER_MODE_XTS, GCRY_MD_BLAKE2B_512 },
+#endif
         { "DES-ofb",  "md5",
             GCRY_CIPHER_DES, GCRY_CIPHER_MODE_OFB, GCRY_MD_MD5 },
         { "twofish",    "sha1",
@@ -432,7 +436,11 @@ static int kmgcry_bind(bound_tgtdefn_t *bound, FILE *fp_key)
         }
 
         if (keyinfo->cipheralg == NULL) {
+#if GCRYPT_VERSION_NUMBER >= 0x010800
             keyinfo->cipheralg = cm_strdup("aes256-xts");
+#else
+            keyinfo->cipheralg = cm_strdup("aes256-cbc");
+#endif
         }
     }
 

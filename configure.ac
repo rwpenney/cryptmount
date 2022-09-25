@@ -3,7 +3,7 @@ dnl (C)Copyright 2005-2022, RW Penney
 
 dnl run 'aclocal; autoconf; automake -a -c -i; ./configure; make'
 
-AC_INIT(cryptmount, 6.0, cryptmount@rwpenney.uk)
+AC_INIT(cryptmount, 6.1-beta, cryptmount@rwpenney.uk)
 AC_PREREQ(2.59)
 
 test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
@@ -38,7 +38,7 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS([errno.h getopt.h mntent.h \
                   linux/fs.h linux/loop.h sys/sysmacros.h])
 
-AC_CHECK_FUNCS([ioctl memset mknod open strncpy syslog])
+AC_CHECK_FUNCS([ioctl memset mknod open strncpy syncfs syslog])
 AC_SEARCH_LIBS(log, m)
 
 AC_C_CONST
