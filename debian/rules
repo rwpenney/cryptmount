@@ -22,7 +22,7 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 %:
 	dh $@
 
-.PHONY:	override_dh_auto_configure override_dh_fixperms
+.PHONY:	override_dh_auto_configure override dh_auto_test override_dh_fixperms
 
 # debmake generated override targets
 override_dh_auto_configure:
@@ -31,6 +31,10 @@ override_dh_auto_configure:
 		--with-systemd --with-libgcrypt --enable-luks \
 		--enable-delegation --enable-fsck \
 		--enable-cswap --enable-openssl-compat
+
+override_dh_auto_test:
+	true
+	# disable "make test" stage because of strong dependence on system devices
 
 override_dh_fixperms:
 	dh_fixperms --exclude usr/bin/cryptmount

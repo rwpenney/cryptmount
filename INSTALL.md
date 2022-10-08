@@ -1,5 +1,5 @@
-Installing "cryptmount"
-=======================
+Installing cryptmount
+=====================
 
 There are three main routes by which cryptmount can be installed
 on a Linux-based system:
@@ -12,7 +12,7 @@ All of these options will, at some stage, require root-level permissions,
 such as "sudo".
 
 
-Vendor-provided packages
+Distro-provided packages
 ------------------------
 
 A variety of flavours of Linux provide official pre-built cryptmount packages,

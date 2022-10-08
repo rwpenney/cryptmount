@@ -1339,7 +1339,7 @@ function test_luks_compat() {
         if mke2fs -q -j "/dev/mapper/${TMPTGT}"; then true; else test_fail mke2fs; return; fi
         wait_udev
         cryptsetup luksClose "${TMPTGT}" 2>&3
-        sync; wait_udev
+        sync; wait_udev; sleep 1
 
         idx=`mkrandshort`
         cat <<EOF > ${TMPDIR}/cmtab
@@ -1488,6 +1488,8 @@ Cryptmount mudslinger logfile
 EOF
 ls -l ${CM} >&3 2>&1
 lsb_release -a >&3 2>&1 || echo "(No lsb_release info)" >&3
+test -r /etc/debian_version && echo "Debian version: `cat /etc/debian_version`" >&3
+test -r /etc/redhat-release && echo "Redhat release: `cat /etc/redhat-release`" >&3
 if [ -r /usr/include/linux/version.h ]; then
     cat /usr/include/linux/version.h >&3
 fi

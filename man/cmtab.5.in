@@ -73,13 +73,13 @@ can contain references to environmental variables of the form $(HOME).
 The following variables are recognized,
 all based on the characteristics of the user currently running
 .B cryptmount :
-.NF
-  * $(HOME) - the home directory, as obtained from /etc/passwd
-  * $(UID) - the numerical identifier of the user
-  * $(USERNAME) - the printable name of the user
-  * $(GID) - the numerical identifier of the user's current group
-  * $(GROUPNAME) - the printable name of the user's current group
-.FI
+.EX
+    $(HOME)         # the home directory, as obtained from /etc/passwd
+    $(UID)          # the numerical identifier of the user
+    $(USERNAME)     # the printable name of the user
+    $(GID)          # the numerical identifier of the user's current group
+    $(GROUPNAME)    # the printable name of the user's current group
+.EE
 
 
 .\" --------------------------------
@@ -111,16 +111,23 @@ are added to the system, etc.
 .TP
 .B flags=FLAG,FLAG,...
 sets configuration switches, such as
-.NF
+.br
   * "user" (any user can mount),
+.br
   * "nouser" (only root can mount),
+.br
   * "fsck" (automatically check filesystem before mounting),
+.br
   * "nofsck" (don't check filesystem before mounting),
+.br
   * "mkswap" (format swap partition before use),
+.br
   * "nomkswap" (don't format swap partition)
+.br
   * "trim" (enable TRIM/discard support on solid-state disks),
+.br
   * "notrim" (disable SSD TRIM/discard support)
-.FI
+.br
 This parameter is optional and defaults to "user,fsck,nomkswap,notrim".
 .\" ----
 .TP
@@ -348,13 +355,17 @@ Ideally @CM_SYSCONF_DIR@/cmtab should be managed only by the system administrato
 makes basic checks on the security of @CM_SYSCONF_DIR@/cmtab
 each time it runs, and will refuse to operate
 unless the following conditions are met:
-.NF
+.br
   * cmtab must be owned by root
+.br
   * cmtab must be a regular file
+.br
   * cmtab must not be globally writable
+.br
   * the directory containing cmtab must be owned by root
+.br
   * the directory containing cmtab must not be globally writable
-.FI
+.br
 In addition, for each target within @CM_SYSCONF_DIR@/cmtab,
 all paths must be absolute (i.e. starting with '/').
 

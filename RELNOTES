@@ -1,4 +1,4 @@
-		    Release notes for cryptmount-6.0
+		    Release notes for cryptmount-6.1
 
 			RW Penney, October 2022
 
@@ -29,13 +29,27 @@ especially within system start-up scripts.
 Summary of new features in cryptmount-6.1
 =========================================
 
-This (beta) release is still under development
+This (stable) release offers the following improvements:
+
+  * Improved deconfliction when operating simultaneously with other device-mapper tools
+
+  * Revised installation instructions, now in markdown format
 
 It has been tested on the following systems:
 
-  * Debian GNU/Linux 11.4 ("bullseye") (amd64)
+  * Alma Linux 9.0 (x86_64, lacking libcryptsetup headers)
+
+  * Arch Linux (early-Oct-2022) (x86_64)
+
+  * Debian GNU/Linux 12.x ("bookworm"/"testing", early-Oct-2022) (amd64)
+
+  * Debian GNU/Linux 11.5 ("bullseye") (amd64)
+
+  * Debian GNU/Linux 10.13 ("buster") (x86)
 
   * Fedora 36 (x86_64)
+
+  * Ubuntu 22.04 ("jammy") (x86_64)
 
 
 Summary of new features in cryptmount-6.0
@@ -51,11 +65,11 @@ It has been tested on the following systems:
 
   * Arch Linux (mid-Aug-2022) (x86_64)
 
-  * Debian GNU/Linux 12.x ("bookworm"/"testing", early-Sep-2020) (amd64)
+  * Debian GNU/Linux 12.x ("bookworm"/"testing", early-Sep-2022) (amd64)
 
   * Debian GNU/Linux 11.4 ("bullseye") (amd64)
 
-  * Debian GNU/Linux 10.12 ("buster") (amd64)
+  * Debian GNU/Linux 10.12 ("buster") (x86)
 
   * Fedora 36 (x86_64)
 

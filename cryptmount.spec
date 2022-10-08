@@ -4,7 +4,7 @@
 #
 Summary:	Let ordinary users mount an encrypted file system
 Name:		cryptmount
-Version: 	6.1-beta
+Version: 	6.1.0
 Release:	1%{?dist}
 License:	GPL
 URL:		http://cryptmount.sourceforge.net
@@ -100,6 +100,8 @@ fi
 
 
 %changelog
+* Sat Oct 08 2022 RW Penney <cryptmount@rwpenney.uk> - 6.1
+    -- Refreshed installation documentation and inter-process locking
 * Sat Sep 03 2022 RW Penney <cryptmount@rwpenney.uk> - 6.0
     -- Refreshed default ciphers and keymanager
 * Wed Feb 07 2018 RW Penney <cryptmount@rwpenney.uk> - 5.3

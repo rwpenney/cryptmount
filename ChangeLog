@@ -1,5 +1,7 @@
 ChangeLog for cryptmount (http://cryptmount.sourceforge.net)
 
+08Oct22	- *** cryptmount-6.1 released
+
 01Oct22	- Improved udev settling schedule and filesystem syncs
 	Added partial support for compiling against libgcrypt-1.7
 

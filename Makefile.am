@@ -35,7 +35,7 @@ SUBDIRS = man po sysinit testing
 
 
 install-exec-hook:	install-etcdir
-	chown root.root $(DESTDIR)$(bindir)/cryptmount$(EXEEXT)
+	chown root:root $(DESTDIR)$(bindir)/cryptmount$(EXEEXT)
 	chmod u+srwx,go-w,go+r $(DESTDIR)$(bindir)/cryptmount$(EXEEXT)
 	@if test -z "$(DESTDIR)" -o "$(DESTDIR)" = "/"; then \
 		modprobe -a loop dm-crypt || true; \

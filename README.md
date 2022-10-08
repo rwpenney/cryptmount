@@ -49,7 +49,7 @@ For example, an entry of the form:
         keyformat=luks
     }
 ```
-Describes a LUKS-encrypted filesystem to be contained in an ordinary file,
+describes a LUKS-encrypted filesystem to be contained in an ordinary file,
 and which will be mounted beneath `/mnt/crypt`.
 
 Such a filesystem could be initialized as follows:

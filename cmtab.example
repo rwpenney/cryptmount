@@ -31,7 +31,7 @@ crypt_sdb63 {
     cipher=serpent      # filesystem encryption
 
     # information about file used to store decryption key:
-    keyfile=/usr/local/etc/cryptmount/crypt_sdb63.key
+    keyfile=/etc/cryptmount/crypt_sdb63.key
     keyformat=openssl-compat keyhash=md5 keycipher=bf-cbc
 }
 

@@ -42,7 +42,7 @@
 
 
 typedef struct {
-    unsigned fversion;
+    unsigned fversion;    /*!< File-format version, default==1 since version 4.0 */
 } blti_overrides_t;
 
 

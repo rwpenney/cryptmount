@@ -10,6 +10,14 @@ UPSDIR=..
 # $VERSION refers to the true version number associated with a *.tar.gz file
 # $PSEUDO_VERSION is the stable release number for which a .deb should be generated
 
+printHelp() {
+    cat <<EOF
+Syntax: $0 [-d|--upstream-dir DIR] [--pseudo-version N] [-u|--upstream-version]
+Upstream-version: ${VERSION}
+Upstream-directory: `realpath ${UPSDIR}`
+EOF
+}
+
 while [ $# -gt 0 ]; do
     case "$1" in
         -d|--upstream-dir)
@@ -21,8 +29,11 @@ while [ $# -gt 0 ]; do
         -u|--upstream-version)
             VERSION="$2"
             shift ;;
+        -h|--help)
+            printHelp; exit 0 ;;
         -*)
-            echo "Unrecognized option \"$1\"" ;;
+            echo "Unrecognized option \"$1\""
+            printHelp; exit 1 ;;
     esac
     shift
 done

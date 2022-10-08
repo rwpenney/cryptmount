@@ -79,23 +79,30 @@ en utilisant le nom sp\['e]cial "_DEFAULTS_".
 .\" ----
 .TP
 .BI PERIPHERIQUE
-est le nom du vrai p\['e]riph\['e]rique (e.g. /dev/hdb63)
+est le nom du vrai p\['e]riph\['e]rique (e.g. /dev/sdb63)
 ou du fichier ordinaire (e.g. /home/secretiveuser/private.fs)
 qui range le syst\[`e]me de fichiers chiffr\['e].
 .\" ----
 .TP
 .BI DRAPEAU
 est un bouton de configuration, comme par exemple
-.NF
+.br
   * "user" (n'importe quel utilisateur peut monter),
+.br
   * "nouser" (seulement le super-utilisateur peut monter),
+.br
   * "fsck" (v\['e]rifier automatiquement le syst\[`e]me de fichiers avant de monter),
+.br
   * "nofsck" (ne v\['e]rifier pas le syst\[`e]me de fichiers avant de monter),
+.br
   * "mkswap" (formater la cible pour la pagination),
+.br
   * "nomkswap" (ne formater pas la cible),
+.br
   * "trim" (activer SSD TRIM/discard),
+.br
   * "notrim" (d\['e]sactiver SSD TRIM/discard).
-.FI
+.br
 Ce param\[`e]tre est optionnel,
 et le d\['e]faut est "user,fsck,nomkswap,notrim".
 .\" ----
@@ -280,13 +287,17 @@ devraient \[^e]tre seulement lisibles par leurs utilisateurs propres.
 cryptmount
 v\['e]rifie la s\['e]curit\['e] du @CM_SYSCONF_DIR@/cmtab
 chaque fois qu'il est execut\['e], et se terminera \[`a] moins que:
-.NF
+.br
   * cmtab ne soit poss\['e]d\['e] par le super-utilisateur
+.br
   * cmtab ne soit un fichier r\['e]gulier
+.br
   * les permissions de cmtab ne contiennent pas d'\['e]criture universelle
+.br
   * le r\['e]pertoire, qui contient cmtab, ne soit poss\['e]d\['e] par le super-utilisateur
+.br
   * les permissions du r\['e]pertoire, qui contient cmtab, ne contiennent pas d'\['e]criture universelle.
-.FI
+.br
 De plus, pour toutes les cibles dans @CM_SYSCONF_DIR@/cmtab,
 tous les fichiers doivent avoir des nom absolus
 (c'est\-\[`a]\-dire commencent avec '/').
@@ -349,10 +360,10 @@ Il y en a aussi un cible qui represent une partition de pagination.
     }
 
     luks {                          # partition cre\['e] avec cryptsetup-luks
-        dev=/dev/hdb63
+        dev=/dev/sdb63
         dir=/mnt/partition-luks
         keyformat=luks
-        keyfile=/dev/hdb63
+        keyfile=/dev/sdb63
         fstype=ext3
     }
 
@@ -368,32 +379,32 @@ Il y en a aussi un cible qui represent une partition de pagination.
     }
 
     partition {
-        dev=/dev/hdb62                      # utiliser une partition enti\[`e]re
+        dev=/dev/sdb62                      # utiliser une partition enti\[`e]re
         dir=/mnt/crypt62
         fstype=ext3     mountoptions=nosuid,noexec \
         cipher=serpent-cbc-plain
 
         # info sur le fichier qui contient la clef de d\['e]chiffrage:
-        keyfile=@CM_SYSCONF_DIR@/crypt_hdb62.key
+        keyfile=@CM_SYSCONF_DIR@/crypt_sdb62.key
         keyformat=openssl                   # utiliser OpenSSL pour chiffrage de la clef
         keyhash=md5 keycipher=bf\-cbc        # chiffrage du fichier de la clef
     }
         
     subset {
-        dev=/dev/hdb63
+        dev=/dev/sdb63
         startsector=512 numsectors=16384    # utiliser une partie d'une partition
-        dir=/mnt/encrypted\\ subset\\ of\\ hdb
+        dir=/mnt/encrypted\\ subset\\ of\\ sdb
         fstype=reiserfs         mountoptions=defaults
         cipher=twofish-cbc-plain            # chiffrage du syst\[`e]me de fichiers
 
         # info sur le fichier qui contient la clef de d\['e]chiffrage:
-        keyfile=@CM_SYSCONF_DIR@/crypt_hdb63.key
+        keyfile=@CM_SYSCONF_DIR@/crypt_sdb63.key
         keyformat=libgcrypt
         keyhash=md5 keycipher=blowfish\-cbc  # chiffrage de la clef d'acc\[`e]s
     }
 
     encswap {                               # pagination chiffr\['e]e
-        dev=/dev/hdb63
+        dev=/dev/sdb63
         startsector=16896 numsectors=1024   # utiliser une partie d'une partition
         fstype=swap        flags=mkswap       cipher=twofish-cbc-plain
 
@@ -438,7 +449,7 @@ Une nouvelle clef de d\['e]chiffrage sera lu du /dev/random chaque fois la cible
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-est Copyright 2005-2018 RW Penney
+est Copyright 2005-2022 RW Penney
 .br
 et il n'y a point de garantie.
 Les termes de sa licence sont d\['e]crits dans le fichier "COPYING"
@@ -447,6 +458,6 @@ dans le paquet source de cryptmount.
 
 .\" --------------------------------
 .SH TRADUCTION
-RW Penney, 2006-2020, avec beaucoup d'assistance de FP.
+RW Penney, 2006-2022, avec beaucoup d'assistance de FP.
 
 .\" vim: set ts=4 sw=4 et:
