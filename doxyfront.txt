@@ -10,7 +10,7 @@
  *  This document contains details of the source-code of 'cryptmount',
  *  a tool for management of encrypted filesystems under GNU/Linux.
  *
- *  \sa http://cryptmount.sourceforge.net
+ *  \sa https://github.com/rwpenney/cryptmount
  *
  *  \section sec_overview Overview
  *

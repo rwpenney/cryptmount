@@ -1,6 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: cryptmount
-Source: https://www.sourceforge.net/projects/cryptmount
+Upstream-Contact: https://github.com/rwpenney/cryptmount/issues
+Source: https://github.com/rwpenney/cryptmount
 License: GPL-2+
 
 Files: *
