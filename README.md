@@ -76,3 +76,11 @@ and the following will unmount it:
 If using a separate keyfile, please take great care that you do not delete
 that file, as this will make access to your filesystem (essentially) impossible.
 You are strongly advised to keep a backup copy of the key-file.
+
+
+## Signing keys
+
+The current GPG signature used for cryptmount releases
+has fingerprint `78BC 1A99 61DC 2DAA 7BF8  99DB A6D8 2C65 B8CE F5E7`,
+and is due to expire in May 2023, to be replaced by
+fingerprint `7A09 0051 9745 19A3 ED1B  D4CB A6CF D54C 4405 160E`.
