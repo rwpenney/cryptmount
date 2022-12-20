@@ -29,7 +29,7 @@ CentOS, [Debian](https://packages.debian.org/stable/cryptmount), Fedora,
 [Ubuntu](https://packages.ubuntu.com/jammy/cryptmount) etc.
 
 For the most recent source-bundles of cryptmount, please see
-[Sourceforge](http://www.sourceforge.net/projects/cryptmount),
+[SourceForge](http://www.sourceforge.net/projects/cryptmount),
 or find the latest developer versions
 on [GitHub](https://github.com/rwpenney/cryptmount).
 

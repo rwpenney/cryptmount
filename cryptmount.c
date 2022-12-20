@@ -165,7 +165,7 @@ int fs_test_blkgetsz()
     const char **dev;
     const char *devices[] = {
         "/dev/hda", "/dev/hda1", "/dev/hda2", "/dev/hda3",
-        "/dev/hdb", "/dev/hdb1", "/dev/hdb2", "/dev/hdb3",
+        "/dev/nvme0n1", "/dev/nvme0n2", "/dev/nvme1n1", "/dev/nvme1n2",
         "/dev/sda", "/dev/sda1", "/dev/sda2", "/dev/sda3",
         "/dev/sdb", "/dev/sdb1", "/dev/sdb2", "/dev/sdb3",
         "/dev/vda", "/dev/vda1", "/dev/xvda", "/dev/xvda1",

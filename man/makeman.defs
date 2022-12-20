@@ -1,5 +1,4 @@
 # cryptmount makefile-rules for man-pages
-# $Revision: $, $Date: $
 # RW Penney, April 2006
 
 
@@ -18,11 +17,14 @@ mantransform="s,@PACKAGE_VERSION\@,${PACKAGE_VERSION},g; \
 
 
 cmtab.5:	cmtab.5.in ${top_builddir}/config.status
-	sed ${mantransform} $< > $@
+	@echo "Preparing $@ from $<"
+	@sed ${mantransform} $< > $@
 
 cryptmount.8:	cryptmount.8.in ${top_builddir}/config.status
-	sed ${mantransform} $< > $@
+	@echo "Preparing $@ from $<"
+	@sed ${mantransform} $< > $@
 
 cryptmount-setup.8:	cryptmount-setup.8.in ${top_builddir}/config.status
-	sed ${mantransform} $< > $@
+	@echo "Preparing $@ from $<"
+	@sed ${mantransform} $< > $@
 

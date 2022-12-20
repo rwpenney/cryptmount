@@ -1,5 +1,9 @@
 ChangeLog for cryptmount (http://cryptmount.sourceforge.net)
 
+20Dec22	- Updated various maintainer URLs to point to github.com
+	Reduced verbosity of manual-page variable substitution
+	Improved unit-test support for NVME devices
+
 08Oct22	- *** cryptmount-6.1 released
 
 01Oct22	- Improved udev settling schedule and filesystem syncs
