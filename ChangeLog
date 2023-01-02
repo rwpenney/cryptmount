@@ -1,5 +1,7 @@
 ChangeLog for cryptmount (http://cryptmount.sourceforge.net)
 
+02Jan23	- Enabled libudev by default
+
 20Dec22	- Updated various maintainer URLs to point to github.com
 	Reduced verbosity of manual-page variable substitution
 	Improved unit-test support for NVME devices

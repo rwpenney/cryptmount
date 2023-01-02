@@ -1,6 +1,6 @@
 /*
  *  Declarations for unit-test utilities for cryptmoumt
- *  (C)Copyright 2006-2022, RW Penney
+ *  (C)Copyright 2006-2023, RW Penney
  */
 
 /*
@@ -128,5 +128,5 @@ int cm_run_tests();
 #endif  /* _CMTEST_H */
 
 /*
- *  (C)Copyright 2006-2022, RW Penney
+ *  (C)Copyright 2006-2023, RW Penney
  */

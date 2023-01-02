@@ -1,6 +1,6 @@
 /*
  *  Device-mapper utilities for cryptmount
- *  (C)Copyright 2005-2022, RW Penney
+ *  (C)Copyright 2005-2023, RW Penney
  */
 
 /*
@@ -322,6 +322,8 @@ int udev_settle()
 }
 
 
+#if !HAVE_LIBUDEV
+
 int udev_queue_size(const char *path)
     /*! Count number of unprocessed udev events in queue.bin file */
 {   FILE *fp;
@@ -373,6 +375,8 @@ int udev_active_dir(const char *path, time_t starttime, double timeout)
     return settling;
 }
 
+#endif  // !HAVE_LIBUDEV
+
 /*
- *  (C)Copyright 2005-2022, RW Penney
+ *  (C)Copyright 2005-2023, RW Penney
  */

@@ -54,6 +54,7 @@ range of much stronger cryptographic tools:
 
   * libcryptsetup (version 1.6 or later; this is essential for LUKS support)
   * libgcrypt (version 1.8 or later)
+  * libudev (version 232 or later)
   * pkgconf or pkg-config
 
 You will also need to ensure that your system has support for the

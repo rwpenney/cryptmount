@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: RW Penney <rwpenney@users.sourceforge.net>
 Homepage: https://github.com/rwpenney/cryptmount
 Build-Depends: automake, debhelper-compat (= 12), libcryptsetup-dev (>= 2.0),
-            libdevmapper-dev, libgcrypt20-dev (>= 1.8), pkgconf
+            libdevmapper-dev, libgcrypt20-dev (>= 1.8), libudev-dev, pkgconf
 Rules-Requires-Root: binary-targets
 Standards-Version: 4.6.2
 

@@ -3,7 +3,7 @@ dnl (C)Copyright 2005-2022, RW Penney
 
 dnl run 'aclocal; autoconf; automake -a -c -i; ./configure; make'
 
-AC_INIT(cryptmount, 6.1.1, cryptmount@rwpenney.uk)
+AC_INIT(cryptmount, 6.2-beta, cryptmount@rwpenney.uk)
 AC_PREREQ(2.59)
 
 test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
@@ -115,8 +115,8 @@ dnl udev libraries
 dnl
 AC_ARG_ENABLE([libudev],
     AS_HELP_STRING([--enable-libudev],
-        [(EXPERIMENTAL) use libudev for /dev events (default=NO)]),
-    [use_libudev="${enableval}"], [use_libudev="no"])
+        [use libudev for /dev events (default is YES)]),
+    [use_libudev="${enableval}"], [use_libudev="yes"])
 if test "x${use_libudev}" = "xyes"; then
     AC_CHECK_HEADER([libudev.h],
         AC_SEARCH_LIBS(udev_queue_get_queue_is_empty, udev,
@@ -322,7 +322,7 @@ AC_MSG_NOTICE([
         Filesystem checking:            $msg_fsck
         Crypto-swap support:            $use_cswap
         libgcrypt support:              $msg_gcry
-        libudev support (EXPERIMENTAL): $udevlib
+        libudev support:                $udevlib
         LUKS support:                   $msg_luks
 
 ])
