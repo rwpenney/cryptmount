@@ -49,6 +49,8 @@
 #include "dmutils.h"
 
 
+#if !HAVE_LIBUDEV
+
 struct udev_queue_loc {
     const char *path;
     int is_file;
@@ -60,6 +62,8 @@ struct udev_queue_loc {
 
 int udev_queue_size(const char *path);
 int udev_active_dir(const char *path, time_t starttime, double timeout);
+
+#endif  // !HAVE_LIBUDEV
 
 
 struct dm_task *devmap_prepare(int type, const char *ident)
@@ -248,19 +252,20 @@ int is_configured(const char *ident, struct dm_info *dminfo)
 
 int udev_settle()
     /*! Allow time for udev events to be processed */
-{   struct udev_queue_loc *udev_mode;
-    double totdelay = 0.0;
+{   double totdelay = 0.0;
     time_t starttime;
+#if HAVE_LIBUDEV
+    struct udev *udev_ctx;
+    struct udev_queue *udev_qu;
+#else
+    struct udev_queue_loc *udev_mode;
     struct stat sbuff;
+#endif
 #if HAVE_NANOSLEEP
     struct timespec delay;
 #endif
     int inc_ms = 250, settling = 1;
     const double timeout = 10.0;
-#if HAVE_LIBUDEV
-    struct udev *udev_ctx;
-    struct udev_queue *udev_qu;
-#endif
 
     /* This routine mitigates apparent race-conditions
      * between udev events which may temporarily take ownership of
@@ -277,14 +282,14 @@ int udev_settle()
     udev_ctx = udev_new();
     //udev_selinux_init(udev_ctx);
     udev_qu = udev_queue_new(udev_ctx);
-#endif
-
+#else
     /* Try to find location and type of udev event queue: */
     udev_mode = udev_queue_locations;
     while (udev_mode->is_file) {
         if (stat(udev_mode->path, &sbuff) == 0) break;
         ++udev_mode;
     }
+#endif
 
     /* Keep waiting until there are no more queued udev events: */
     do {

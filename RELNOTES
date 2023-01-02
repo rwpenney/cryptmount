@@ -1,6 +1,6 @@
-		    Release notes for cryptmount-6.1.1
+		    Release notes for cryptmount-6.2
 
-			RW Penney, December 2022
+			RW Penney, January 2023
 
 Introduction
 ============
@@ -24,6 +24,30 @@ the system administrator whenever the system is booted.
 cryptmount also provides an aid to the system manager in allowing easier
 control over the configuration and mounting of encrypted filesystems,
 especially within system start-up scripts.
+
+
+Summary of new features in cryptmount-6.2
+=========================================
+
+This (stable) release offers the following improvements:
+
+  * More robust handshaking on device setup using libudev
+
+It has been tested on the following systems:
+
+  * Arch Linux (early-Jan-2023) (x86_64)
+
+  * Debian GNU/Linux 12.x ("bookworm"/"testing", early-Jan-2023) (amd64)
+
+  * Debian GNU/Linux 11.6 ("bullseye") (amd64)
+
+  * Debian GNU/Linux 10.13 ("buster") (x86)
+
+  * Fedora 37 (x86_64)
+
+  * openSUSE Leap 15.4 (x86_64)
+
+  * Ubuntu 22.10 ("kinetic") (x86_64)
 
 
 Summary of new features in cryptmount-6.1

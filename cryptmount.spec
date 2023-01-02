@@ -4,7 +4,7 @@
 #
 Summary:	Let ordinary users mount an encrypted file system
 Name:		cryptmount
-Version: 	6.1.1
+Version: 	6.2.0
 Release:	1%{?dist}
 License:	GPL
 URL:		http://cryptmount.sourceforge.net
@@ -13,7 +13,7 @@ Source0:	http://sourceforge.net/projects/cryptmount/files/cryptmount-%{version}/
 %if 0%{?fedora}
 #{
 # Fedora
-BuildRequires:  cryptsetup-devel libgcrypt-devel
+BuildRequires:  cryptsetup-devel libgcrypt-devel systemd-devel
 Requires:       cryptsetup-libs libgcrypt device-mapper
 #}
 %else
@@ -22,7 +22,7 @@ Requires:       cryptsetup-libs libgcrypt device-mapper
 #{
 # RHEL, CentOS
 %if 0%{?rhl} >= 7
-BuildRequires:  cryptsetup-devel libgcrypt-devel
+BuildRequires:  cryptsetup-devel libgcrypt-devel systemd-devel
 Requires:       cryptsetup-libs libgcrypt device-mapper
 %else
 BuildRequires:  cryptsetup-luks-devel libgcrypt-devel
@@ -76,7 +76,7 @@ device-mapper and loopback devices before mounting.
 
 %files -f %{name}.lang
 %defattr(-, root, root, 0755)
-%doc AUTHORS ChangeLog COPYING NEWS README* RELNOTES ToDo
+%doc AUTHORS ChangeLog COPYING README* RELNOTES
 %doc %{_mandir}/man5/cmtab.5*
 %doc %{_mandir}/man8/cryptmount*.8*
 %doc %{_mandir}/*/man5/cmtab.5*
@@ -100,6 +100,8 @@ fi
 
 
 %changelog
+* Sat Jan 07 2023 RW Penney <cryptmount@rwpenney.uk> - 6.2
+    -- Enabled libudev by default
 * Sat Oct 08 2022 RW Penney <cryptmount@rwpenney.uk> - 6.1
     -- Refreshed installation documentation and inter-process locking
 * Sat Sep 03 2022 RW Penney <cryptmount@rwpenney.uk> - 6.0

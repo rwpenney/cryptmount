@@ -39,6 +39,7 @@ man/*/Makefile
 
 po/Makefile
 po/Makefile.in
+po/messages.mo
 po/POTFILES
 po/stamp-po
 po/*.gmo

@@ -1,7 +1,7 @@
 .\" cryptmount-setup manual page
 .\" (C)Copyright 2007-2023 RW Penney
 .\"
-.TH CRYPTMOUNT-SETUP 8 "2018-01-18" "@PACKAGE_VERSION@" "User commands"
+.TH CRYPTMOUNT-SETUP 8 "2023-01-07" "@PACKAGE_VERSION@" "User commands"
 .SH NAME
 cryptmount-setup \- setup a new encrypted filesystem
 
@@ -21,7 +21,7 @@ an encrypted filesystem, to be managed by
 
 If run by the superuser,
 .B cryptmount-setup
-will allow a basic encrypted filesystem to be created
+will allow a basic LUKS-encrypted filesystem to be created
 within an ordinary file.
 The size, location, mount-point and ownership of the filesystem
 can be selected interactively.

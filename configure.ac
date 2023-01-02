@@ -1,9 +1,9 @@
 dnl autoconf script for cryptmount
-dnl (C)Copyright 2005-2022, RW Penney
+dnl (C)Copyright 2005-2023, RW Penney
 
 dnl run 'aclocal; autoconf; automake -a -c -i; ./configure; make'
 
-AC_INIT(cryptmount, 6.2-beta, cryptmount@rwpenney.uk)
+AC_INIT(cryptmount, 6.2.0, cryptmount@rwpenney.uk)
 AC_PREREQ(2.59)
 
 test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc

@@ -5,7 +5,7 @@ Source: https://github.com/rwpenney/cryptmount
 License: GPL-2+
 
 Files: *
-Copyright: (C) 2005 - 2022 RW Penney <rwpenney@users.sourceforge.net>
+Copyright: (C) 2005 - 2023 RW Penney <rwpenney@users.sourceforge.net>
 License: GPL-2+
 
 Files: blowfish.c blowfish.h

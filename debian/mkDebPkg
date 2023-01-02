@@ -42,7 +42,7 @@ if [ -z "${PSEUDO_VERSION}" ]; then
     PSEUDO_VERSION="${VERSION}"
 fi
 
-SRCPKG="${UPSDIR}/${PACKAGE}-${VERSION}.tar.gz"
+SRCPKG=`realpath ${UPSDIR}`/"${PACKAGE}-${VERSION}.tar.gz"
 if [ ! -r "${SRCPKG}" ]; then
     echo "Upstream package ${SRCPKG} is not readable"
     exit 1

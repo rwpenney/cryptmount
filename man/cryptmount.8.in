@@ -1,7 +1,7 @@
 .\" cryptmount manual page
 .\" (C)Copyright 2005-2023 RW Penney
 .\"
-.TH CRYPTMOUNT 8 "2022-09-03" "@PACKAGE_VERSION@" "User commands"
+.TH CRYPTMOUNT 8 "2023-01-07" "@PACKAGE_VERSION@" "User commands"
 .SH NAME
 cryptmount \- mount/unmount/configure an encrypted filesystem
 

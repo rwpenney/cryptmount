@@ -1,3 +1,10 @@
+cryptmount (6.2.0-1) unstable; urgency=low
+
+  * New upstream release
+    - migrated device-setup handshaking using libudev
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 07 Jan 2023 09:15:00 +0000
+
 cryptmount (6.1.0-1) unstable; urgency=low
 
   * New upstream release
