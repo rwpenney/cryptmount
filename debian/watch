@@ -6,4 +6,6 @@
 version=4
 
 # Location of cryptographic signature of upstream package:
-opts=pgpsigurlmangle=s/$/.sig/ http://sf.net/cryptmount/ cryptmount-(\d\S*)@ARCHIVE_EXT@
+opts=pgpsigurlmangle=s/$/.asc/ \
+https://github.com/rwpenney/cryptmount/tags \
+(?:|.*/)cryptmount-[vV]?(\d\S*)@ARCHIVE_EXT@
