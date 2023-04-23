@@ -28,7 +28,8 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 override_dh_auto_configure:
 	dh_auto_configure -- \
 		--prefix=/usr --sysconfdir=/etc --with-sysrundir=/run \
-		--with-systemd --with-libgcrypt --enable-luks \
+		--with-systemd --with-systemd-unit-dir=/lib/systemd/system \
+		--with-libgcrypt --enable-luks \
 		--enable-delegation --enable-fsck \
 		--enable-cswap --enable-openssl-compat
 

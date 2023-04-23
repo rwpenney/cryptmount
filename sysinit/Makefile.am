@@ -26,10 +26,10 @@ install-exec-hook:	install-inits install-setup
 
 install-inits:	cryptmount.service initscript
 if USE_SYSTEMD
-	test -d "${DESTDIR}/usr/lib/systemd/system" || ${mkdir_p} "${DESTDIR}/usr/lib/systemd/system"
+	test -d "${DESTDIR}${CM_SYSD_UNITDIR}" || ${mkdir_p} "${DESTDIR}${CM_SYSD_UNITDIR}"
 endif	# USE_SYSTEMD
-	if test -d "${DESTDIR}/usr/lib/systemd/system" ; then \
-	    ${INSTALL_PROGRAM_ENV} ${INSTALL_DATA} cryptmount.service "${DESTDIR}/usr/lib/systemd/system"; \
+	if test -d "${DESTDIR}${CM_SYSD_UNITDIR}" ; then \
+	    ${INSTALL_PROGRAM_ENV} ${INSTALL_DATA} cryptmount.service "${DESTDIR}${CM_SYSD_UNITDIR}"; \
 	fi
 	test -d "${DESTDIR}/etc/modules-load.d" || ${mkdir_p} "${DESTDIR}/etc/modules-load.d"
 	${INSTALL_PROGRAM_ENV} ${INSTALL_DATA} modules-load.conf "${DESTDIR}/etc/modules-load.d/cryptmount.conf";

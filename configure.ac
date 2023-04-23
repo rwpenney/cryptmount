@@ -3,7 +3,7 @@ dnl (C)Copyright 2005-2023, RW Penney
 
 dnl run 'aclocal; autoconf; automake -a -c -i; ./configure; make'
 
-AC_INIT(cryptmount, 6.2.0, cryptmount@rwpenney.uk)
+AC_INIT(cryptmount, 6.2.1, cryptmount@rwpenney.uk)
 AC_PREREQ(2.59)
 
 test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
@@ -52,12 +52,7 @@ if test -d /run; then default_sysrundir="/run";
 else default_sysrundir="/var/run"; fi
 AC_ARG_WITH([sysrundir],
     AS_HELP_STRING([--with-sysrundir=DIR], [directory for run-time state]),
-    [sysrundir="${withval}"], [sysrundir="${default_sysrundir}"])
-if test "x${sysrundir}" = "xyes" -o "x${sysrundir}" = "xno"; then
-    CM_SYSRUN_DIR="${default_sysrundir}"
-else
-    CM_SYSRUN_DIR="${sysrundir}"
-fi
+    [CM_SYSRUN_DIR="${withval}"], [CM_SYSRUN_DIR="${default_sysrundir}"])
 
 
 dnl --------
@@ -259,12 +254,15 @@ AC_SUBST(DOXYGEN_DOCDIR)
 dnl --------
 dnl systemd vs sysv boot support
 dnl
+if test -d "/lib/systemd/system"; then default_sysd_unitdir="/lib/systemd/system";
+else default_sysd_unitdir="/usr/lib/systemd/system"; fi
+AC_ARG_WITH([systemd-unit-dir],
+    AS_HELP_STRING([--with-systemd-unit-dir], [directory for systemd unit files]),
+    [CM_SYSD_UNITDIR="${withval}"],
+    [CM_SYSD_UNITDIR="${default_sysd_unitdir}"])
 AC_ARG_WITH([systemd],
     AS_HELP_STRING([--with-systemd],
         [whether boot-up support should be via systemd or sysvinit (default is NO)]))
-if test "x${with_systemd}" != "xyes"; then
-    true
-fi
 AM_CONDITIONAL(USE_SYSTEMD, test "x$with_systemd" = "xyes")
 
 
@@ -273,6 +271,7 @@ dnl substitute variables for location of configuration files etc
 dnl
 AC_SUBST(CM_SYSCONF_DIR)
 AC_SUBST(CM_SYSRUN_DIR)
+AC_SUBST(CM_SYSD_UNITDIR)
 AC_SUBST(LIBS_GCRY)
 AC_SUBST(LIBS_LUKS)
 AC_SUBST(CM_DEFAULT_CIPHER)

@@ -1,3 +1,2 @@
-systemd-paths.patch
 install-example-cmtab.patch
 init.d-script.patch
