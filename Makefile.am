@@ -49,11 +49,12 @@ install-exec-hook:	install-etcdir
 install-etcdir:
 	if test ! -d "${DESTDIR}${CM_SYSCONF_DIR}" ; then \
 	    ${mkdir_p} "${DESTDIR}${CM_SYSCONF_DIR}" ; \
-	    ${INSTALL_PROGRAM_ENV} ${INSTALL_DATA} cmtab.example "${DESTDIR}${CM_SYSCONF_DIR}" ; \
 	fi
 	if test ! -f "${DESTDIR}${CM_SYSCONF_DIR}/cmtab" ; then \
 	    echo -e "# ${CM_SYSCONF_DIR}/cmtab - encrypted filesystem information for cryptmount\n# try 'man 8 cryptmount' or 'man 5 cmtab' for more details\n# or refer to ${CM_SYSCONF_DIR}/cmtab.example\n" >> "${DESTDIR}${CM_SYSCONF_DIR}/cmtab"; \
 	fi
+	${mkdir_p} "${DESTDIR}$(datarootdir)/doc/cryptmount/examples"
+	${INSTALL_PROGRAM_ENV} ${INSTALL_DATA} cmtab.example "${DESTDIR}$(datarootdir)/doc/cryptmount/examples/cmtab"
 
 
 install-setup:	setupscript
