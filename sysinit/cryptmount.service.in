@@ -2,7 +2,7 @@
 
 [Unit]
 Description=cryptmount startup
-Documentation=man:cryptmount http://cryptmount.sourceforge.net/
+Documentation=man:cryptmount https://github.com/rwpenney/cryptmount/
 After=local-fs.target
 
 [Service]

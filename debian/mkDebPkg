@@ -90,8 +90,13 @@ quilt new docfiles-pathnames.patch
 for fl in ${TXFILES}; do
     quilt add "${fl}"
     sed "${debtransform}" ${fl} > ${fl}-debtx && mv ${fl}-debtx ${fl}
-    echo "Correct installation pathnames in documentation" | quilt header -r
 done
+cat <<EOF | quilt header -r
+Description: Correct installation pathnames in documentation
+ Some documentation files not installed except in Debian packaging
+Author: RW Penney <rwpenney@users.sourceforge.net>
+Forwarded: not-needed
+EOF
 quilt refresh
 
 

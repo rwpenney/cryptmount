@@ -1,4 +1,7 @@
-Add link to /lib/lsb/init-functions
+Description: Add link to /lib/lsb/init-functions
+ /lib/lsb/init-functions is not available in all distros, even if commonplace
+Author: RW Penney <rwpenney@users.sourceforge.net>
+Forwarded: not-needed
 --- a/sysinit/initscript.in
 +++ b/sysinit/initscript.in
 @@ -16,6 +16,8 @@

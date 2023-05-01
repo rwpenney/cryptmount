@@ -7,7 +7,7 @@ Name:		cryptmount
 Version: 	6.2.1
 Release:	1%{?dist}
 License:	GPL
-URL:		http://cryptmount.sourceforge.net
+URL:		https://github.com/rwpenney/cryptmount
 Group:		System/Filesystems
 Source0:	http://sourceforge.net/projects/cryptmount/files/cryptmount-%{version}/%{name}-%{version}.tar.gz
 %if 0%{?fedora}
