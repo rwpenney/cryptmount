@@ -12,7 +12,7 @@
 ..
 
 
-.TH CMTAB 5 "2022-09-03" "@PACKAGE_VERSION@" "User commands"
+.TH CMTAB 5 "2023-05-28" "@PACKAGE_VERSION@" "User commands"
 .SH NAME
 cmtab \- static information about filesystems managed by cryptmount
 
@@ -37,8 +37,8 @@ The backslash character \(aq\\' can be used to ignore any special significance
 of the following character, for example to include a space in a filename.
 
 @CM_SYSCONF_DIR@/cmtab contains entries of the following form:
-
-.EX
+.sp
+.nf
     TARGET_NAME {
         dev=DEVICE                      # REQUIRED
         flags=FLAG,FLAG,...
@@ -60,7 +60,7 @@ of the following character, for example to include a space in a filename.
         keymaxlen=KEYMAXLEN
         passwdretries=NUMATTEMPTS
     }
-.EE
+.fi
 
 Some fields, such as \(aqdev' and \(aqfstype' are mandatory,
 although many fields have sensible default values.
@@ -73,13 +73,14 @@ can contain references to environmental variables of the form $(HOME).
 The following variables are recognized,
 all based on the characteristics of the user currently running
 .B cryptmount :
-.EX
+.sp
+.nf
     $(HOME)         # the home directory, as obtained from /etc/passwd
     $(UID)          # the numerical identifier of the user
     $(USERNAME)     # the printable name of the user
     $(GID)          # the numerical identifier of the user's current group
     $(GROUPNAME)    # the printable name of the user's current group
-.EE
+.fi
 
 
 .\" --------------------------------
@@ -424,8 +425,8 @@ The following example of @CM_SYSCONF_DIR@/cmtab consists of five targets,
 using a variety of encryption algorithms and storing
 their filesystems in different ways,
 including a target representing an encrypted swap partition:
-
-.EX
+.sp
+.nf
     # @CM_SYSCONF_DIR@/cmtab
     # example file \- please modify before use
 
@@ -487,7 +488,7 @@ including a target representing an encrypted swap partition:
     }
 
     # end of cmtab
-.EE
+.fi
 
 The 'basic' target uses an ordinary file "/home/secretiveuser/crypt.fs"
 to store the encrypted filesystem,
