@@ -1,15 +1,15 @@
 #
 # rpm spec-file for cryptmount
-# Copyright 2006-2022, Holger Mueller, Eriks Zelenka & RW Penney
+# Copyright 2006-2023, Holger Mueller, Eriks Zelenka & RW Penney
 #
 Summary:	Let ordinary users mount an encrypted file system
 Name:		cryptmount
-Version: 	6.2.1
+Version:	6.2.0
 Release:	1%{?dist}
 License:	GPL
 URL:		https://github.com/rwpenney/cryptmount
 Group:		System/Filesystems
-Source0:	http://sourceforge.net/projects/cryptmount/files/cryptmount-%{version}/%{name}-%{version}.tar.gz
+Source0:	https://github.com/rwpenney/cryptmount/archive/refs/tags/v%{version}.tar.gz
 %if 0%{?fedora}
 #{
 # Fedora
@@ -100,9 +100,9 @@ fi
 
 
 %changelog
-* Sat Jan 07 2023 RW Penney <cryptmount@rwpenney.uk> - 6.2
+* Sat Jan 07 2023 RW Penney <cryptmount@rwpenney.uk> - 6.2.0
     -- Enabled libudev by default
-* Sat Oct 08 2022 RW Penney <cryptmount@rwpenney.uk> - 6.1
+* Sat Oct 08 2022 RW Penney <cryptmount@rwpenney.uk> - 6.1.0
     -- Refreshed installation documentation and inter-process locking
 * Sat Sep 03 2022 RW Penney <cryptmount@rwpenney.uk> - 6.0
     -- Refreshed default ciphers and keymanager

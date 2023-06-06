@@ -29,9 +29,9 @@ CentOS, [Debian](https://packages.debian.org/stable/cryptmount), Fedora,
 [Ubuntu](https://packages.ubuntu.com/jammy/cryptmount) etc.
 
 For the most recent source-bundles of cryptmount, please see
-[SourceForge](http://www.sourceforge.net/projects/cryptmount),
-or find the latest developer versions
-on [GitHub](https://github.com/rwpenney/cryptmount).
+[GitHub](https://github.com/rwpenney/cryptmount/releases),
+where the latest [developer versions](https://github.com/rwpenney/cryptmount)
+can also be found.
 
 An encrypted filing system must initially be created by the superuser.
 A basic setup can be created interactively by running the `cryptmount-setup`
@@ -81,6 +81,6 @@ You are strongly advised to keep a backup copy of the key-file.
 ## Signing keys
 
 The current GPG signature used for cryptmount releases
-has fingerprint `78BC 1A99 61DC 2DAA 7BF8  99DB A6D8 2C65 B8CE F5E7`,
-and is due to expire in May 2023, to be replaced by
-fingerprint `7A09 0051 9745 19A3 ED1B  D4CB A6CF D54C 4405 160E`.
+has fingerprint `7A09 0051 9745 19A3 ED1B  D4CB A6CF D54C 4405 160E`.
+(The previous key, `78BC 1A99 61DC 2DAA 7BF8  99DB A6D8 2C65 B8CE F5E7`,
+expired in May 2023.)
