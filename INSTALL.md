@@ -35,7 +35,7 @@ cryptmount's [GitHub repository](https://github.com/rwpenney/cryptmount),
 then you may need to set up [autoconf](https://www.gnu.org/software/autoconf/)
 (version 2.61 or later), and run
 
-    aclocal; autoconf; automake -a -c -i
+    autoreconf -v -i
 
 
 Dependencies

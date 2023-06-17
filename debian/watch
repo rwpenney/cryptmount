@@ -6,6 +6,7 @@
 version=4
 
 # Location of cryptographic signature of upstream package:
-opts=pgpsigurlmangle=s/$/.asc/ \
+opts=filenamemangle=s%(?:.*?)?[vV]?(\d[\d.]*@ARCHIVE_EXT@)%@PACKAGE@-$1%,\
+pgpsigurlmangle=s%(.*?)/tags/[vV]?(\d[\d.]*)(@ARCHIVE_EXT@)%https://github.com/rwpenney/cryptmount/releases/download/v$2/@PACKAGE@-$2$3.asc% \
 https://github.com/rwpenney/cryptmount/tags \
-(?:|.*/)cryptmount-[vV]?(\d\S*)@ARCHIVE_EXT@
+(?:|.*/)[vV]?(\d\S*)@ARCHIVE_EXT@

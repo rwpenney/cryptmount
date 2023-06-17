@@ -1,7 +1,7 @@
 dnl autoconf script for cryptmount
 dnl (C)Copyright 2005-2023, RW Penney
 
-dnl run 'aclocal; autoconf; automake -a -c -i; ./configure; make'
+dnl run 'autoreconf -v -i -s; ./configure; make'
 
 AC_INIT(cryptmount, 6.2.2, cryptmount@rwpenney.uk)
 AC_PREREQ(2.59)
