@@ -1372,7 +1372,7 @@ cmmode_t parse_options(int argc, char *argv[],
 #ifdef _GNU_SOURCE
     struct option *longopts;
 
-    longopts = (struct option*)malloc((n_options + 1) * sizeof(struct option));
+    longopts = (struct option*)calloc(n_options + 1, sizeof(struct option));
     for (i=0; i<n_options; ++i) {
         longopts[i].name =      opt_table[i].longopt;
         longopts[i].has_arg =   ((opt_table[i].flags & NEEDS_ARG)

@@ -1,5 +1,7 @@
 ChangeLog for cryptmount (https://github.com/rwpenney/cryptmount)
 
+17Jun23	- Improved zeroing of inputs to getopt_long() (as highlighted by dukpt/@ptef)
+
 07Jan23	- *** cryptmount-6.2 released
 
 02Jan23	- Enabled libudev by default
