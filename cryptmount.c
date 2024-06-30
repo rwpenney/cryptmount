@@ -534,9 +534,9 @@ int do_devshutdown(const bound_tgtdefn_t *boundtgt)
  *  \see do_unmount(), do_devsetup(), fs_mount().
  */
 static int do_mount(const km_pw_context_t *pw_ctxt, bound_tgtdefn_t *boundtgt)
-{   const tgtdefn_t *tgt=NULL;
-    int freedev=0, eflag=ERR_NOERROR;
-    char *mntdev=NULL;
+{   const tgtdefn_t *tgt = NULL;
+    int freedev = 0, eflag = ERR_NOERROR;
+    char *mntdev = NULL;
     tgtstat_t *tstat;
 
     if (is_mounted(boundtgt->tgt)) {
@@ -552,8 +552,9 @@ static int do_mount(const km_pw_context_t *pw_ctxt, bound_tgtdefn_t *boundtgt)
 
 #if WITH_FSCK
     if ((tgt->flags & FLG_FSCK) != 0) {
-        if (fs_check(mntdev, tgt) != ERR_NOERROR) {
-            freedev = 1; eflag = ERR_BADMOUNT;
+        const int fsck_flag = fs_check(mntdev, tgt);
+        if (fsck_flag != ERR_NOERROR) {
+            freedev = 1; eflag = fsck_flag;
             goto bail_out;
         }
     }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: cryptmount@rwpenney.uk\n"
-"POT-Creation-Date: 2024-06-30 13:01+0100\n"
+"POT-Creation-Date: 2024-06-30 14:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,7 +188,7 @@ msgstr ""
 msgid "Device-mapper target-creation failed for \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:487 cryptmount.c:721
+#: cryptmount.c:487 cryptmount.c:722
 #, c-format
 msgid "Target \"%s\" does not appear to be configured\n"
 msgstr ""
@@ -208,12 +208,12 @@ msgstr ""
 msgid "Target \"%s\" is already mounted\n"
 msgstr ""
 
-#: cryptmount.c:601
+#: cryptmount.c:602
 #, c-format
 msgid "Target \"%s\" does not appear to be mounted\n"
 msgstr ""
 
-#: cryptmount.c:611
+#: cryptmount.c:612
 #, c-format
 msgid "Only \"%s\" can unmount \"%s\"\n"
 msgstr ""
@@ -221,122 +221,122 @@ msgstr ""
 #. TRANSLATORS: the following expands to include
 #. the *numerical* user-identity in place of '%lu',
 #. e.g. giving 'only user-16 can unmount "target"':
-#: cryptmount.c:617
+#: cryptmount.c:618
 #, c-format
 msgid "Only user-%lu can unmount \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:662
+#: cryptmount.c:663
 #, c-format
 msgid "Target \"%s\" is already configured\n"
 msgstr ""
 
-#: cryptmount.c:685 cryptmount.c:741
+#: cryptmount.c:686 cryptmount.c:742
 #, c-format
 msgid "Crypto-swap is not supported by this installation of cryptmount\n"
 msgstr ""
 
-#: cryptmount.c:773
+#: cryptmount.c:774
 #, c-format
 msgid "Key-file for \"%s\" isn't password-protected\n"
 msgstr ""
 
-#: cryptmount.c:799 cryptmount.c:920
+#: cryptmount.c:800 cryptmount.c:921
 #, c-format
 msgid "Cannot open \"%s\" for writing\n"
 msgstr ""
 
-#: cryptmount.c:814
+#: cryptmount.c:815
 #, c-format
 msgid "Retiring old key (%s -> %s) failed\n"
 msgstr ""
 
-#: cryptmount.c:822
+#: cryptmount.c:823
 #, c-format
 msgid "Installing new key (%s -> %s) failed\n"
 msgstr ""
 
-#: cryptmount.c:829
+#: cryptmount.c:830
 #, c-format
 msgid "Backup of previous key is in \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:869 cryptmount.c:1546
+#: cryptmount.c:870 cryptmount.c:1547
 #, c-format
 msgid "Target name \"%s\" is not recognized\n"
 msgstr ""
 
-#: cryptmount.c:875
+#: cryptmount.c:876
 #, c-format
 msgid "Bad key-length parameter"
 msgstr ""
 
-#: cryptmount.c:887
+#: cryptmount.c:888
 #, c-format
 msgid "Key-file \"%s\" already exists for target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:897
+#: cryptmount.c:898
 #, c-format
 msgid "Generating random key; please be patient...\n"
 msgstr ""
 
-#: cryptmount.c:901
+#: cryptmount.c:902
 #, c-format
 msgid "Failed to generate new key\n"
 msgstr ""
 
-#: cryptmount.c:934
+#: cryptmount.c:935
 #, c-format
 msgid "Installation of new keyfile \"%s\" failed"
 msgstr ""
 
-#: cryptmount.c:1070
+#: cryptmount.c:1071
 #, c-format
 msgid "Only root can use option \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1083
+#: cryptmount.c:1084
 #, c-format
 msgid "Only root can configure \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1147
+#: cryptmount.c:1148
 #, c-format
 msgid "Cannot find key-manager to match target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1414
+#: cryptmount.c:1415
 #, c-format
 msgid "Multiple operating modes not supported\n"
 msgstr ""
 
-#: cryptmount.c:1469
+#: cryptmount.c:1470
 #, c-format
 msgid "Memory-locking failed...\n"
 msgstr ""
 
-#: cryptmount.c:1497
+#: cryptmount.c:1498
 #, c-format
 msgid "Bad file-descriptor (%d)\n"
 msgstr ""
 
-#: cryptmount.c:1507
+#: cryptmount.c:1508
 #, c-format
 msgid "Security failure\n"
 msgstr ""
 
-#: cryptmount.c:1526
+#: cryptmount.c:1527
 #, c-format
 msgid "Trailing command-line arguments given with '--all' option\n"
 msgstr ""
 
-#: cryptmount.c:1558
+#: cryptmount.c:1559
 #, c-format
 msgid "Target security failure for \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1567
+#: cryptmount.c:1568
 #, c-format
 msgid "No targets specified\n"
 msgstr ""

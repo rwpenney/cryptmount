@@ -82,8 +82,8 @@ struct dm_task *devmap_prepare(int type, const char *ident)
 }
 
 
+/*! @brief Create device-mapper full pathname from target description */
 int devmap_path(char **buff, const char *ident)
-    /* create device-mapper full pathname from target description */
 {   size_t pfxlen, sfxlen;
 
     pfxlen = strlen(dm_dir());
@@ -177,24 +177,25 @@ int devmap_dependencies(const char *ident, unsigned *count, dev_t **devids)
 }
 
 
+/*! @brief Remove device-mapper target and associated device */
 int devmap_remove(const char *ident)
-    /* remove device-mapper target and associated device */
-{   struct dm_task *dmt=NULL;
+{   struct dm_task *dmt = NULL;
     struct dm_info dmi;
     struct stat sbuff;
-    char *devpath=NULL;
+    char *devpath = NULL;
     int eflag = ERR_NOERROR;
 
-    /* check device-mapper target is configured & get info: */
+    /* Check device-mapper target is configured & get info: */
     if (!is_configured(ident, &dmi)) {
         eflag = ERR_BADDEVICE;
         goto bail_out;
     }
 
-    /* remove device node (below /dev?): */
+    /* Remove device node (below /dev?): */
     devmap_path(&devpath, ident);
     if (stat(devpath, &sbuff) != 0) {
-        fprintf(stderr, "unable to stat() device node\n");
+        fprintf(stderr, "unable to stat() device node for %s at %s\n",
+                ident, devpath);
         eflag = ERR_DMSETUP;
         goto bail_out;
     }
@@ -207,7 +208,7 @@ int devmap_remove(const char *ident)
         goto bail_out;
     }
 
-    /* remove device-mapper target: */
+    /* Remove device-mapper target: */
     if ((dmt = devmap_prepare(DM_DEVICE_REMOVE, ident)) == NULL) {
         fprintf(stderr, "failed to initialize device-mapper task\n");
         eflag = ERR_DMSETUP;

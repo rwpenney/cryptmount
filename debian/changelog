@@ -2,7 +2,8 @@ cryptmount (6.2.2-1) unstable; urgency=low
 
   * New upstream release
     - Replaced (long-defunct) maintainer forwarding address
-    - Relocated systemd files from /lib to /usr/lib (Closes: bug#1073753)
+  * Updated to Debian Standards Version 4.7.0
+  * Relocated systemd files from /lib to /usr/lib (Closes: bug#1073753)
 
  -- RW Penney <cryptmount@rwpenney.uk>  Sat, 03 Aug 2024 10:30:00 +0000
 
