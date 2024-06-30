@@ -1,6 +1,6 @@
 /*
  *  Loopback-device utilities for cryptmount
- *  (C)Copyright 2005-2023, RW Penney
+ *  (C)Copyright 2005-2024, RW Penney
  */
 
 /*
@@ -302,5 +302,5 @@ int unblockify_file(const char **devname, int isloop)
 }
 
 /*
- *  (C)Copyright 2005-2023, RW Penney
+ *  (C)Copyright 2005-2024, RW Penney
  */

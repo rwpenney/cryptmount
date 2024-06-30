@@ -9,6 +9,6 @@ XGETTEXT_OPTIONS = --keyword=_ --keyword=N_
 
 COPYRIGHT_HOLDER = RW Penney
 
-MSGID_BUGS_ADDRESS = rwpenney@users.sourceforge.net
+MSGID_BUGS_ADDRESS = cryptmount@rwpenney.uk
 
 EXTRA_LOCALE_CATEGORIES =

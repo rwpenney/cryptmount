@@ -1,7 +1,7 @@
 Source: cryptmount
 Section: admin
 Priority: optional
-Maintainer: RW Penney <rwpenney@users.sourceforge.net>
+Maintainer: RW Penney <cryptmount@rwpenney.uk>
 Homepage: https://github.com/rwpenney/cryptmount
 Build-Depends: automake, debhelper-compat (= 12), libcryptsetup-dev (>= 2.0),
             libdevmapper-dev, libgcrypt20-dev (>= 1.8), libudev-dev, pkgconf

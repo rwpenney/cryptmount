@@ -1,6 +1,6 @@
 /*
  *  Methods for unit-testing utiltities for cryptmount
- *  (C)Copyright 2006-2023, RW Penney
+ *  (C)Copyright 2006-2024, RW Penney
  */
 
 /*
@@ -113,5 +113,5 @@ int _keep_ansi_pedantic_quiet = 0;
 #endif  /* TESTING */
 
 /*
- *  (C)Copyright 2006-2023, RW Penney
+ *  (C)Copyright 2006-2024, RW Penney
  */

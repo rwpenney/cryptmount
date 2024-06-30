@@ -1,3 +1,10 @@
+cryptmount (6.2.2-1) unstable; urgency=low
+
+  * New upstream release
+    - Replaced (long-defunct) maintainer forwarding address
+
+ -- RW Penney <cryptmount@rwpenney.uk>  Sat, 03 Aug 2024 10:30:00 +0000
+
 cryptmount (6.2.0-1) unstable; urgency=low
 
   * New upstream release

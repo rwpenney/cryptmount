@@ -1,6 +1,6 @@
 /*
  *  General declarations for cryptmount
- *  (C)Copyright 2005-2023, RW Penney
+ *  (C)Copyright 2005-2024, RW Penney
  */
 
 /*
@@ -173,5 +173,5 @@ typedef struct tgtdefn
 #endif  /* _CRYPTMOUNT_H */
 
 /*
- *  (C)Copyright 2005-2023, RW Penney
+ *  (C)Copyright 2005-2024, RW Penney
  */

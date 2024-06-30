@@ -1,14 +1,14 @@
 # French translations for cryptmount package.
-# Copyright (C) 2006-2022 RW Penney <rwpenney@users.sourceforge.net>
+# Copyright (C) 2006-2024 RW Penney
 # This file is distributed under the same license as the cryptmount package.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: cryptmount 4.0-1\n"
-"Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
-"POT-Creation-Date: 2022-10-01 12:52+0100\n"
+"Report-Msgid-Bugs-To: cryptmount@rwpenney.uk\n"
+"POT-Creation-Date: 2024-06-30 13:01+0100\n"
 "PO-Revision-Date: 2006-04-21 07:51+0100\n"
-"Last-Translator: RW Penney <rwpenney@users.sourceforge.net>\n"
+"Last-Translator: RW Penney <cryptmount@rwpenney.uk>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"

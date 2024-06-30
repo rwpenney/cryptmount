@@ -94,7 +94,7 @@ done
 cat <<EOF | quilt header -r
 Description: Correct installation pathnames in documentation
  Some documentation files not installed except in Debian packaging
-Author: RW Penney <rwpenney@users.sourceforge.net>
+Author: RW Penney <cryptmount@rwpenney.uk>
 Forwarded: not-needed
 EOF
 quilt refresh

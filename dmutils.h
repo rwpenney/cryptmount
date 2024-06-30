@@ -1,6 +1,6 @@
 /*
  *  Declarations for device-mapper utilities for cryptmount
- *  (C)Copyright 2005-2023, RW Penney
+ *  (C)Copyright 2005-2024, RW Penney
  */
 
 /*
@@ -47,5 +47,5 @@ int udev_settle();
 #endif  /* _DMUTILS_H */
 
 /*
- *  (C)Copyright 2005-2023, RW Penney
+ *  (C)Copyright 2005-2024, RW Penney
  */

@@ -1,5 +1,5 @@
 dnl autoconf script for cryptmount
-dnl (C)Copyright 2005-2023, RW Penney
+dnl (C)Copyright 2005-2024, RW Penney
 
 dnl run 'autoreconf -v -i -s; ./configure; make'
 

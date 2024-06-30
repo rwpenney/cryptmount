@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: cryptmount 6.0-1\n"
-"Report-Msgid-Bugs-To: rwpenney@users.sourceforge.net\n"
-"POT-Creation-Date: 2022-10-01 12:52+0100\n"
+"Report-Msgid-Bugs-To: cryptmount@rwpenney.uk\n"
+"POT-Creation-Date: 2024-06-30 13:01+0100\n"
 "PO-Revision-Date: 2022-09-11 20:18+0200\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
@@ -93,8 +93,8 @@ msgstr "Falsches Schlüsseldateiformat (openssl-compat).\n"
 #, c-format
 msgid "Checksum mismatch in keyfile (openssl-compat, ofs=%u,idx=%u)\n"
 msgstr ""
-"Nicht übereinstimmende Prüfsumme in der Schlüsseldatei (openssl-compat, ofs="
-"%u, idx=%u).\n"
+"Nicht übereinstimmende Prüfsumme in der Schlüsseldatei (openssl-compat, "
+"ofs=%u, idx=%u).\n"
 
 #: armour-luks.c:217
 #, c-format
