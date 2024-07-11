@@ -40,6 +40,7 @@ int devmap_dependencies(const char *ident, unsigned *count, dev_t **devids);
 int devmap_remove(const char *ident);
 
 int is_configured(const char *ident, struct dm_info *dminfo);
+int await_device(const char *path, int present, unsigned timeout_ms);
 int udev_settle();
 
 /**  @} */

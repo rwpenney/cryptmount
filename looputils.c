@@ -68,11 +68,9 @@ static const char *loop_formats[] = {
  *  that it not associated with a backing file.
  */
 int loop_findfree(char *buff, size_t buffsz)
-{   unsigned idx, found = 0;
+{   unsigned found = 0;
     int devfd, devno;
-    struct loop_info64 linfo;
     char loopname[256] = "";
-    struct stat sbuff;
 
 #ifdef LOOP_CTL_GET_FREE
     devfd = open("/dev/loop-control", O_RDWR);
@@ -82,9 +80,12 @@ int loop_findfree(char *buff, size_t buffsz)
         snprintf(loopname, sizeof(loopname), "/dev/loop%d", devno);
         found = 1;
     }
-#endif
-
+#else
     for (devno=0; devno<256 && !found; ++devno) {
+        unsigned idx;
+        struct loop_info64 linfo;
+        struct stat sbuff;
+
         for (idx=0; loop_formats[idx]!=NULL && !found; ++idx) {
             snprintf(loopname, sizeof(loopname),
                      loop_formats[idx], (unsigned)devno);
@@ -97,6 +98,7 @@ int loop_findfree(char *buff, size_t buffsz)
             close(devfd);
         }
     }
+#endif    /* LOOP_CTL_GET_FREE */
 
     if (found && buff != NULL) strncpy(buff, loopname, buffsz);
 

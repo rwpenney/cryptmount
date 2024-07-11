@@ -23,6 +23,7 @@
 
 #include "config.h"
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -248,6 +249,41 @@ int is_configured(const char *ident, struct dm_info *dminfo)
     if (dmt != NULL) dm_task_destroy(dmt);
 
     return config;
+}
+
+
+int await_device(const char *path, int present, unsigned timeout_ms)
+    /*! Repeatedly check for presence (or absence) of block device */
+{   int st = -1, t_waited = 0, resolved = 0;
+    struct stat sbuff;
+    struct timespec start_time, now, delay;
+
+    clock_gettime(CLOCK_REALTIME, &start_time);
+
+    do {
+        st = stat(path, &sbuff);
+        if (present) {
+          resolved = (st == 0 && (sbuff.st_mode & S_IFMT) == S_IFBLK);
+        } else {
+          resolved = (st != 0 && errno == ENOENT);
+        }
+
+        if (!resolved) {
+#if HAVE_NANOSLEEP
+            delay.tv_sec = 0;
+            delay.tv_nsec = 250;
+            nanosleep(&delay, NULL);
+#else
+            sleep(1);
+#endif
+        }
+
+        clock_gettime(CLOCK_REALTIME, &now);
+        t_waited = (now.tv_sec - start_time.tv_sec) * 1000 +
+                    (now.tv_nsec - start_time.tv_nsec) / 1000000;
+    } while (!resolved && (t_waited < timeout_ms));
+
+    return (resolved ? 0 : 1);
 }
 
 

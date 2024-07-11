@@ -130,8 +130,6 @@ static inline int cm_fwrite(const void *buff, size_t nbytes, FILE *stream) {
 }
 
 
-
-
 #endif  /* _UTILS_H */
 
 /*
