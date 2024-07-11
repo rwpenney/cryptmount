@@ -106,27 +106,6 @@ fi
 
 
 dnl --------
-dnl udev libraries
-dnl
-AC_ARG_ENABLE([libudev],
-    AS_HELP_STRING([--enable-libudev],
-        [use libudev for /dev events (default is YES)]),
-    [use_libudev="${enableval}"], [use_libudev="yes"])
-if test "x${use_libudev}" = "xyes"; then
-    AC_CHECK_HEADER([libudev.h],
-        AC_SEARCH_LIBS(udev_queue_get_queue_is_empty, udev,
-                        [udevlib="yes"], [udevlib="no"]),
-        [udevlib="no"])
-else
-    udevlib="no"
-fi
-if test "x${udevlib}" = "xyes"; then
-    AC_DEFINE(HAVE_LIBUDEV, [1],
-            [Define to 1 if you have libudev header files])
-fi
-
-
-dnl --------
 dnl libcryptsetup libraries (needed for LUKS/cryptsetup key-manager)
 dnl
 PKG_CHECK_MODULES([libcryptsetup], [libcryptsetup >= 1.4],
@@ -321,7 +300,6 @@ AC_MSG_NOTICE([
         Filesystem checking:            $msg_fsck
         Crypto-swap support:            $use_cswap
         libgcrypt support:              $msg_gcry
-        libudev support:                $udevlib
         LUKS support:                   $msg_luks
 
 ])

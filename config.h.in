@@ -53,9 +53,6 @@
 /* Define to 1 to enable libgcrypt support */
 #undef HAVE_LIBGCRYPT
 
-/* Define to 1 if you have libudev header files */
-#undef HAVE_LIBUDEV
-
 /* Define to 1 if you have the <linux/fs.h> header file. */
 #undef HAVE_LINUX_FS_H
 

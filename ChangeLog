@@ -2,6 +2,7 @@ ChangeLog for cryptmount (https://github.com/rwpenney/cryptmount)
 
 11Jul24	- Fixed duplicated loopback free device search
 	Replaced udev-settle mechanisms with new await_device() mechanism
+	Removed use of libudev
 
 17Jun23	- Improved zeroing of inputs to getopt_long() (as highlighted by dukpt/@ptef)
 
