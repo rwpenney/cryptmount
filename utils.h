@@ -75,6 +75,8 @@ void *sec_realloc(void *ptr, size_t size);
 void mem_cleanse(uint8_t *addr, size_t sz);
 void sec_free(void *ptr);
 
+void millisleep(unsigned ms);
+
 int cm_generate_key(uint8_t *key, size_t len);
 int km_get_passwd(const char *ident, const km_pw_context_t *pw_ctxt,
                 char **passwd, int isnew, int verify);

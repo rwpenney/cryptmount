@@ -490,8 +490,10 @@ int do_devshutdown(const bound_tgtdefn_t *boundtgt)
         goto bail_out;
     }
 
+    /* Delay to allow udev to settle */
+    millisleep(500);    /* FIXME - find more deterministic solution! */
+
     /* Find any underlying (e.g. loopback) devices for device-mapper target: */
-    udev_settle();
     (void)devmap_dependencies(tgt->ident, &devcnt, &devids);
 #ifdef DEBUG
     fprintf(stderr, "Shutting down %s [%u dependencies]\n",
@@ -511,7 +513,7 @@ int do_devshutdown(const bound_tgtdefn_t *boundtgt)
             tgt->ident);
         goto bail_out;
     }
-    udev_settle();
+    await_devmap(tgt->ident, 0, 2000);
 
     /* Tidy-up any associated loopback devices: */
     if (S_ISREG(sbuff.st_mode) && devids != NULL) {
@@ -549,6 +551,7 @@ static int do_mount(const km_pw_context_t *pw_ctxt, bound_tgtdefn_t *boundtgt)
     eflag = do_devsetup(pw_ctxt, boundtgt, &mntdev);
     if (eflag != ERR_NOERROR) goto bail_out;
     tgt = boundtgt->tgt;
+    await_device(mntdev, 1, 5000);
 
 #if WITH_FSCK
     if ((tgt->flags & FLG_FSCK) != 0) {
@@ -574,7 +577,6 @@ static int do_mount(const km_pw_context_t *pw_ctxt, bound_tgtdefn_t *boundtgt)
 
     if (freedev) {
         /* Tidy-up debris if mount failed */
-        udev_settle();
         do_devshutdown(boundtgt);
     }
     if (mntdev != NULL) free((void*)mntdev);
@@ -669,6 +671,7 @@ static int do_swapon(const km_pw_context_t *pw_ctxt, bound_tgtdefn_t *boundtgt)
     eflag = do_devsetup(pw_ctxt, boundtgt, &mntdev);
     if (eflag != ERR_NOERROR) goto bail_out;
     tgt = boundtgt->tgt;
+    await_device(mntdev, 1, 5000);
 
     if (fs_swapon(mntdev, tgt) != ERR_NOERROR) {
         freedev = 1;
@@ -692,7 +695,6 @@ static int do_swapon(const km_pw_context_t *pw_ctxt, bound_tgtdefn_t *boundtgt)
 
     if (freedev) {
         /* Tidy-up debris if swapon failed */
-        udev_settle();
         do_devshutdown(boundtgt);
     }
 
@@ -988,7 +990,6 @@ static int do_safetynet()
     old_ident = tgt->ident;
 
     /* Get list of all targets in status-file: */
-    udev_settle();
     all_tsts = get_all_tgtstatus();
 
     for (tst=all_tsts; tst!=NULL; tst=tst->nx) {
@@ -1018,7 +1019,7 @@ static int do_safetynet()
         /* Remove device-mapper device: */
         (void)devmap_dependencies(tst->ident, &devcnt, &devids);
         if (devmap_remove(tst->ident) == ERR_NOERROR) ++counts.undeviced;
-        udev_settle();
+        await_device(devname, 0, 500);
 
         /* Free any associated loopback devices: */
         if (devcnt > 0 && loop_dellist(devcnt, devids) == 0) ++counts.unlooped;

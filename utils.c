@@ -38,6 +38,7 @@
 #if HAVE_TERMIOS
 #  include <termios.h>
 #endif
+#include <time.h>
 #include <unistd.h>
 
 #include "cryptmount.h"
@@ -362,6 +363,19 @@ void sec_free(void *ptr)
     mem_cleanse((uint8_t*)(memarr + 1), sz);
 
     free((void*)memarr);
+}
+
+
+void millisleep(unsigned ms)
+{
+#if HAVE_NANOSLEEP
+    struct timespec delay;
+    delay.tv_sec = ms / 1000;
+    delay.tv_nsec = (ms % 1000) * 1000 * 1000;
+    nanosleep(&delay, NULL);
+#else
+    sleep((ms + 999) / 1000);
+#endif
 }
 
 

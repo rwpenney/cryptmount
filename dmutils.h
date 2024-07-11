@@ -31,7 +31,6 @@
 /*! \addtogroup dev_mapper
  *  @{ */
 
-
 struct dm_task *devmap_prepare(int type, const char *devname);
 int devmap_path(char **buff, const char *ident);
 int devmap_create(const char *ident, uint64_t blk0, uint64_t blklen,
@@ -41,7 +40,7 @@ int devmap_remove(const char *ident);
 
 int is_configured(const char *ident, struct dm_info *dminfo);
 int await_device(const char *path, int present, unsigned timeout_ms);
-int udev_settle();
+int await_devmap(const char *ident, int present, unsigned timeout_ms);
 
 /**  @} */
 

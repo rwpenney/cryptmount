@@ -1,5 +1,8 @@
 ChangeLog for cryptmount (https://github.com/rwpenney/cryptmount)
 
+11Jul24	- Fixed duplicated loopback free device search
+	Replaced udev-settle mechanisms with new await_device() mechanism
+
 17Jun23	- Improved zeroing of inputs to getopt_long() (as highlighted by dukpt/@ptef)
 
 30Apr23	- Incorporated Debian patch for cmtab.example installation

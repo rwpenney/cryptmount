@@ -283,7 +283,25 @@ int await_device(const char *path, int present, unsigned timeout_ms)
                     (now.tv_nsec - start_time.tv_nsec) / 1000000;
     } while (!resolved && (t_waited < timeout_ms));
 
+    if (t_waited >= timeout_ms) {
+        fprintf(stderr, "Timeout in await_device(%s, %d, %u)\n",
+                path, present, timeout_ms);
+    }
+
     return (resolved ? 0 : 1);
+}
+
+
+int await_devmap(const char *ident, int present, unsigned timeout_ms)
+    /*! Wrapper around await_device(), using device-mapper target name */
+{   char *tgt = NULL;
+    int status = -1;
+
+    devmap_path(&tgt, ident);
+    status = await_device(tgt, present, timeout_ms);
+    free((void*)tgt);
+
+    return status;
 }
 
 

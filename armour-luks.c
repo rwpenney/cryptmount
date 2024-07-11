@@ -349,7 +349,7 @@ static int kmluks_get_key(bound_tgtdefn_t *boundtgt,
 
     crypt_deactivate(luks_ctxt, label);
     crypt_free(luks_ctxt);
-    udev_settle();
+    await_devmap(label, 0, 5000);
     if (passwd != NULL) sec_free((void*)passwd);
 
     return eflag;
@@ -446,7 +446,7 @@ static int kmluks_put_key(bound_tgtdefn_t *boundtgt,
     if (passwd != NULL) sec_free((void*)passwd);
     if (ciphername != NULL) free((void*)ciphername);
     if (ciphermode != NULL) free((void*)ciphermode);
-    udev_settle();
+    await_devmap(boundtgt->tgt->ident, 0, 5000);
 
     return eflag;
 }
