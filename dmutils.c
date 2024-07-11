@@ -33,9 +33,7 @@
 #  include <sys/sysmacros.h>
 #endif
 #include <sys/types.h>
-#if HAVE_NANOSLEEP
-#  include <time.h>
-#endif
+#include <time.h>
 #if HAVE_LIBUDEV
 #  include <libudev.h>
 #endif
@@ -48,6 +46,7 @@
 
 #include "cryptmount.h"
 #include "dmutils.h"
+#include "utils.h"
 
 
 #if !HAVE_LIBUDEV
@@ -256,7 +255,7 @@ int await_device(const char *path, int present, unsigned timeout_ms)
     /*! Repeatedly check for presence (or absence) of block device */
 {   int st = -1, t_waited = 0, resolved = 0;
     struct stat sbuff;
-    struct timespec start_time, now, delay;
+    struct timespec start_time, now;
 
     clock_gettime(CLOCK_REALTIME, &start_time);
 
@@ -269,13 +268,7 @@ int await_device(const char *path, int present, unsigned timeout_ms)
         }
 
         if (!resolved) {
-#if HAVE_NANOSLEEP
-            delay.tv_sec = 0;
-            delay.tv_nsec = 250;
-            nanosleep(&delay, NULL);
-#else
-            sleep(1);
-#endif
+            millisleep(250);
         }
 
         clock_gettime(CLOCK_REALTIME, &now);

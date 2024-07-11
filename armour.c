@@ -29,9 +29,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if HAVE_NANOSLEEP
-#  include <time.h>
-#endif
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -803,12 +800,8 @@ static const char *cm_lock_filename = "_cryptmount_lock_";
 int cm_mutex_lock(void)
     /** Try to acquire lock on configuration directory (via symlink marker) */
 {   char *fname=NULL, ident[64];
-    int eflag=ERR_BADMUTEX;
-#if HAVE_NANOSLEEP
-    int delay_ms;
+    int delay_ms, eflag = ERR_BADMUTEX;
     unsigned dither = ((size_t)&fname % 250) + 1;
-    struct timespec delay;
-#endif
     const unsigned MAX_ATTEMPTS = 10;
 
     (void)cm_path(&fname, CM_SYSRUN_PFX, cm_lock_filename);
@@ -823,15 +816,9 @@ int cm_mutex_lock(void)
         } else {
             if (errno == EEXIST) {
                 /* Try again later */
-#if HAVE_NANOSLEEP
                 delay_ms = 53 + attempt * (dither + attempt * 19);
                 dither = (dither * 213) % 251;
-                delay.tv_sec = (delay_ms / 1000);
-                delay.tv_nsec = (delay_ms % 1000) * 1000L * 1000L;
-                nanosleep(&delay, NULL);
-#else
-                sleep(1);
-#endif
+                millisleep(delay_ms);
             }
             else break;     /* failed to make link for more peculiar reason */
         }
