@@ -86,6 +86,8 @@ struct dm_task *devmap_prepare(int type, const char *ident)
 int devmap_path(char **buff, const char *ident)
 {   size_t pfxlen, sfxlen;
 
+    // FIXME - kernel 6.9 appears prone to automatically moving devices from /dev/mapper/* into /dev/disk/by-name/dm-name-*
+
     pfxlen = strlen(dm_dir());
     sfxlen = strlen(ident);
     *buff = (char*)realloc((void*)(*buff), (pfxlen + sfxlen + 2));
@@ -143,7 +145,7 @@ int devmap_create(const char *ident, uint64_t blk0, uint64_t blklen,
 
 
 int devmap_dependencies(const char *ident, unsigned *count, dev_t **devids)
-{   struct dm_task *dmt=NULL;
+{   struct dm_task *dmt = NULL;
     struct dm_deps *deps;
     unsigned i;
     int eflag=ERR_NOERROR;

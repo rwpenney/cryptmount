@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: cryptmount@rwpenney.uk\n"
-"POT-Creation-Date: 2024-06-30 14:53+0100\n"
+"POT-Creation-Date: 2024-07-20 14:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,32 +17,32 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: armour.c:154 armour-builtin.c:300 armour-gcry.c:570 armour-gcry.c:726
+#: armour.c:151 armour-builtin.c:300 armour-gcry.c:570 armour-gcry.c:726
 #, c-format
 msgid "Key-extraction failed for \"%s\"\n"
 msgstr ""
 
-#: armour.c:176
+#: armour.c:173
 #, c-format
 msgid "Key-writing failed for \"%s\"\n"
 msgstr ""
 
-#: armour.c:361
+#: armour.c:358
 #, c-format
 msgid "Failed to open keyfile \"%s\" for target \"%s\"\n"
 msgstr ""
 
-#: armour.c:369
+#: armour.c:366
 #, c-format
 msgid "Missing keyfile for target \"%s\"\n"
 msgstr ""
 
-#: armour.c:396
+#: armour.c:393
 #, c-format
 msgid "Missing output keyfile for target \"%s\"\n"
 msgstr ""
 
-#: armour.c:789
+#: armour.c:786
 #, c-format
 msgid "Specification for target \"%s\" contains non-absolute pathname\n"
 msgstr ""
@@ -188,32 +188,32 @@ msgstr ""
 msgid "Device-mapper target-creation failed for \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:487 cryptmount.c:722
+#: cryptmount.c:487 cryptmount.c:724
 #, c-format
 msgid "Target \"%s\" does not appear to be configured\n"
 msgstr ""
 
-#: cryptmount.c:502
+#: cryptmount.c:505
 #, c-format
 msgid "Cannot stat \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:510
+#: cryptmount.c:513
 #, c-format
 msgid "Failed to remove device-mapper target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:543
+#: cryptmount.c:545
 #, c-format
 msgid "Target \"%s\" is already mounted\n"
 msgstr ""
 
-#: cryptmount.c:602
+#: cryptmount.c:604
 #, c-format
 msgid "Target \"%s\" does not appear to be mounted\n"
 msgstr ""
 
-#: cryptmount.c:612
+#: cryptmount.c:614
 #, c-format
 msgid "Only \"%s\" can unmount \"%s\"\n"
 msgstr ""
@@ -221,122 +221,122 @@ msgstr ""
 #. TRANSLATORS: the following expands to include
 #. the *numerical* user-identity in place of '%lu',
 #. e.g. giving 'only user-16 can unmount "target"':
-#: cryptmount.c:618
+#: cryptmount.c:620
 #, c-format
 msgid "Only user-%lu can unmount \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:663
+#: cryptmount.c:665
 #, c-format
 msgid "Target \"%s\" is already configured\n"
 msgstr ""
 
-#: cryptmount.c:686 cryptmount.c:742
+#: cryptmount.c:689 cryptmount.c:744
 #, c-format
 msgid "Crypto-swap is not supported by this installation of cryptmount\n"
 msgstr ""
 
-#: cryptmount.c:774
+#: cryptmount.c:776
 #, c-format
 msgid "Key-file for \"%s\" isn't password-protected\n"
 msgstr ""
 
-#: cryptmount.c:800 cryptmount.c:921
+#: cryptmount.c:802 cryptmount.c:923
 #, c-format
 msgid "Cannot open \"%s\" for writing\n"
 msgstr ""
 
-#: cryptmount.c:815
+#: cryptmount.c:817
 #, c-format
 msgid "Retiring old key (%s -> %s) failed\n"
 msgstr ""
 
-#: cryptmount.c:823
+#: cryptmount.c:825
 #, c-format
 msgid "Installing new key (%s -> %s) failed\n"
 msgstr ""
 
-#: cryptmount.c:830
+#: cryptmount.c:832
 #, c-format
 msgid "Backup of previous key is in \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:870 cryptmount.c:1547
+#: cryptmount.c:872 cryptmount.c:1548
 #, c-format
 msgid "Target name \"%s\" is not recognized\n"
 msgstr ""
 
-#: cryptmount.c:876
+#: cryptmount.c:878
 #, c-format
 msgid "Bad key-length parameter"
 msgstr ""
 
-#: cryptmount.c:888
+#: cryptmount.c:890
 #, c-format
 msgid "Key-file \"%s\" already exists for target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:898
+#: cryptmount.c:900
 #, c-format
 msgid "Generating random key; please be patient...\n"
 msgstr ""
 
-#: cryptmount.c:902
+#: cryptmount.c:904
 #, c-format
 msgid "Failed to generate new key\n"
 msgstr ""
 
-#: cryptmount.c:935
+#: cryptmount.c:937
 #, c-format
 msgid "Installation of new keyfile \"%s\" failed"
 msgstr ""
 
-#: cryptmount.c:1071
+#: cryptmount.c:1072
 #, c-format
 msgid "Only root can use option \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1084
+#: cryptmount.c:1085
 #, c-format
 msgid "Only root can configure \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1148
+#: cryptmount.c:1149
 #, c-format
 msgid "Cannot find key-manager to match target \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1415
+#: cryptmount.c:1416
 #, c-format
 msgid "Multiple operating modes not supported\n"
 msgstr ""
 
-#: cryptmount.c:1470
+#: cryptmount.c:1471
 #, c-format
 msgid "Memory-locking failed...\n"
 msgstr ""
 
-#: cryptmount.c:1498
+#: cryptmount.c:1499
 #, c-format
 msgid "Bad file-descriptor (%d)\n"
 msgstr ""
 
-#: cryptmount.c:1508
+#: cryptmount.c:1509
 #, c-format
 msgid "Security failure\n"
 msgstr ""
 
-#: cryptmount.c:1527
+#: cryptmount.c:1528
 #, c-format
 msgid "Trailing command-line arguments given with '--all' option\n"
 msgstr ""
 
-#: cryptmount.c:1559
+#: cryptmount.c:1560
 #, c-format
 msgid "Target security failure for \"%s\"\n"
 msgstr ""
 
-#: cryptmount.c:1568
+#: cryptmount.c:1569
 #, c-format
 msgid "No targets specified\n"
 msgstr ""
@@ -353,17 +353,17 @@ msgid ""
 "mkswap manually\n"
 msgstr ""
 
-#: looputils.c:226
+#: looputils.c:228
 #, c-format
 msgid "Failed to free device (%d,%d)\n"
 msgstr ""
 
-#: looputils.c:262
+#: looputils.c:264
 #, c-format
 msgid "No available loopback devices\n"
 msgstr ""
 
-#: looputils.c:276
+#: looputils.c:278
 #, c-format
 msgid "Bad device type (%x) for \"%s\" (need block/file)\n"
 msgstr ""
@@ -384,57 +384,57 @@ msgstr ""
 msgid "Configuration error near %s:%d\n"
 msgstr ""
 
-#: utils.c:315
+#: utils.c:316
 #, c-format
 msgid "Unable to allocate memory\n"
 msgstr ""
 
-#: utils.c:425
+#: utils.c:439
 #, c-format
 msgid "Too few random-number sources found\n"
 msgstr ""
 
-#: utils.c:484
+#: utils.c:498
 #, c-format
 msgid "Cannot read stdin"
 msgstr ""
 
-#: utils.c:496
+#: utils.c:510
 #, c-format
 msgid "Failed to turn off keyboard echoing on terminal\n"
 msgstr ""
 
-#: utils.c:526
+#: utils.c:540
 #, c-format
 msgid "Enter new password for target \"%s\": "
 msgstr ""
 
-#: utils.c:527
+#: utils.c:541
 #, c-format
 msgid "Enter password for target \"%s\": "
 msgstr ""
 
-#: utils.c:536
+#: utils.c:550
 #, c-format
 msgid "Confirm password: "
 msgstr ""
 
-#: utils.c:539
+#: utils.c:553
 #, c-format
 msgid "Password mismatch\n"
 msgstr ""
 
-#: utils.c:578 sysinit/setupscript.sh.in:237
+#: utils.c:592 sysinit/setupscript.sh.in:237
 #, sh-format
 msgid "yes"
 msgstr ""
 
-#: utils.c:585
+#: utils.c:599
 #, c-format
 msgid "Are you sure? (Type \"%s\" to proceed): "
 msgstr ""
 
-#: utils.c:588
+#: utils.c:602
 #, c-format
 msgid "Cannot read stdin\n"
 msgstr ""

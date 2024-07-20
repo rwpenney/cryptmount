@@ -307,7 +307,7 @@ bound_tgtdefn_t *bind_tgtdefn(const tgtdefn_t *tgt)
     /** Find keymanager that is able to handle given target & keyfile */
 {   bound_tgtdefn_t *bound;
     keymanager_t *km;
-    FILE *fp_key=NULL;
+    FILE *fp_key = NULL;
 
     if (tgt == NULL) return NULL;
 

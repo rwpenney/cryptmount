@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cryptmount 6.0-1\n"
 "Report-Msgid-Bugs-To: cryptmount@rwpenney.uk\n"
-"POT-Creation-Date: 2024-06-30 14:53+0100\n"
+"POT-Creation-Date: 2024-07-20 14:24+0100\n"
 "PO-Revision-Date: 2022-09-11 20:18+0200\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
@@ -16,32 +16,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: armour.c:154 armour-builtin.c:300 armour-gcry.c:570 armour-gcry.c:726
+#: armour.c:151 armour-builtin.c:300 armour-gcry.c:570 armour-gcry.c:726
 #, c-format
 msgid "Key-extraction failed for \"%s\"\n"
 msgstr "Auslesen des Schlüssels für »%s« schlug fehl.\n"
 
-#: armour.c:176
+#: armour.c:173
 #, c-format
 msgid "Key-writing failed for \"%s\"\n"
 msgstr "Schreiben des Schlüssels für »%s« schlug fehl.\n"
 
-#: armour.c:361
+#: armour.c:358
 #, c-format
 msgid "Failed to open keyfile \"%s\" for target \"%s\"\n"
 msgstr "Öffnen der Schlüsseldatei »%s« für Ziel »%s« schlug fehl.\n"
 
-#: armour.c:369
+#: armour.c:366
 #, c-format
 msgid "Missing keyfile for target \"%s\"\n"
 msgstr "Schlüsseldatei für Ziel »%s« fehlt.\n"
 
-#: armour.c:396
+#: armour.c:393
 #, c-format
 msgid "Missing output keyfile for target \"%s\"\n"
 msgstr "Schlüsselausgabedatei für Ziel »%s« fehlt.\n"
 
-#: armour.c:789
+#: armour.c:786
 #, c-format
 msgid "Specification for target \"%s\" contains non-absolute pathname\n"
 msgstr "Die Zielangabe für »%s« enthält eine nicht-absolute Pfadangabe.\n"
@@ -216,32 +216,32 @@ msgstr "Falsche(r) device-mapper-Beginn/Länge."
 msgid "Device-mapper target-creation failed for \"%s\"\n"
 msgstr "Erstellen des device-mapper-Ziels für »%s« schlug fehl.\n"
 
-#: cryptmount.c:487 cryptmount.c:722
+#: cryptmount.c:487 cryptmount.c:724
 #, c-format
 msgid "Target \"%s\" does not appear to be configured\n"
 msgstr "Ziel »%s« scheint unkonfiguriert zu sein.\n"
 
-#: cryptmount.c:502
+#: cryptmount.c:505
 #, c-format
 msgid "Cannot stat \"%s\"\n"
 msgstr "Kann Status für »%s« nicht abfragen.\n"
 
-#: cryptmount.c:510
+#: cryptmount.c:513
 #, c-format
 msgid "Failed to remove device-mapper target \"%s\"\n"
 msgstr "Entfernen des device-mapper-Ziels »%s« schlug fehl.\n"
 
-#: cryptmount.c:543
+#: cryptmount.c:545
 #, c-format
 msgid "Target \"%s\" is already mounted\n"
 msgstr "Ziel »%s« ist bereits eingehängt.\n"
 
-#: cryptmount.c:602
+#: cryptmount.c:604
 #, c-format
 msgid "Target \"%s\" does not appear to be mounted\n"
 msgstr "Ziel »%s« scheint noch nicht eingehängt zu sein.\n"
 
-#: cryptmount.c:612
+#: cryptmount.c:614
 #, c-format
 msgid "Only \"%s\" can unmount \"%s\"\n"
 msgstr "Nur »%s« kann »%s« aushängen.\n"
@@ -249,125 +249,125 @@ msgstr "Nur »%s« kann »%s« aushängen.\n"
 #. TRANSLATORS: the following expands to include
 #. the *numerical* user-identity in place of '%lu',
 #. e.g. giving 'only user-16 can unmount "target"':
-#: cryptmount.c:618
+#: cryptmount.c:620
 #, c-format
 msgid "Only user-%lu can unmount \"%s\"\n"
 msgstr "Nur der Benutzer mit der ID »%lu« kann »%s« aushängen.\n"
 
-#: cryptmount.c:663
+#: cryptmount.c:665
 #, c-format
 msgid "Target \"%s\" is already configured\n"
 msgstr "Ziel »%s« ist bereits konfiguriert.\n"
 
-#: cryptmount.c:686 cryptmount.c:742
+#: cryptmount.c:689 cryptmount.c:744
 #, c-format
 msgid "Crypto-swap is not supported by this installation of cryptmount\n"
 msgstr ""
 "Crypto-swap wird von dieser cryptmount-Installation nicht unterstützt.\n"
 
-#: cryptmount.c:774
+#: cryptmount.c:776
 #, c-format
 msgid "Key-file for \"%s\" isn't password-protected\n"
 msgstr "Schlüsseldatei für »%s« ist nicht passwortgeschützt.\n"
 
-#: cryptmount.c:800 cryptmount.c:921
+#: cryptmount.c:802 cryptmount.c:923
 #, c-format
 msgid "Cannot open \"%s\" for writing\n"
 msgstr "Kann »%s« nicht zum Schreiben öffnen.\n"
 
-#: cryptmount.c:815
+#: cryptmount.c:817
 #, c-format
 msgid "Retiring old key (%s -> %s) failed\n"
 msgstr "Ausmustern des alten Schlüssels (%s -> %s) schlug fehl.\n"
 
-#: cryptmount.c:823
+#: cryptmount.c:825
 #, c-format
 msgid "Installing new key (%s -> %s) failed\n"
 msgstr "Installation des neuen Schlüssels (%s -> %s) schlug fehl.\n"
 
-#: cryptmount.c:830
+#: cryptmount.c:832
 #, c-format
 msgid "Backup of previous key is in \"%s\"\n"
 msgstr "Eine Sicherheitskopie des vorherigen Schlüssels ist in »%s«.\n"
 
-#: cryptmount.c:870 cryptmount.c:1547
+#: cryptmount.c:872 cryptmount.c:1548
 #, c-format
 msgid "Target name \"%s\" is not recognized\n"
 msgstr "Zielname »%s« wurde nicht erkannt.\n"
 
-#: cryptmount.c:876
+#: cryptmount.c:878
 #, c-format
 msgid "Bad key-length parameter"
 msgstr "Falscher Schlüssellängen-Parameter"
 
-#: cryptmount.c:888
+#: cryptmount.c:890
 #, c-format
 msgid "Key-file \"%s\" already exists for target \"%s\"\n"
 msgstr "Schlüsseldatei »%s« existiert für das Ziel »%s« bereits.\n"
 
-#: cryptmount.c:898
+#: cryptmount.c:900
 #, c-format
 msgid "Generating random key; please be patient...\n"
 msgstr "Erstelle zufälligen Schlüssel; bitte warten Sie …\n"
 
-#: cryptmount.c:902
+#: cryptmount.c:904
 #, c-format
 msgid "Failed to generate new key\n"
 msgstr "Generieren des neuen Schlüssels schlug fehl\n"
 
-#: cryptmount.c:935
+#: cryptmount.c:937
 #, c-format
 msgid "Installation of new keyfile \"%s\" failed"
 msgstr "Installation der neuen Schlüsseldatei »%s« schlug fehl."
 
-#: cryptmount.c:1071
+#: cryptmount.c:1072
 #, c-format
 msgid "Only root can use option \"%s\"\n"
 msgstr "Nur root kann die Option »%s« verwenden.\n"
 
-#: cryptmount.c:1084
+#: cryptmount.c:1085
 #, c-format
 msgid "Only root can configure \"%s\"\n"
 msgstr "Nur root kann »%s« konfigurieren.\n"
 
-#: cryptmount.c:1148
+#: cryptmount.c:1149
 #, c-format
 msgid "Cannot find key-manager to match target \"%s\"\n"
 msgstr "Kann keinen für das Ziel »%s« passenden Schlüsselmanager finden.\n"
 
-#: cryptmount.c:1415
+#: cryptmount.c:1416
 #, c-format
 msgid "Multiple operating modes not supported\n"
 msgstr "Mehrere Betriebsmodi werden nicht unterstützt\n"
 
-#: cryptmount.c:1470
+#: cryptmount.c:1471
 #, c-format
 msgid "Memory-locking failed...\n"
 msgstr "Sperren des Arbeitsspeichers schlug fehl …\n"
 
-#: cryptmount.c:1498
+#: cryptmount.c:1499
 #, c-format
 msgid "Bad file-descriptor (%d)\n"
 msgstr "Fehlerhafter Dateideskriptor (%d)\n"
 
-#: cryptmount.c:1508
+#: cryptmount.c:1509
 #, c-format
 msgid "Security failure\n"
 msgstr "Sicherheitsfehler\n"
 
-#: cryptmount.c:1527
+#: cryptmount.c:1528
 #, c-format
 msgid "Trailing command-line arguments given with '--all' option\n"
 msgstr ""
 "Abschließende Befehlszeilen-Argumente; wurden zusammen mit der Option »--"
 "all« angegeben.\n"
 
-#: cryptmount.c:1559
+#: cryptmount.c:1560
 #, c-format
 msgid "Target security failure for \"%s\"\n"
 msgstr "Sicherheitsfehler für Ziel »%s«.\n"
 
-#: cryptmount.c:1568
+#: cryptmount.c:1569
 #, c-format
 msgid "No targets specified\n"
 msgstr "Keine Ziele angegeben.\n"
@@ -386,17 +386,17 @@ msgstr ""
 "Das Gerät »%s« scheint Daten zu enthalten (Entropie=%.3g,%.3g) – bitte "
 "führen Sie mkswap manuell aus.\n"
 
-#: looputils.c:226
+#: looputils.c:228
 #, c-format
 msgid "Failed to free device (%d,%d)\n"
 msgstr "Konnte Gerät (%d,%d) nicht freigeben.\n"
 
-#: looputils.c:262
+#: looputils.c:264
 #, c-format
 msgid "No available loopback devices\n"
 msgstr "Keine verfügbaren Loopback-Geräte.\n"
 
-#: looputils.c:276
+#: looputils.c:278
 #, c-format
 msgid "Bad device type (%x) for \"%s\" (need block/file)\n"
 msgstr "Falscher Gerätetyp (%x) für »%s« (Block/Datei benötigt).\n"
@@ -418,57 +418,57 @@ msgstr "cryptmount: Nicht unterstützte Option »%s« in der cmtab.\n"
 msgid "Configuration error near %s:%d\n"
 msgstr "Konfigurationsfehler nahe %s:%d\n"
 
-#: utils.c:315
+#: utils.c:316
 #, c-format
 msgid "Unable to allocate memory\n"
 msgstr "Konnte keinen Speicher reservieren.\n"
 
-#: utils.c:425
+#: utils.c:439
 #, c-format
 msgid "Too few random-number sources found\n"
 msgstr "Zu wenige Zufallszahlenquellen gefunden.\n"
 
-#: utils.c:484
+#: utils.c:498
 #, c-format
 msgid "Cannot read stdin"
 msgstr "Kann nicht von der Standardeingabe lesen."
 
-#: utils.c:496
+#: utils.c:510
 #, c-format
 msgid "Failed to turn off keyboard echoing on terminal\n"
 msgstr "Konnte die Wiedergabe der Tastatureingabe nicht deaktivieren.\n"
 
-#: utils.c:526
+#: utils.c:540
 #, c-format
 msgid "Enter new password for target \"%s\": "
 msgstr "Bitte geben Sie ein neues Passwort für das Ziel »%s« ein: "
 
-#: utils.c:527
+#: utils.c:541
 #, c-format
 msgid "Enter password for target \"%s\": "
 msgstr "Bitte geben Sie das Passwort für das Ziel »%s« ein: "
 
-#: utils.c:536
+#: utils.c:550
 #, c-format
 msgid "Confirm password: "
 msgstr "Passwort bestätigen: "
 
-#: utils.c:539
+#: utils.c:553
 #, c-format
 msgid "Password mismatch\n"
 msgstr "Passworte stimmen nicht überein.\n"
 
-#: utils.c:578 sysinit/setupscript.sh.in:237
+#: utils.c:592 sysinit/setupscript.sh.in:237
 #, sh-format
 msgid "yes"
 msgstr "ja"
 
-#: utils.c:585
+#: utils.c:599
 #, c-format
 msgid "Are you sure? (Type \"%s\" to proceed): "
 msgstr "Sind Sie sicher? (Geben Sie »%s« ein, um fortzufahren): "
 
-#: utils.c:588
+#: utils.c:602
 #, c-format
 msgid "Cannot read stdin\n"
 msgstr "Kann nicht von der Standardeingabe lesen.\n"

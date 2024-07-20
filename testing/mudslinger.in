@@ -51,7 +51,7 @@ function blank_mke2fs() {
     dev_arg="${@: -1}"
     if [ -b "${dev_arg}" ]; then
         ${DD} if=/dev/zero of="${dev_arg}" bs=1M count=1 2>/dev/null
-        mke2fs "$@"
+        mke2fs "$@" 2>&3
     else
         echo "${dev_arg} is not a block device"
         false
@@ -142,9 +142,10 @@ function tupelize() {
 
 function wait_udev() {
     # Wait for udev events to settle
+    sleep 0.25
     udevadm settle 2>/dev/null \
     || udevsettle 2>/dev/null \
-    || sleep 5
+    || sleep 2.75
 };
 
 function mk_ssl_keyfile() {
@@ -286,9 +287,9 @@ EOF
     rm -f ${TMPDIR}/keyfile
     if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-    if blank_mke2fs -q /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    if blank_mke2fs -q /dev/mapper/target${idx}; then true; else test_fail "mke2fs (${idx})"; ls -l /dev/mapper/ 1>&3; return; fi
     wait_udev
-    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; find /dev -name \*target${idx}\* -ls 1>&3; return; fi
     test_pass
 };
 
@@ -1334,7 +1335,7 @@ EOF
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
     if blank_mke2fs -t ext3 -q /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
     wait_udev
-    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; find /dev -name \*target${idx}\* -ls 1>&3; return; fi
     wait_udev
     if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password "${PASSWD}" target${idx}" 2>&3; then true; else test_fail "mount"; return; fi
     wait_udev; sleep 1
@@ -1366,7 +1367,7 @@ function test_luks_compat() {
         sync; wait_udev
         cryptsetup --key-file ${TMPDIR}/keymat luksOpen "${LOOPDEV}" "${TMPTGT}" 1>&3 2>&3
         sync; wait_udev
-        if [ ! -b /dev/mapper/${TMPTGT} ]; then test_fail "luksOpen"; return; fi
+        if [ ! -b /dev/mapper/${TMPTGT} ]; then test_fail "luksOpen"; find /dev -name \*target${idx}\* -ls 1>&3; return; fi
         if blank_mke2fs -q -j "/dev/mapper/${TMPTGT}"; then true; else test_fail mke2fs; return; fi
         wait_udev
         cryptsetup luksClose "${TMPTGT}" 2>&3

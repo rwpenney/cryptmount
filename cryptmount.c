@@ -478,9 +478,9 @@ static int do_devsetup(const km_pw_context_t *pw_ctxt,
 int do_devshutdown(const bound_tgtdefn_t *boundtgt)
 {   const tgtdefn_t *tgt = boundtgt->tgt;
     struct stat sbuff;
-    unsigned devcnt=0;
-    dev_t *devids=NULL;
-    int eflag=ERR_NOERROR;
+    unsigned devcnt = 0;
+    dev_t *devids = NULL;
+    int eflag = ERR_NOERROR;
 
     /* Check if filing system has been configured at all: */
     if (!is_configured(tgt->ident, NULL)) {
@@ -500,10 +500,11 @@ int do_devshutdown(const bound_tgtdefn_t *boundtgt)
             tgt->ident, devcnt);
 #endif
 
+    memset((void*)&sbuff, 0, sizeof(sbuff));
     if (stat(tgt->dev, &sbuff) != 0) {
         fprintf(stderr, _("Cannot stat \"%s\"\n"), tgt->dev);
+        sbuff.st_mode |= S_IFREG;
         eflag = ERR_BADDEVICE;
-        goto bail_out;
     }
 
     /* Remove demice-mapper target: */
@@ -511,7 +512,6 @@ int do_devshutdown(const bound_tgtdefn_t *boundtgt)
     if (eflag != ERR_NOERROR) {
         fprintf(stderr, _("Failed to remove device-mapper target \"%s\"\n"),
             tgt->ident);
-        goto bail_out;
     }
     await_devmap(tgt->ident, 0, 2000);
 
