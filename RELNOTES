@@ -31,9 +31,15 @@ Summary of new features in cryptmount-6.3
 
 This (testing) release offers the following improvements:
 
+  * Safer interaction with system automatic creation of devmapper nodes
+
   * Replacement of device-settling mechanisms to remove dependency on libudev
 
 It has been tested on the following systems:
+
+  * Arch Linux (mid-Jul-2024) (x86_64)
+
+  * Debian GNU/Linux 13.x ("trixie"/"testing", mid-Jul-2024) (amd64)
 
   * Debian GNU/Linux 12.6 ("bookworm") (amd64)
 

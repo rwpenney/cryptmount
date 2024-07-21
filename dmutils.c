@@ -84,17 +84,17 @@ struct dm_task *devmap_prepare(int type, const char *ident)
 
 /*! @brief Create device-mapper full pathname from target description */
 int devmap_path(char **buff, const char *ident)
-{   size_t pfxlen, sfxlen;
+{   const char prefix[] = "/dev/disk/by-id/dm-name";
+    size_t bufflen;
 
     // FIXME - kernel 6.9 appears prone to automatically moving devices from /dev/mapper/* into /dev/disk/by-name/dm-name-*
 
-    pfxlen = strlen(dm_dir());
-    sfxlen = strlen(ident);
-    *buff = (char*)realloc((void*)(*buff), (pfxlen + sfxlen + 2));
+    bufflen = sizeof(prefix) + strlen(ident) + 1;
+    *buff = (char*)realloc((void*)(*buff), bufflen);
 
-    snprintf(*buff, (pfxlen + sfxlen + 2), "%s/%s", dm_dir(), ident);
+    snprintf(*buff, bufflen, "%s-%s", prefix, ident);
 
-    return (int)(pfxlen + sfxlen + 1);
+    return (int)(bufflen - 1);
 }
 
 

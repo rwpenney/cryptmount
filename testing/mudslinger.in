@@ -39,6 +39,15 @@ function listLoopDevs() {
 };
 
 
+function dm_target_path() {
+    if [ -b "/dev/disk/by-id/dm-name-$1" ]; then
+        echo "/dev/disk/by-id/dm-name-$1"
+    else
+        echo "/dev/mapper/$1"
+    fi
+};
+
+
 function dd_sync() {
     ${DD} $@
     sync
@@ -204,7 +213,7 @@ function cleanup_devmap() {
     do
         if grep -q "${tgt}" ${TMPDIR}/dm-list0; then true; else
             echo "removing ${tgt}"
-            umount "/dev/mapper/${tgt}" 2>&3 || true
+            umount "$(dm_target_path ${tgt})" 2>&3 || true
             dmsetup remove ${tgt} 2>&3
         fi
     done
@@ -287,7 +296,7 @@ EOF
     rm -f ${TMPDIR}/keyfile
     if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-    if blank_mke2fs -q /dev/mapper/target${idx}; then true; else test_fail "mke2fs (${idx})"; ls -l /dev/mapper/ 1>&3; return; fi
+    if blank_mke2fs -q $(dm_target_path target${idx}); then true; else test_fail "mke2fs (${idx})"; find /dev -name \*target${idx}\* -ls 1>&3; return; fi
     wait_udev
     if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; find /dev -name \*target${idx}\* -ls 1>&3; return; fi
     test_pass
@@ -310,7 +319,7 @@ EOF
     rm -f ${TMPDIR}/keyfile
     if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-    if blank_mke2fs -q /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    if blank_mke2fs -q $(dm_target_path target${idx}); then true; else test_fail mke2fs; return; fi
     wait_udev
     if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
     test_pass
@@ -341,7 +350,7 @@ EOF
     rm -f ${TMPDIR}/keyfile
     if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation" "${cleanup}"; return; fi
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail "prepare" "${cleanup}" ; return; fi
-    if blank_mke2fs -q /dev/mapper/target${idx}; then true; else test_fail "mke2fs" "${cleanup}"; return; fi
+    if blank_mke2fs -q $(dm_target_path target${idx}); then true; else test_fail "mke2fs" "${cleanup}"; return; fi
     wait_udev
     if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release" "${cleanup}"; return; fi
     mount -o remount,ro ${TMPDIR}/romnt
@@ -437,19 +446,19 @@ EOF
         echo "variant=\"${variant}\"" >&3
         test -f ${TMPDIR}/keyfile || ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3;
         if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail "prepare" "${cleanup}" ; return; fi
-        if mkfs -t ${fstype} /dev/mapper/target${idx} 1>&3 2>&3; then true; else
+        if mkfs -t ${fstype} $(dm_target_path target${idx}) 1>&3 2>&3; then true; else
             ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3;
             test_fail "mkfs.${fstype}" "${cleanup}"; return
         fi
         wait_udev
         if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release" "${cleanup}" ; return; fi
 
-        if [ `df -k | grep -c /dev/mapper/target${idx}` -ne 0 ]; then test_fail "pre-existing" "${cleanup}" ; return; fi
+        if [ `df -k | grep -c $(dm_target_path target${idx})` -ne 0 ]; then test_fail "pre-existing" "${cleanup}" ; return; fi
         if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --mount target${idx}" 1>&3 2>&3; then true; else test_fail "mount" "${cleanup}" ; return; fi
-        if [ `df -k | grep -c "/dev/mapper/target${idx}"` -ne 1 ]; then test_fail "unregistered" "${cleanup}" ; return; fi
+        if [ `df -k | grep -c "target${idx}"` -ne 1 ]; then test_fail "unregistered" "${cleanup}" ; return; fi
         wait_udev
         if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount target${idx}" 2>&3; then true; else test_fail "unmount" "${cleanup}" ; return; fi
-        if [ `df -k | grep -c /dev/mapper/target${idx}` -ne 0 ]; then test_fail "remnant" "${cleanup}" ; return; fi
+        if [ `df -k | grep -c $(dm_target_path target${idx})` -ne 0 ]; then test_fail "remnant" "${cleanup}" ; return; fi
     done
     eval "${cleanup}"
     test_pass
@@ -647,7 +656,7 @@ EOF
     if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3; then true; else test_fail "make-key"; return; fi
     if [ ! -f ${TMPDIR}/keyfile-root ]; then test_fail "missing key"; return; fi
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail "prepare"; return; fi
-    if blank_mke2fs -q /dev/mapper/target${idx}; then true; else test_fail "mke2fs"; return; fi
+    if blank_mke2fs -q $(dm_target_path target${idx}); then true; else test_fail "mke2fs"; return; fi
     if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; return; fi
 
     for user in ${USER1} ${USER2}; do
@@ -676,7 +685,7 @@ function test_frenzy() {
     pos=0
     fsz=2048
     cat /dev/null > ${TMPDIR}/cmtab
-    for cnt in 0 1 2 3 4 5 6 7; do
+    for cnt in $(seq 0 7); do
         if [ ! -d ${TMPDIR}/mnt${cnt} ]; then mkdir ${TMPDIR}/mnt${cnt}; fi
         idx=`mkrandshort`
         while ( echo ${tgtlist} | grep -q target${idx} ); do
@@ -696,8 +705,8 @@ EOF
     cleanup="${CM} --config-dir ${TMPDIR} --release --all"
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare --all 2>&3; then true; else test_fail "prepare" "${cleanup}"; return; fi
     for tgt in ${tgtlist}; do
-        dd_sync if=/dev/zero of=/dev/mapper/target${idx} bs=1M count=1 2>/dev/null
-        if blank_mke2fs -q /dev/mapper/${tgt}; then true; else test_fail mke2fs; return; fi
+        dd_sync if=/dev/zero of=$(dm_target_path ${tgt}) bs=1M count=1 2>/dev/null
+        if blank_mke2fs -q $(dm_target_path ${tgt}); then true; else test_fail mke2fs; return; fi
     done
     wait_udev
     for tgt in ${tgtlist}; do
@@ -710,8 +719,8 @@ EOF
     wait
     cat ${TMPDIR}/cryptmount.status 1>&3
     cleanup="${CM} --config-dir ${TMPDIR} --unmount --all"
-    if [ "`wc -l ${TMPDIR}/cryptmount.status | awk '{printf"%d",$1}'`" -ne 10 ]; then test_fail "cmstatus" "${cleanup}" ; return; fi
-    if [ `df -k | grep -c /dev/mapper/target` -lt 8 ]; then test_fail "df" "${cleanup}" ; return; fi
+    if [ "`wc -l ${TMPDIR}/cryptmount.status | awk '{printf"%d",$1}'`" -ne 10 ]; then test_fail "cmstatus" "${cleanup}"; return; fi
+    if [ `df -k | grep -c "${TMPDIR}/mnt"` -lt 8 ]; then df 1>&3; test_fail "df" "${cleanup}"; return; fi
     if ${SU_p} ${USER1} -c "${CM} --config-dir ${TMPDIR} --unmount ${tgtlist}" 2>&3; then true; else test_fail unmount; return; fi
     test_pass
 };
@@ -739,7 +748,7 @@ EOF
         rm -f ${TMPDIR}/keyfile
         if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
         if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-        if blank_mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+        if blank_mke2fs -q -j $(dm_target_path target${idx}); then true; else test_fail mke2fs; return; fi
         wait_udev
         if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
 
@@ -765,7 +774,7 @@ EOF
     cleanup="${CM} --config-dir ${TMPDIR} --release --all"
     if ${CM} --config-dir ${TMPDIR} --password "pure" --prepare target${idx} 2>&3; then true; else test_fail "prepare passwd.fs"; return; fi
     wait_udev
-    if [ "`head -n 1 /dev/mapper/target${idx}`" = "PurePassword" ]; then true; else test_fail "bad decrypt" "${cleanup}"; return; fi
+    if [ "`head -n 1 $(dm_target_path target${idx})`" = "PurePassword" ]; then true; else test_fail "bad decrypt" "${cleanup}"; return; fi
     if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release passwd.fs" "${cleanup}"; return; fi
 
     # Check creation & access of new filesystems:
@@ -785,8 +794,8 @@ EOF
 EOF
         rm -f ${TMPDIR}/keyfile
         if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-        dd_sync if=/dev/zero of=/dev/mapper/target${idx} bs=1M count=1 2>/dev/null
-        if blank_mke2fs -q /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+        dd_sync if=/dev/zero of=$(dm_target_path target${idx}) bs=1M count=1 2>/dev/null
+        if blank_mke2fs -q $(dm_target_path target${idx}); then true; else test_fail mke2fs; return; fi
         wait_udev
         if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
         wait_udev
@@ -822,8 +831,8 @@ function test_ssl_algs() {
                 }
 EOF
             if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-            dd_sync if=/dev/zero of=/dev/mapper/target${idx} bs=1M count=1 2>/dev/null
-            if blank_mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+            dd_sync if=/dev/zero of=$(dm_target_path target${idx}) bs=1M count=1 2>/dev/null
+            if blank_mke2fs -q -j $(dm_target_path target${idx}); then true; else test_fail mke2fs; return; fi
             wait_udev
             if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
 
@@ -862,8 +871,8 @@ EOF
             rm -f ${TMPDIR}/keyfile
             if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
             if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-            dd_sync if=/dev/zero of=/dev/mapper/target${idx} bs=1M count=1 2>/dev/null
-            if blank_mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+            dd_sync if=/dev/zero of=$(dm_target_path target${idx}) bs=1M count=1 2>/dev/null
+            if blank_mke2fs -q -j $(dm_target_path target${idx}); then true; else test_fail mke2fs; return; fi
             wait_udev
             if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
 
@@ -910,8 +919,8 @@ function test_gcryossl() {
 EOF
         # Configure filesystem with libgcrypt-openssl compatibility layer:
         if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-        dd_sync if=/dev/zero of=/dev/mapper/target${idx} bs=1M count=1 2>/dev/null
-        if blank_mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+        dd_sync if=/dev/zero of=$(dm_target_path target${idx}) bs=1M count=1 2>/dev/null
+        if blank_mke2fs -q -j $(dm_target_path target${idx}); then true; else test_fail mke2fs; return; fi
         wait_udev
         if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
 
@@ -952,7 +961,7 @@ EOF
     rm -f ${TMPDIR}/keyfile
     if ${CM} --config-dir ${TMPDIR} --generate-key 32 --newpassword "${PASSWD}" target${idx} 2>&3; then true; else test_fail make-key; return; fi
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-    if blank_mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    if blank_mke2fs -q -j $(dm_target_path target${idx}); then true; else test_fail mke2fs; return; fi
     wait_udev
     if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
 
@@ -980,7 +989,7 @@ EOF
     rm -f ${TMPDIR}/keyfile
     if ${CM} --config-dir ${TMPDIR} --generate-key 16 --newpassword "${PASSWD}" target${idx} 2>&3; then true; else test_fail make-key; return; fi
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-    if blank_mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    if blank_mke2fs -q -j $(dm_target_path target${idx}); then true; else test_fail mke2fs; return; fi
     wait_udev
     if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
 
@@ -1031,7 +1040,7 @@ EOF
     rm -f ${TMPDIR}/keyfile
     if ${CM} --config-dir ${TMPDIR} --generate-key 12 --newpassword "${PASSWD}" target${idx} 2>&3; then true; else test_fail make-key; return; fi
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-    if blank_mke2fs -q -j /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    if blank_mke2fs -q -j $(dm_target_path target${idx}); then true; else test_fail mke2fs; return; fi
     wait_udev
     if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail release; return; fi
     for mntopt in "" "-m" "--mount"
@@ -1075,7 +1084,7 @@ EOF
             sync
             if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then
                 cleanup="${CM} --config-dir ${TMPDIR} --release target${idx}"
-                dd_sync if=/dev/zero of=/dev/mapper/target${idx} bs=1b count=`expr ${length} + 16` 2>&3
+                dd_sync if=/dev/zero of=$(dm_target_path target${idx}) bs=1b count=`expr ${length} + 16` 2>&3
                 wait_udev
                 ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3
                 wait_udev
@@ -1280,11 +1289,11 @@ function test_cryptsetup_compat() {
                     idx=`mkrandshort`
                     echo "${cipher},${length},${startsec},${ivoffset}" 1>&3
                     cryptsetup --key-file ${TMPDIR}/keymat -c ${cipher} -b ${length} -o ${startsec} -p ${ivoffset} create cstarget${idx} ${LOOPDEV} 2>&3
-                    if [ -b /dev/mapper/cstarget${idx} ]; then
-                        cs_size=`blockdev --getsize /dev/mapper/cstarget${idx}`
-                        dd_sync if=/dev/zero of=/dev/mapper/cstarget${idx} \
+                    if [ -b $(dm_target_path cstarget${idx}) ]; then
+                        cs_size=`blockdev --getsize $(dm_target_path cstarget${idx})`
+                        dd_sync if=/dev/zero of=$(dm_target_path cstarget${idx}) \
                             bs=16k count=16 2>/dev/null
-                        blank_mke2fs -q -j /dev/mapper/cstarget${idx}
+                        blank_mke2fs -q -j $(dm_target_path cstarget${idx})
                         wait_udev
                         cryptsetup remove cstarget${idx} 2>&3
                         wait_udev
@@ -1333,7 +1342,7 @@ function test_luks_loopdev() {
 EOF
     if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 32 target${idx} 2>&3; then true; else test_fail "key-generation"; return; fi
     if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail prepare; return; fi
-    if blank_mke2fs -t ext3 -q /dev/mapper/target${idx}; then true; else test_fail mke2fs; return; fi
+    if blank_mke2fs -t ext3 -q "/dev/disk/by-id/dm-name-target${idx}"; then true; else test_fail mke2fs; return; fi
     wait_udev
     if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; find /dev -name \*target${idx}\* -ls 1>&3; return; fi
     wait_udev
@@ -1367,8 +1376,8 @@ function test_luks_compat() {
         sync; wait_udev
         cryptsetup --key-file ${TMPDIR}/keymat luksOpen "${LOOPDEV}" "${TMPTGT}" 1>&3 2>&3
         sync; wait_udev
-        if [ ! -b /dev/mapper/${TMPTGT} ]; then test_fail "luksOpen"; find /dev -name \*target${idx}\* -ls 1>&3; return; fi
-        if blank_mke2fs -q -j "/dev/mapper/${TMPTGT}"; then true; else test_fail mke2fs; return; fi
+        if [ ! -b $(dm_target_path ${TMPTGT}) ]; then test_fail "luksOpen"; find /dev -name \*target${idx}\* -ls 1>&3; return; fi
+        if blank_mke2fs -q -j "$(dm_target_path ${TMPTGT})"; then true; else test_fail mke2fs; return; fi
         wait_udev
         cryptsetup luksClose "${TMPTGT}" 2>&3
         sync; wait_udev; sleep 1
@@ -1419,7 +1428,7 @@ EOF
         sync
         if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 32 target${idx} 1>&3 2>&3; then true; else test_fail "key-generation"; return; fi
         if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}" --prepare target${idx} 2>&3; then true; else test_fail "prepare"; return; fi
-        if blank_mke2fs -q /dev/mapper/target${idx}; then true; else test_fail "mke2fs"; return; fi
+        if blank_mke2fs -q "/dev/disk/by-id/dm-name-target${idx}"; then true; else test_fail "mke2fs"; return; fi
         wait_udev
         if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; return; fi
         wait_udev
@@ -1427,13 +1436,13 @@ EOF
         # Attempt to mount with cryptsetup-luks:
         TMPTGT="mudslinger-`mkrandshort`"
         cryptsetup --key-file ${TMPDIR}/keymat luksOpen "${LOOPDEV}" "${TMPTGT}" 1>&3 2>&3
-        if [ ! -b /dev/mapper/${TMPTGT} ]; then test_fail "luksOpen"; return; fi
-        if mount -t ext2 /dev/mapper/${TMPTGT} ${TMPDIR}/mnt; then true; else test_fail "mount"; return; fi
+        if [ ! -b $(dm_target_path ${TMPTGT}) ]; then test_fail "luksOpen"; return; fi
+        if mount -t ext2 $(dm_target_path ${TMPTGT}) ${TMPDIR}/mnt; then true; else test_fail "mount"; return; fi
         wait_udev
         lukscipher=`cryptsetup luksDump "${LOOPDEV}" | sed -n '/^Cipher name/s/^[^:]*:\s*//p'`
         luksmode=`cryptsetup luksDump "${LOOPDEV}" | sed -n '/^Cipher mode/s/^[^:]*:\s*//p'`
         echo "LUKSheader: $lukscipher + $luksmode" 1>&3
-        umount /dev/mapper/${TMPTGT}
+        umount $(dm_target_path ${TMPTGT})
         cryptsetup luksClose "${TMPTGT}" 2>&3
         if [ "$cipher" != "$lukscipher" ]; then test_fail "cipher mismatch ($lukscipher)"; return; fi
         if [ "$mode" != "$luksmode" ]; then test_fail "mode mismatch ($luksmode)"; return; fi
