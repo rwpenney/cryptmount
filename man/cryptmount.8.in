@@ -1,7 +1,7 @@
 .\" cryptmount manual page
-.\" (C)Copyright 2005-2023 RW Penney
+.\" (C)Copyright 2005-2024 RW Penney
 .\"
-.TH CRYPTMOUNT 8 "2023-05-28" "@PACKAGE_VERSION@" "User commands"
+.TH CRYPTMOUNT 8 "2024-07-21" "@PACKAGE_VERSION@" "User commands"
 .SH NAME
 cryptmount \- mount/unmount/configure an encrypted filesystem
 
@@ -235,7 +235,7 @@ If we now execute, as root:
 we will then be asked for the password that we used when setting up
 @CM_SYSCONF_DIR@/opaque.key, which will enable
 .B cryptmount
-to setup a device-mapper target (/dev/mapper/opaque).
+to setup a device-mapper target (/dev/disk/by-id/dm-name-opaque).
 (If you receive an error message of the form
 .B "device-mapper ioctl cmd 9 failed: Invalid argument",
 this may mean that you have chosen a key-size that isn't supported
@@ -245,10 +245,10 @@ by checking the output from "more /proc/crypto", and looking at the
 "min keysize" and "max keysize" fields.)
 
 
-We can now use standard tools to create the actual filesystem on /dev/mapper/opaque:
+We can now use standard tools to create the actual filesystem on /dev/disk/by-id/dm-name-opaque:
 .sp
 .nf
-    mke2fs /dev/mapper/opaque
+    mke2fs /dev/disk/by-id/dm-name-opaque
 .fi
 .sp
 (It may be advisable, after the filesystem is first mounted,
@@ -385,10 +385,10 @@ target 'opaque', we first need to prepare the decryption devices:
     cryptmount \-\-prepare opaque
 .fi
 .sp
-this will create a device-mapper target accessible via '/dev/mapper/opaque', on which we can then run standard checking utilities:
+this will create a device-mapper target accessible via '/dev/disk/by-id/dm-name-opaque', on which we can then run standard checking utilities:
 .sp
 .nf
-    fsck \-t auto /dev/mapper/opaque
+    fsck \-t auto /dev/disk/by-id/dm-name-opaque
 .fi
 
 After these tests have been completed, we can then release the devices:
@@ -430,7 +430,7 @@ suggestions and bug-reports, via https://github.com/rwpenney/cryptmount/issues
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-is Copyright 2005-2023, RW Penney
+is Copyright 2005-2024, RW Penney
 .br
 and is supplied with NO WARRANTY.
 Licencing terms are as described in the file "COPYING"

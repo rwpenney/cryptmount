@@ -133,7 +133,7 @@ Thereafter, one can prepare the key-file and filing system as follows:
     sudo mkdir /mnt/crypt
     sudo cryptmount --generate-key 32 crypt
     sudo cryptmount --prepare crypt
-    sudo mke2fs -t ext4 /dev/mapper/crypt
+    sudo mke2fs -t ext4 /dev/disk/by-id/dm-name-crypt
     sudo cryptmount --release crypt
 
 

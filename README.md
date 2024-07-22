@@ -58,7 +58,7 @@ Such a filesystem could be initialized as follows:
     mkdir /mnt/crypt
     cryptmount --generate-key 32 crypt
     cryptmount --prepare crypt
-    mke2fs -t ext4 /dev/mapper/crypt
+    mke2fs -t ext4 /dev/disk/by-id/dm-name-crypt
     cryptmount --release crypt
 ```
 Further details are available in the installed manual pages.

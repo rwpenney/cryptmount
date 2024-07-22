@@ -1,7 +1,7 @@
 .\" cryptmount (French) manual page
-.\" Copyright (c) 2006-2018 RW Penney
+.\" Copyright (c) 2006-2024 RW Penney
 .\"
-.TH CRYPTMOUNT 8 "2018-01-18" "@PACKAGE_VERSION@" "Manuel de l'utilisateur Linux"
+.TH CRYPTMOUNT 8 "2024-07-21" "@PACKAGE_VERSION@" "Manuel de l'utilisateur Linux"
 .SH NOM
 cryptmount \- monter/d\['e]monter un syst\[`e]me de fichiers chiffr\['e]
 
@@ -204,13 +204,13 @@ on doit produire le mot de passe qu'on a donn\['e]
 lors de l'\['e]criture du @CM_SYSCONF_DIR@/opaque.key.
 Ceci permet \[`a]
 .B cryptmount
-de pr\['e]parer une cible device-mapper (/dev/mapper/opaque).
+de pr\['e]parer une cible device-mapper (/dev/disk/by-id/dm-name-opaque).
 
 Maintenant, les outils standards sont disponibles
-pour mettre un syst\[`e]me de fichiers sur /dev/mapper/opaque:
+pour mettre un syst\[`e]me de fichiers sur /dev/disk/by-id/dm-name-opaque:
 
 .EX
-    mke2fs /dev/mapper/opaque
+    mke2fs /dev/disk/by-id/dm-name-opaque
 .EE
 
 Apr\[`e]s avoir ex\['e]cut\['e]
@@ -321,7 +321,7 @@ L'auteur accueille les suggestions
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-est Copyright 2005-2022 RW Penney
+est Copyright 2005-2024 RW Penney
 .br
 et il n'y a point de garantie.
 Les termes de sa licence sont d\['e]crits dans le fichier "COPYING"

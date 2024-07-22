@@ -17,7 +17,7 @@
 ### END INIT INFO
 
 CM_EXE=@EXENAME@
-DMPATH=/dev/mapper
+DISK_ID_PATH=/dev/disk/by-id/
 
 CM_BOOTDV=""
 CM_BOOTSW=""
@@ -35,7 +35,7 @@ fi
 configured() {
     # Check if any of the targets needed at boot has been configured:
     for target in ${CM_BOOTDV} ${CM_BOOTFS} ${CM_BOOTSW}; do
-        if [ -b "${DMPATH}/${target}" ]; then
+        if [ -b "${DISK_ID_PATH}/dm-name-${target}" ]; then
             true
             return
         fi

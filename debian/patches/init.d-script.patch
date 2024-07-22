@@ -11,7 +11,7 @@ Forwarded: not-needed
 +. /lib/lsb/init-functions
 +
  CM_EXE=@EXENAME@
- DMPATH=/dev/mapper
+ DISK_ID_PATH=/dev/disk/by-id/
  
 @@ -79,7 +79,7 @@ dofilesys() {
  doALL() {
