@@ -4,14 +4,14 @@ Priority: optional
 Maintainer: RW Penney <cryptmount@rwpenney.uk>
 Homepage: https://github.com/rwpenney/cryptmount
 Build-Depends: automake, debhelper-compat (= 12), libcryptsetup-dev (>= 2.0),
-            libdevmapper-dev, libgcrypt20-dev (>= 1.8), libudev-dev, pkgconf
+            libdevmapper-dev, libgcrypt20-dev (>= 1.8), pkgconf
 Rules-Requires-Root: binary-targets
 Standards-Version: 4.7.0
 
 Package: cryptmount
 Architecture: linux-any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Recommends: e2fsprogs (>= 1.42.12), udev
+Recommends: e2fsprogs (>= 1.42.12)
 Suggests: dmsetup
 Description: Management of encrypted file systems
  cryptmount is a utility for creating encrypted filesystems & swap partitions

@@ -3,7 +3,7 @@ dnl (C)Copyright 2005-2024, RW Penney
 
 dnl run 'autoreconf -v -i -s; ./configure; make'
 
-AC_INIT(cryptmount, 6.3-beta, cryptmount@rwpenney.uk)
+AC_INIT(cryptmount, 6.3.0, cryptmount@rwpenney.uk)
 AC_PREREQ(2.59)
 
 test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
@@ -34,7 +34,6 @@ AC_SEARCH_LIBS(tcgetattr, termios,
     [AC_DEFINE(HAVE_TERMIOS,[0],[Define to 1 if you have tcgetattr()])])
 
 
-AC_HEADER_STDC
 AC_CHECK_HEADERS([errno.h getopt.h mntent.h \
                   linux/fs.h linux/loop.h sys/sysmacros.h])
 

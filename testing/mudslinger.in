@@ -1522,9 +1522,8 @@ chgrp --reference=$0 ${logfile} || true
 cat >&3 <<EOF
 Cryptmount mudslinger logfile
   package-version: @PKG_VERSION@
-  modules: @CM_KEYMODS@
-  date: `date`
-  system: `uname -a`
+  date: $(date)
+  system: $(uname -a)
 
 EOF
 ls -l ${CM} >&3 2>&1

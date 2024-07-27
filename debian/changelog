@@ -1,11 +1,26 @@
-cryptmount (6.2.2-1) unstable; urgency=low
+cryptmount (6.3.0-1) unstable; urgency=low
 
   * New upstream release
     - Replaced (long-defunct) maintainer forwarding address
+    - Migrated preferred device paths to /dev/disk/by-id/ (Closes: bug#1072996)
   * Updated to Debian Standards Version 4.7.0
   * Relocated systemd files from /lib to /usr/lib (Closes: bug#1073753)
 
  -- RW Penney <cryptmount@rwpenney.uk>  Sat, 03 Aug 2024 10:30:00 +0000
+
+cryptmount (6.2.0-1+deb12u1) bookworm; urgency=low
+
+  * Fix for memory-initialization in command-line parser (bug#1038384)
+    - one-line change to source-code, replacing malloc() with calloc()
+    - reduces risk of SEGV crashes when handling unrecognized command-line options
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sat, 15 Jul 2023 10:30:00 +0000
+
+cryptmount (6.2.0-2) unstable; urgency=low
+
+  * Fix for memory-initialization in command-line parser (Closes: bug#1038384)
+
+ -- RW Penney <rwpenney@users.sourceforge.net>  Sun, 09 Jul 2023 05:00:00 +0000
 
 cryptmount (6.2.0-1) unstable; urgency=low
 

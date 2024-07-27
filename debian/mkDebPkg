@@ -5,6 +5,7 @@
 PACKAGE=cryptmount
 VERSION=`sed -n 's/^AC_INIT[^,]*, *\([^,)]*\).*/\1/p' ../configure.ac`
 PSEUDO_VERSION=""
+DEBDIR=$(dirname $(realpath $0))
 UPSDIR=..
 
 # $VERSION refers to the true version number associated with a *.tar.gz file
@@ -42,7 +43,7 @@ if [ -z "${PSEUDO_VERSION}" ]; then
     PSEUDO_VERSION="${VERSION}"
 fi
 
-SRCPKG=`realpath ${UPSDIR}`/"${PACKAGE}-${VERSION}.tar.gz"
+SRCPKG=$(realpath ${UPSDIR})/"${PACKAGE}-${VERSION}.tar.gz"
 if [ ! -r "${SRCPKG}" ]; then
     echo "Upstream package ${SRCPKG} is not readable"
     exit 1
@@ -61,8 +62,7 @@ debtransform="s,/usr/local/etc/,/etc/,g; \
             s,/usr/local/sbin/,/usr/sbin/,g"
 TXFILES="INSTALL.md README.md README.sshfs cmtab.example"
 
-TMPDIR=/tmp/cm-deb-${VERSION}
-CURDIR=`pwd`
+TMPDIR=/tmp/cm-deb-${VERSION}-$$
 PKGDIR="${TMPDIR}/${PACKAGE}-${PSEUDO_VERSION}"
 
 
@@ -105,7 +105,7 @@ cp ${SRCPKG} ${TMPDIR}/${PACKAGE}_${PSEUDO_VERSION}.orig.tar.gz
 test -e ${SRCPKG}.sig && cp ${SRCPKG}.sig ${TMPDIR}/${PACKAGE}_${PSEUDO_VERSION}.orig.tar.gz.sig
 dpkg-source -b ${TMPDIR}/${PACKAGE}-${PSEUDO_VERSION}
 
-cd "${CURDIR}"
+cd "${DEBDIR}"
 mv ${TMPDIR}/${PACKAGE}_* ./
 rm -rf ${TMPDIR}
 

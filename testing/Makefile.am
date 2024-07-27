@@ -14,8 +14,7 @@ dist-hook:
 	mkdir ${distdir}/keys; cp -p ${srcdir}/keys/[0-9]* ${distdir}/keys/
 
 mudslinger:	mudslinger.in
-	sed -e 's,@PKG_VERSION@,$(PACKAGE_VERSION),g' \
-		-e 's,@CM_KEYMODS@,$(CM_MODULES),g' $< > $@
+	sed -e 's,@PKG_VERSION@,$(PACKAGE_VERSION),g' $< > $@
 	chmod +x mudslinger
 
 autokeys:	${AUTOKEYS}
