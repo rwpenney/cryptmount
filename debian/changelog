@@ -6,7 +6,7 @@ cryptmount (6.3.0-1) unstable; urgency=low
   * Updated to Debian Standards Version 4.7.0
   * Relocated systemd files from /lib to /usr/lib (Closes: bug#1073753)
 
- -- Dr RW Penney (cryptmount signing key) <cryptmount@rwpenney.uk>  Sun, 28 Jul 2024 06:30:00 +0000
+ -- RW Penney <cryptmount@rwpenney.uk>  Sun, 28 Jul 2024 18:30:00 +0000
 
 cryptmount (6.2.0-1+deb12u1) bookworm; urgency=low
 

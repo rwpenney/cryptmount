@@ -81,8 +81,9 @@ fi
 test -d patches || mkdir patches
 (cd "${PKGDIR}"; test -d debian || mkdir debian)
 if [ -n "${DEBFILES}" ]; then
-    tar -cf - ${DEBFILES} | \
+    tar -C "${DEBDIR}" -cf - ${DEBFILES} | \
     tar -C "${PKGDIR}/debian" -xpf -
+    (cd "${PKGDIR}"; rm -f debian/p*.ex)
 fi
 
 cd "${PKGDIR}"
