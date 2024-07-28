@@ -1,6 +1,6 @@
 #
 # rpm spec-file for cryptmount
-# Copyright 2006-2023, Holger Mueller, Eriks Zelenka & RW Penney
+# Copyright 2006-2024, Holger Mueller, Eriks Zelenka & RW Penney
 #
 Summary:	Let ordinary users mount an encrypted file system
 Name:		cryptmount
@@ -31,9 +31,9 @@ Requires:       cryptsetup-luks-libs libgcrypt device-mapper
 #}
 %else
 #{
-# Default - OpenSuse13.1
+# Default ~openSUSE
 BuildRequires:  libcryptsetup-devel libgcrypt-devel
-Requires:       libcryptsetup4 libgcrypt11 device-mapper
+Requires:       libcryptsetup12 libgcrypt20 device-mapper
 #}
 %endif
 #}
@@ -100,6 +100,8 @@ fi
 
 
 %changelog
+* Sun Jul 28 2024 RW Penney <cryptmount@rwpenney.uk> - 6.3.0
+    -- Preferred device-mapper paths relocated to /dev/disk/by-id
 * Sat Jan 07 2023 RW Penney <cryptmount@rwpenney.uk> - 6.2.0
     -- Enabled libudev by default
 * Sat Oct 08 2022 RW Penney <cryptmount@rwpenney.uk> - 6.1.0

@@ -422,9 +422,8 @@ ___END_FSCK_1
 
 .\" --------------------------------
 .SH BUGS
-The author would be grateful for any
-.B constructive
-suggestions and bug-reports, via https://github.com/rwpenney/cryptmount/issues
+The author would be grateful for any constructive suggestions
+and bug-reports, via https://github.com/rwpenney/cryptmount/issues
 
 
 .\" --------------------------------

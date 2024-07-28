@@ -1,5 +1,5 @@
 .\" cmtab (cryptmount) manual page
-.\" (C)Copyright 2005-2023 RW Penney
+.\" (C)Copyright 2005-2024 RW Penney
 .\"
 
 .\" ---- macro definitions ----
@@ -12,7 +12,7 @@
 ..
 
 
-.TH CMTAB 5 "2023-05-28" "@PACKAGE_VERSION@" "User commands"
+.TH CMTAB 5 "2024-07-28" "@PACKAGE_VERSION@" "User commands"
 .SH NAME
 cmtab \- static information about filesystems managed by cryptmount
 
@@ -548,7 +548,7 @@ but various advanced LUKS features must be accessed through
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-is Copyright 2005-2023, RW Penney
+is Copyright 2005-2024, RW Penney
 .br
 and is supplied with NO WARRANTY.
 Licencing terms are as described in the file "COPYING"

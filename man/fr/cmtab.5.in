@@ -1,5 +1,5 @@
 .\" cmtab (French) manual page
-.\" Copyright (c) 2006-2018 RW Penney
+.\" Copyright (c) 2006-2024 RW Penney
 .\"
 
 .\" ---- macro definitions ----
@@ -449,7 +449,7 @@ Une nouvelle clef de d\['e]chiffrage sera lu du /dev/random chaque fois la cible
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-est Copyright 2005-2022 RW Penney
+est Copyright 2005-2024 RW Penney
 .br
 et il n'y a point de garantie.
 Les termes de sa licence sont d\['e]crits dans le fichier "COPYING"
@@ -458,6 +458,6 @@ dans le paquet source de cryptmount.
 
 .\" --------------------------------
 .SH TRADUCTION
-RW Penney, 2006-2022, avec beaucoup d'assistance de FP.
+RW Penney, 2006-2024, avec beaucoup d'assistance de FP.
 
 .\" vim: set ts=4 sw=4 et:

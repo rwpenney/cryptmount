@@ -1,5 +1,9 @@
 ChangeLog for cryptmount (https://github.com/rwpenney/cryptmount)
 
+28Jul24	- *** cryptmount-6.3 released
+
+21Jul24	- Migrated devmapper naming assumptions to /dev/disk/by-id/dm-name-*
+
 11Jul24	- Fixed duplicated loopback free device search
 	Replaced udev-settle mechanisms with new await_device() mechanism
 	Removed use of libudev
