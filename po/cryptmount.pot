@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR RW Penney
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the cryptmount package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: cryptmount 6.3.1\n"
 "Report-Msgid-Bugs-To: cryptmount@rwpenney.uk\n"
-"POT-Creation-Date: 2024-07-20 14:24+0100\n"
+"POT-Creation-Date: 2025-05-05 14:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"

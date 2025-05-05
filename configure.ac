@@ -1,9 +1,9 @@
 dnl autoconf script for cryptmount
-dnl (C)Copyright 2005-2024, RW Penney
+dnl (C)Copyright 2005-2025, RW Penney
 
 dnl run 'autoreconf -v -i -s; ./configure; make'
 
-AC_INIT(cryptmount, 6.3.0, cryptmount@rwpenney.uk)
+AC_INIT(cryptmount, 6.3.1, cryptmount@rwpenney.uk)
 AC_PREREQ(2.59)
 
 test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
@@ -198,7 +198,7 @@ AC_PATH_PROG([PATH_FSCK], [fsck], [NOTHING], ${SYSPATH})
 dnl --------
 dnl internationalization
 dnl
-AM_GNU_GETTEXT_VERSION([0.16.1])
+AM_GNU_GETTEXT_VERSION([0.21])
 AM_GNU_GETTEXT([external])
 
 

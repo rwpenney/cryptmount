@@ -1,6 +1,6 @@
 /*
  *  General declarations for cryptmount
- *  (C)Copyright 2005-2024, RW Penney
+ *  (C)Copyright 2005-2025, RW Penney
  */
 
 /*

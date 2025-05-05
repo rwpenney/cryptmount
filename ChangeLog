@@ -1,5 +1,7 @@
 ChangeLog for cryptmount (https://github.com/rwpenney/cryptmount)
 
+05May25	- Updated gettext configuration
+
 28Jul24	- *** cryptmount-6.3 released
 
 21Jul24	- Migrated devmapper naming assumptions to /dev/disk/by-id/dm-name-*

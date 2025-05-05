@@ -8,7 +8,13 @@ top_builddir = ..
 XGETTEXT_OPTIONS = --keyword=_ --keyword=N_
 
 COPYRIGHT_HOLDER = RW Penney
+PACKAGE_GNU = no
 
 MSGID_BUGS_ADDRESS = cryptmount@rwpenney.uk
 
 EXTRA_LOCALE_CATEGORIES =
+USE_MSGCTXT = no
+MSGMERGE_OPTIONS =
+MSGINIT_OPTIONS =
+PO_DEPENDS_ON_POT = yes
+DIST_DEPENDS_ON_UPDATE_PO = yes

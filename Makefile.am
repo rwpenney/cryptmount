@@ -1,6 +1,8 @@
 # automake script for 'cryptmount'
 # RW Penney, November 2005
 
+ACLOCAL_AMFLAGS = -I m4
+
 AM_CPPFLAGS = -DCM_SYSCONF_DIR="\"$(CM_SYSCONF_DIR)\"" \
 		-DCM_SYSRUN_DIR="\"$(CM_SYSRUN_DIR)\""
 

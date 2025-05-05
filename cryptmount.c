@@ -1,6 +1,6 @@
 /*
  *  cryptmount - a utility for user-level mounting of encrypted filesystems
- *  (C)Copyright 2005-2024, RW Penney
+ *  (C)Copyright 2005-2025, RW Penney
  */
 
 /*
