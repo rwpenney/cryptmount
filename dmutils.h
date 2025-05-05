@@ -1,6 +1,6 @@
 /*
  *  Declarations for device-mapper utilities for cryptmount
- *  (C)Copyright 2005-2024, RW Penney
+ *  (C)Copyright 2005-2025, RW Penney
  */
 
 /*
@@ -47,5 +47,5 @@ int await_devmap(const char *ident, int present, unsigned timeout_ms);
 #endif  /* _DMUTILS_H */
 
 /*
- *  (C)Copyright 2005-2024, RW Penney
+ *  (C)Copyright 2005-2025, RW Penney
  */

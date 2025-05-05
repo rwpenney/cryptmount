@@ -13,6 +13,7 @@ in some areas.
 
 Thanks are also due to the following people who have been
 very helpful in testing and improving cryptmount:
+    Pierre Ayoub        (identifying gettext po/Makevars issue)
     Carl Banks          (idea behind --safetynet option)
     László Böszörményi  (debian-specific packaging)
     Raphaël Droz        (advice on use of libcryptsetup)

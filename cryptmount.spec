@@ -1,6 +1,6 @@
 #
 # rpm spec-file for cryptmount
-# Copyright 2006-2024, Holger Mueller, Eriks Zelenka & RW Penney
+# (C)Copyright 2006-2025, Holger Mueller, Eriks Zelenka & RW Penney
 #
 Summary:	Let ordinary users mount an encrypted file system
 Name:		cryptmount

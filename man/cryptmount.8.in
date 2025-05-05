@@ -1,5 +1,5 @@
 .\" cryptmount manual page
-.\" (C)Copyright 2005-2024 RW Penney
+.\" (C)Copyright 2005-2025, RW Penney
 .\"
 .TH CRYPTMOUNT 8 "2024-07-21" "@PACKAGE_VERSION@" "User commands"
 .SH NAME
@@ -429,7 +429,7 @@ and bug-reports, via https://github.com/rwpenney/cryptmount/issues
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-is Copyright 2005-2024, RW Penney
+is (C)Copyright 2005-2025, RW Penney
 .br
 and is supplied with NO WARRANTY.
 Licencing terms are as described in the file "COPYING"

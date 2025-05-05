@@ -1,6 +1,6 @@
 /*
  *  Filesystem-related utilities for cryptmount
- *  (C)Copyright 2005-2024, RW Penney
+ *  (C)Copyright 2005-2025, RW Penney
  */
 
 /*
@@ -719,5 +719,5 @@ int fs_test_entropy()
 #endif  /* TESTING */
 
 /*
- *  (C)Copyright 2005-2024, RW Penney
+ *  (C)Copyright 2005-2025, RW Penney
  */

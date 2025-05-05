@@ -321,7 +321,7 @@ L'auteur accueille les suggestions
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-est Copyright 2005-2024 RW Penney
+est (C)Copyright 2005-2025, RW Penney
 .br
 et il n'y a point de garantie.
 Les termes de sa licence sont d\['e]crits dans le fichier "COPYING"

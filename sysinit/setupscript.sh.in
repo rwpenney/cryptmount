@@ -310,7 +310,7 @@ eval_gettext "cryptmount setup script"; echo; echo
 
 eval_gettext "This program will allow you to setup a secure filing-system that will be managed by \"cryptmount\". You will be able to select basic features such as the location and size of the filesystem - if you want more advanced features, you should consult the cryptmount manual page." | FoldLines; echo; echo
 
-echo "cryptmount version @PKG_VERSION@, (C)Copyright 2007-2024, RW Penney"
+echo "cryptmount version @PKG_VERSION@, (C)Copyright 2007-2025, RW Penney"
 eval_gettext "cryptmount comes with ABSOLUTELY NO WARRANTY."; echo
 eval_gettext "This is free software, and you are welcome to redistribute it under certain conditions - see the file 'COPYING' in the source directory." | FoldLines; echo
 
