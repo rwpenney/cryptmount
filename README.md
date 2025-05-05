@@ -26,7 +26,7 @@ cryptmount has been tested on a wide variety of GNU/Linux platforms including:
 CentOS, [Debian](https://packages.debian.org/stable/cryptmount), Fedora,
 [Gentoo](https://packages.gentoo.org/packages/sys-fs/cryptmount),
 [Mageia](https://madb.mageia.org/package/show/source/1/application/0/release/cauldron/name/cryptmount),
-[Ubuntu](https://packages.ubuntu.com/jammy/cryptmount) etc.
+[Ubuntu](https://packages.ubuntu.com/noble/cryptmount) etc.
 
 For the most recent source-bundles of cryptmount, please see
 [GitHub](https://github.com/rwpenney/cryptmount/releases),
@@ -82,5 +82,3 @@ You are strongly advised to keep a backup copy of the key-file.
 
 The current GPG signature used for cryptmount releases
 has fingerprint `7A09 0051 9745 19A3 ED1B  D4CB A6CF D54C 4405 160E`.
-(The previous key, `78BC 1A99 61DC 2DAA 7BF8  99DB A6D8 2C65 B8CE F5E7`,
-expired in May 2023.)

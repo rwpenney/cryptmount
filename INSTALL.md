@@ -37,13 +37,18 @@ then you may need to set up [autoconf](https://www.gnu.org/software/autoconf/)
 
     autoreconf -v -i
 
+This `autoreconf` process may require installation of packages such as
+automake, autoconf, gettext-devel, intltools, etc.
+
 
 Dependencies
 ------------
 
 A number of development packages will need to be pre-installed in order
 to provide library functions on which cryptmount depends. (The precise
-naming of these packages may differ between Linux systems.)
+naming of these packages may differ between Linux systems, and
+rpm-based systems may require enabling of additional repositories
+such as PowerTools or CRB to access these.)
 The following packages are essential:
 
   * kernel-headers (matching the running linux-image)
