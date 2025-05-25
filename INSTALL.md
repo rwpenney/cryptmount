@@ -39,7 +39,8 @@ then you may need to set up [autoconf](https://www.gnu.org/software/autoconf/)
 
 This `autoreconf` process may require installation of packages such as
 automake, autoconf, gettext-devel,
-[intltool](https://www.freedesktop.org/wiki/Software/intltool/) etc.
+[intltool](https://www.freedesktop.org/wiki/Software/intltool/),
+libtool etc.
 
 
 Dependencies

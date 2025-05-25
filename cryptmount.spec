@@ -17,7 +17,7 @@ Source0:	https://github.com/rwpenney/cryptmount/archive/refs/tags/v%{version}.ta
 %if 0%{?fedora}
 #{
 # Fedora
-BuildRequires:  cryptsetup-devel libgcrypt-devel systemd-devel
+BuildRequires:  cryptsetup-devel device-mapper-devel libgcrypt-devel
 Requires:       cryptsetup-libs libgcrypt device-mapper
 #}
 %else
@@ -36,7 +36,7 @@ Requires:       cryptsetup-libs device-mapper
 %else
 #{
 # Default ~openSUSE
-BuildRequires:  libcryptsetup-devel libgcrypt-devel
+BuildRequires:  device-mapper-devel libcryptsetup-devel libgcrypt-devel
 Requires:       libcryptsetup12 libgcrypt20 device-mapper
 #}
 %endif
@@ -84,7 +84,7 @@ device-mapper and loopback devices before mounting.
 %doc %{_mandir}/man8/cryptmount*.8*
 %doc %{_mandir}/*/man5/cmtab.5*
 %doc %{_mandir}/*/man8/cryptmount*.8*
-%doc /usr/share/doc/cryptmount/
+%doc /usr/share/doc/cryptmount/examples/
 %config(noreplace) %{_sysconfdir}/cryptmount/
 %config /etc/modules-load.d/cryptmount.conf
 %config /usr/lib/systemd/system/cryptmount.service
