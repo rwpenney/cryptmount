@@ -10,6 +10,10 @@ License:	GPL
 URL:		https://github.com/rwpenney/cryptmount
 Group:		System/Filesystems
 Source0:	https://github.com/rwpenney/cryptmount/archive/refs/tags/v%{version}.tar.gz
+
+# Example usage:
+#   rpmbuild --build-in-place -bb cryptmount.spec
+
 %if 0%{?fedora}
 #{
 # Fedora
@@ -25,8 +29,8 @@ Requires:       cryptsetup-libs libgcrypt device-mapper
 BuildRequires:  cryptsetup-devel libgcrypt-devel systemd-devel
 Requires:       cryptsetup-libs libgcrypt device-mapper
 %else
-BuildRequires:  cryptsetup-luks-devel libgcrypt-devel
-Requires:       cryptsetup-luks-libs libgcrypt device-mapper
+BuildRequires:  cryptsetup-devel device-mapper-devel libgcrypt-devel
+Requires:       cryptsetup-libs device-mapper
 %endif
 #}
 %else
@@ -51,19 +55,18 @@ device-mapper and loopback devices before mounting.
 %prep
 %setup -n %{name}-%{version}
 %{__perl} -pi.orig -e '
-	s|^(\s*)chown(\s*root)|\1#chown\2|g;
+	s|^(\s*)chown(\s*root)|\1echo chown\2|g;
 	s|/etc/init.d|%{_initrddir}|g;
     ' Makefile.am Makefile.in
 
 
 %build
-%configure --enable-delegation --enable-fsck
+%configure --with-systemd --with-systemd-unit-dir=/usr/lib/systemd/system --enable-delegation --enable-fsck
 %{__make} %{?_smp_mflags}
 
 
 %install
 %{__rm} -rf %{buildroot}
-%{__install} -d -m0755 %{buildroot}%{_initrddir}
 %{__install} -d -m0755 %{buildroot}%{_sbindir}
 %{__install} -d -m0755 %{buildroot}/usr/lib/systemd/system
 %{__make} DESTDIR=%{buildroot} install
@@ -81,8 +84,8 @@ device-mapper and loopback devices before mounting.
 %doc %{_mandir}/man8/cryptmount*.8*
 %doc %{_mandir}/*/man5/cmtab.5*
 %doc %{_mandir}/*/man8/cryptmount*.8*
+%doc /usr/share/doc/cryptmount/
 %config(noreplace) %{_sysconfdir}/cryptmount/
-%config %{_initrddir}/cryptmount
 %config /etc/modules-load.d/cryptmount.conf
 %config /usr/lib/systemd/system/cryptmount.service
 %{_sbindir}/cryptmount-setup
@@ -91,15 +94,17 @@ device-mapper and loopback devices before mounting.
 
 
 %post
-/sbin/chkconfig --add cryptmount
+systemctl enable cryptmount
 
 %preun
 if [ "$1" = 0 ]; then
-    /sbin/chkconfig --del cryptmount
+    systemctl disable cryptmount
 fi
 
 
 %changelog
+* Sun May 25 2025 RW Penney <cryptmount@rwpenney.uk> - 6.3.1
+    -- Updated to prefer systemd and fix build on Rocky-9
 * Sun Jul 28 2024 RW Penney <cryptmount@rwpenney.uk> - 6.3.0
     -- Preferred device-mapper paths relocated to /dev/disk/by-id
 * Sat Jan 07 2023 RW Penney <cryptmount@rwpenney.uk> - 6.2.0

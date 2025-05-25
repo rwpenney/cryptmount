@@ -33,12 +33,13 @@ packages to be available, and should be driven by the "configure" script.
 If the configure script is missing, for example if working with a clone of
 cryptmount's [GitHub repository](https://github.com/rwpenney/cryptmount),
 then you may need to set up [autoconf](https://www.gnu.org/software/autoconf/)
-(version 2.61 or later), and run
+(version 2.61 or later), and then run
 
     autoreconf -v -i
 
 This `autoreconf` process may require installation of packages such as
-automake, autoconf, gettext-devel, intltools, etc.
+automake, autoconf, gettext-devel,
+[intltool](https://www.freedesktop.org/wiki/Software/intltool/) etc.
 
 
 Dependencies
