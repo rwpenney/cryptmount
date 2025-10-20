@@ -3,7 +3,7 @@ dnl (C)Copyright 2005-2025, RW Penney
 
 dnl run 'autoreconf -v -i -s; ./configure; make'
 
-AC_INIT(cryptmount, 6.3.1, cryptmount@rwpenney.uk)
+AC_INIT(cryptmount, 6.3.2, cryptmount@rwpenney.uk)
 AC_PREREQ(2.59)
 
 test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
@@ -107,7 +107,7 @@ fi
 dnl --------
 dnl libcryptsetup libraries (needed for LUKS/cryptsetup key-manager)
 dnl
-PKG_CHECK_MODULES([libcryptsetup], [libcryptsetup >= 1.4],
+PKG_CHECK_MODULES([libcryptsetup], [libcryptsetup >= 2.2],
                   [libcs="yes"], [libcs="no"])
 if test "x${libcs}" = "xyes"; then
     AC_DEFINE(HAVE_LIBCRYPTSETUP, [1],

@@ -1,5 +1,7 @@
 ChangeLog for cryptmount (https://github.com/rwpenney/cryptmount)
 
+20Oct25	- Added support for LUKS detached headers
+
 05May25	- Updated gettext configuration
 
 28Jul24	- *** cryptmount-6.3 released

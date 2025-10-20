@@ -280,6 +280,23 @@ void kmluks_log(int level, const char *msg, void *data)
 }
 
 
+static int kmluks_init_context(const tgtdefn_t *tgt,
+                               struct crypt_device **luks_ctxt)
+  /*! Setup LUKS context for either single-device or detached-header scenarios */
+{   int liberr = 0;
+
+    if (tgt->key.filename != NULL && tgt->dev != NULL &&
+        strcmp(tgt->key.filename, tgt->dev) != 0) {
+      /* Detached LUKS header */
+      liberr = crypt_init_data_device(luks_ctxt, tgt->key.filename, tgt->dev);
+    } else {      /* Single block device with embedded header */
+      liberr = crypt_init(luks_ctxt, tgt->key.filename);
+    }
+
+    return liberr;
+}
+
+
 static int kmluks_get_key(bound_tgtdefn_t *boundtgt,
             const km_pw_context_t *pw_ctxt,
             uint8_t **key, int *keylen, FILE *fp_key)
@@ -305,7 +322,7 @@ static int kmluks_get_key(bound_tgtdefn_t *boundtgt,
     eflag = km_get_passwd(tgt->ident, pw_ctxt, &passwd, 0, 0);
     if (eflag != ERR_NOERROR) goto bail_out;
 
-    if (crypt_init(&luks_ctxt, tgt->key.filename) < 0
+    if (kmluks_init_context(tgt, &luks_ctxt) < 0
         || crypt_load(luks_ctxt, NULL, NULL) < 0) {
         fprintf(stderr, _("Failed to initialize device for LUKS keyfile\n"));
         eflag = ERR_BADDECRYPT;
@@ -361,7 +378,6 @@ static int kmluks_put_key(bound_tgtdefn_t *boundtgt,
             const uint8_t *key, const int keylen, FILE *fp_key)
     /** Store or create key in LUKS header */
 {
-    const keyinfo_t *keyinfo = &boundtgt->tgt->key;
     char *passwd = NULL, *ciphername = NULL, *ciphermode = NULL;
     struct crypt_device *luks_ctxt = NULL;
     unsigned keyslot = 0;
@@ -390,7 +406,7 @@ static int kmluks_put_key(bound_tgtdefn_t *boundtgt,
     eflag = km_get_passwd(boundtgt->tgt->ident, pw_ctxt, &passwd, 1, 1);
     if (eflag != ERR_NOERROR) goto bail_out;
 
-    if (crypt_init(&luks_ctxt, keyinfo->filename) < 0) {
+    if (kmluks_init_context(boundtgt->tgt, &luks_ctxt) < 0) {
         fprintf(stderr, _("Failed to initialize device for LUKS keyfile\n"));
         eflag = ERR_BADDECRYPT;
         goto bail_out;

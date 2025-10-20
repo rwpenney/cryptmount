@@ -1456,6 +1456,43 @@ EOF
 };
 
 
+function test_luks_detached() {
+    # Check whether LUKS detached headers are handled correctly
+    if test_start "LUKS detached header support"; then true; else return; fi
+    if which cryptsetup 1>&3; then true; else test_fail "cryptsetup not available"; return; fi
+    if ${CM} --key-managers 2>/dev/null | grep -q luks; then true; else test_fail "No LUKS support"; return; fi
+
+    echo -n "keyslot0-password" > ${TMPDIR}/keymat0
+    echo -n "${PASSWD}" > ${TMPDIR}/keymat1
+    HDRFILE=${TMPDIR}/luks.header
+    TMPTGT="mudslinger-`mkrandshort`"
+
+    if dd_sync if=/dev/zero of=${LOOPDEV} bs=1M count=1 conv=notrunc 2>/dev/null; then true; else test_fail "purging"; return; fi
+    rm -f ${HDRFILE} || true
+    cryptsetup --batch-mode --type luks2 --header ${TMPDIR}/luks.header luksFormat "${LOOPDEV}" ${TMPDIR}/keymat0 1>&3 2>&3
+    sync
+
+    idx=`mkrandshort`
+    cat <<EOF > ${TMPDIR}/cmtab
+    target${idx} {
+        dev=${LOOPDEV}      dir=${TMPDIR}/mnt
+        fstype=ext3         flags=nofsck
+        keyformat=luks      keyfile=${HDRFILE}
+    }
+EOF
+
+    if ${CM} --config-dir ${TMPDIR} --change-password --password "keyslot0-password" --newpassword "${PASSWD}" target${idx} 1>&3 2>&3; then true; else test_fail "password changing"; return; fi
+
+    if ${CM} --config-dir ${TMPDIR} --password "${PASSWD}"  --prepare target${idx} 2>&3; then true; else test_fail "prepare"; return; fi
+    if ${CM} --config-dir ${TMPDIR} --release target${idx} 2>&3; then true; else test_fail "release"; return; fi
+    wait_udev
+    if cryptsetup --verbose  --header ${HDRFILE} --key-file ${TMPDIR}/keymat1 luksOpen ${LOOPDEV} ${TMPTGT} 1>&3 2>&3; then true; else test_fail "luksOpen"; return; fi
+    if cryptsetup --header ${HDRFILE} luksClose ${TMPTGT} 2>&3; then true; else test_fail "luksClose"; return; fi
+
+    test_pass
+};
+
+
 function test_loopset() {
     # Check that 'loopdev' parameter correctly targets specific loopback dev
     if test_start "loopdev specification"; then true; else return; fi
@@ -1609,6 +1646,7 @@ test_cryptsetup_compat
 test_luks_loopdev
 test_luks_compat
 test_luks_tapmoc
+test_luks_detached
 test_residues
 
 test_summary
