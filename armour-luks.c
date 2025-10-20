@@ -395,7 +395,7 @@ static int kmluks_put_key(bound_tgtdefn_t *boundtgt,
         char msgbuff[1024];
         snprintf(msgbuff, sizeof(msgbuff),
                 _("Formatting \"%s\", will probably destroy all existing data"),
-                keyinfo->filename);
+                boundtgt->tgt->key.filename);
         if (!cm_confirm(msgbuff)) {
             eflag = ERR_ABORT;
             goto bail_out;
