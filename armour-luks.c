@@ -307,7 +307,7 @@ static int kmluks_get_key(bound_tgtdefn_t *boundtgt,
     int slot = -1, eflag = ERR_NOERROR;
     luks_overrides_t *luksor;
     int64_t delta;
-    size_t lcs_keylen = 256;
+    size_t lcs_keylen;
     const size_t namesz = 128;
 
     /* This is vulnerable to permission-issues created by libgcrypt
@@ -358,9 +358,16 @@ static int kmluks_get_key(bound_tgtdefn_t *boundtgt,
     boundtgt->km_data = (void*)luksor;
 
     /* Take copy of LUKS master-key: */
+    lcs_keylen = crypt_keyslot_get_key_size(luks_ctxt, slot);
     *key = (uint8_t*)sec_realloc((void*)*key, lcs_keylen);
-    crypt_volume_key_get(luks_ctxt, slot, (char*)*key, &lcs_keylen,
-                         passwd, strlen(passwd));
+    eflag = crypt_volume_key_get(luks_ctxt, slot, (char*)*key, &lcs_keylen,
+                                 passwd, strlen(passwd));
+    if (eflag != ERR_NOERROR) {
+        fprintf(stderr, _("Failed to get LUKS key for \"%s\" (errno=%d)\n"),
+                tgt->ident, -eflag);
+        eflag = ERR_BADDECRYPT;
+        goto bail_out;
+    }
     *keylen = lcs_keylen;
 
   bail_out:

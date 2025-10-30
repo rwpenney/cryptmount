@@ -428,12 +428,12 @@ static int do_devsetup(const km_pw_context_t *pw_ctxt,
     dpsize = 2 * keylen + BUFFMIN;
     dmparams = (char*)sec_realloc(dmparams, dpsize);
     buffpos = snprintf(dmparams, dpsize, "%s ",
-                        (tgt->cipher != NULL ?  tgt->cipher
-                                             : CM_DEFAULT_CIPHER));
+                       (tgt->cipher != NULL ? tgt->cipher
+                                            : CM_DEFAULT_CIPHER));
     buffpos += mk_key_string(key, (size_t)keylen, dmparams + buffpos);
     buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),
-                          " %" PRId64 " %s %" PRId64,
-                          tgt->ivoffset, tgtdev, tgt->start);
+                        " %" PRId64 " %s %" PRId64,
+                        tgt->ivoffset, tgtdev, tgt->start);
     if (tgt->sectorsize > 0) numopts += 1;
     if ((tgt->flags & FLG_TRIM) != 0) numopts += 1;
     buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),
