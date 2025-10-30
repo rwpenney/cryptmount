@@ -297,10 +297,12 @@ the libgcrypt library being available.
 .Sh luks
 This keymanager is supported by cryptmount-3.1 or later,
 and provided compatibility with the Linux Unified Key Setup (LUKS) disk-format.
-Instead of a separate keyfile, LUKS uses a header
-within the encrypted filesystem itself.
-It is advisable to choose the same value for both the 'dev'
+By default, LUKS uses a header within the encrypted filesystem itself, instead
+of a separate keyfile.
+In that case, it is advisable to choose the same value for both the 'dev'
 and 'keyfile' parameters, or leave 'keyfile' unspecified.
+Alternatively, LUKS can be configured to use a "detached header", in which case
+the 'keyfile' parameter should be the detached header file.
 As with all cryptmount filesystems, the 'dev' parameter may point
 to either a raw disk partition or an ordinary file.
 However, because of the filesystem structure assumed by LUKS,
