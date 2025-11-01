@@ -197,6 +197,7 @@ tgtdefn_t *alloc_tgtdefn(const tgtdefn_t *prototype)
     tgt->flags = DFLT_OR_PROTO(FLG_DEFAULTS, prototype->flags);
 
     tgt->dev = NULL;
+    tgt->sectorsize = -1;
     tgt->start = 0; tgt->length = -1;
     tgt->dir = NULL;
     tgt->fstype = DFLT_OR_PROTO(NULL, cm_strdup(prototype->fstype));
@@ -250,6 +251,7 @@ tgtdefn_t *clone_tgtdefn(const tgtdefn_t *orig)
     clone->flags = orig->flags;
 
     clone->dev = cm_strdup(orig->dev);
+    clone->sectorsize = orig->sectorsize;
     clone->start = orig->start;
     clone->length = orig->length;
     clone->dir = cm_strdup(orig->dir);
