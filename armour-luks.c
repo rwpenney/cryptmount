@@ -161,11 +161,11 @@ static int kmluks_bind(bound_tgtdefn_t *bound, FILE *fp_key)
         }
 
         if (tgt->key.digestalg == NULL) {
-            tgt->key.digestalg = cm_strdup("sha1");
+            tgt->key.digestalg = cm_strdup("sha256");
         }
 
         if (tgt->key.cipheralg == NULL) {
-            tgt->key.cipheralg = cm_strdup("aes128");
+            tgt->key.cipheralg = cm_strdup("aes256");
         }
     }
 
@@ -362,11 +362,14 @@ static int kmluks_get_key(bound_tgtdefn_t *boundtgt,
     *key = (uint8_t*)sec_realloc((void*)*key, lcs_keylen);
     eflag = crypt_volume_key_get(luks_ctxt, slot, (char*)*key, &lcs_keylen,
                                  passwd, strlen(passwd));
-    if (eflag != ERR_NOERROR) {
-        fprintf(stderr, _("Failed to get LUKS key for \"%s\" (errno=%d)\n"),
+    if (eflag < 0) {
+        fprintf(stderr, _("Failed to get LUKS volume key for \"%s\" (errno=%d)\n"),
                 tgt->ident, -eflag);
         eflag = ERR_BADDECRYPT;
         goto bail_out;
+    } else {
+        // crypt_volume_key_get() returns slot-number, which we can ignore
+        eflag = ERR_NOERROR;
     }
     *keylen = lcs_keylen;
 

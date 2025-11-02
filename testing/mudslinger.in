@@ -1288,7 +1288,7 @@ function test_cryptsetup_compat() {
                 for ivoffset in 0 172 932; do
                     idx=`mkrandshort`
                     echo "${cipher},${length},${startsec},${ivoffset}" 1>&3
-                    cryptsetup --key-file ${TMPDIR}/keymat -c ${cipher} -b ${length} -o ${startsec} -p ${ivoffset} create cstarget${idx} ${LOOPDEV} 2>&3
+                    cryptsetup --key-file ${TMPDIR}/keymat -c ${cipher} --key-size 256 -b ${length} -o ${startsec} -p ${ivoffset} create cstarget${idx} ${LOOPDEV} 2>&3
                     if [ -b $(dm_target_path cstarget${idx}) ]; then
                         cs_size=`blockdev --getsize $(dm_target_path cstarget${idx})`
                         dd_sync if=/dev/zero of=$(dm_target_path cstarget${idx}) \
@@ -1372,12 +1372,12 @@ function test_luks_compat() {
         if dd_sync if=/dev/zero of=${LOOPDEV} bs=1M count=1 conv=notrunc 2>/dev/null; then true; else test_fail "purging"; return; fi
         cryptsetup --batch-mode --cipher ${cipher} --key-size ${len} luksFormat "${LOOPDEV}" ${TMPDIR}/keymat0 1>&3 2>&3
         sync
-        cryptsetup --key-file ${TMPDIR}/keymat0 --cipher ${cipher} --key-slot 2 luksAddKey "${LOOPDEV}" ${TMPDIR}/keymat 1>&3 2>&3
+        cryptsetup --key-file ${TMPDIR}/keymat0 --cipher ${cipher} luksAddKey --new-key-slot 2 "${LOOPDEV}" ${TMPDIR}/keymat 1>&3 2>&3
         sync; wait_udev
         cryptsetup --key-file ${TMPDIR}/keymat luksOpen "${LOOPDEV}" "${TMPTGT}" 1>&3 2>&3
         sync; wait_udev
         if [ ! -b $(dm_target_path ${TMPTGT}) ]; then test_fail "luksOpen"; find /dev -name \*target${idx}\* -ls 1>&3; return; fi
-        if blank_mke2fs -q -j "$(dm_target_path ${TMPTGT})"; then true; else test_fail mke2fs; return; fi
+        if blank_mke2fs -q -j "$(dm_target_path ${TMPTGT})"; then true; else test_fail "mke2fs"; return; fi
         wait_udev
         cryptsetup luksClose "${TMPTGT}" 2>&3
         sync; wait_udev; sleep 1

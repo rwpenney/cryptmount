@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cryptmount 4.0-1\n"
 "Report-Msgid-Bugs-To: cryptmount@rwpenney.uk\n"
-"POT-Creation-Date: 2025-05-05 14:04+0100\n"
+"POT-Creation-Date: 2025-11-02 13:46+0000\n"
 "PO-Revision-Date: 2006-04-21 07:51+0100\n"
 "Last-Translator: RW Penney <cryptmount@rwpenney.uk>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -41,7 +41,7 @@ msgstr "Pas de fichier-clef pour la cible \"%s\"\n"
 msgid "Missing output keyfile for target \"%s\"\n"
 msgstr "Pas de fichier-clef pour la cible \"%s\"\n"
 
-#: armour.c:786
+#: armour.c:788
 #, c-format
 msgid "Specification for target \"%s\" contains non-absolute pathname\n"
 msgstr ""
@@ -96,32 +96,38 @@ msgstr "Mauvais fichier-clef (openssl-compat, ofs=%u,idx=%u)\n"
 msgid "Failed to acquire privileges for LUKS container\n"
 msgstr "Échec de l'acquisition des privilèges pour le fichier-clef LUKS\n"
 
-#: armour-luks.c:310 armour-luks.c:394
+#: armour-luks.c:327 armour-luks.c:419
 #, c-format
 msgid "Failed to initialize device for LUKS keyfile\n"
 msgstr "Échec de l'initialisation des appareils pour le fichier-clef LUKS\n"
 
-#: armour-luks.c:320
+#: armour-luks.c:337
 #, c-format
 msgid "Failed to extract LUKS key for \"%s\" (errno=%d)\n"
 msgstr "Extraction de la clef LUKS a echouée pour la cible \"%s\" (errno=%d)\n"
 
-#: armour-luks.c:381
+#: armour-luks.c:364
+#, fuzzy, c-format
+#| msgid "Failed to extract LUKS key for \"%s\" (errno=%d)\n"
+msgid "Failed to get LUKS volume key for \"%s\" (errno=%d)\n"
+msgstr "Extraction de la clef LUKS a echouée pour la cible \"%s\" (errno=%d)\n"
+
+#: armour-luks.c:406
 #, c-format
 msgid "Formatting \"%s\", will probably destroy all existing data"
 msgstr "Formatage de \"%s\" va detruire tous donnés sur ce conteneur"
 
-#: armour-luks.c:410
+#: armour-luks.c:435
 #, c-format
 msgid "Failed to create LUKS header for \"%s\"\n"
 msgstr "Génération d'en-tête LUKS pour \"%s\" a echouée\n"
 
-#: armour-luks.c:420
+#: armour-luks.c:445
 #, c-format
 msgid "Failed to create LUKS key for \"%s\"\n"
 msgstr "Génération de clef LUKS pour \"%s\" a echouée\n"
 
-#: armour-luks.c:433
+#: armour-luks.c:458
 #, c-format
 msgid "Setting password on LUKS keyslot-%u\n"
 msgstr ""
