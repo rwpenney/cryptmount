@@ -19,8 +19,8 @@ mudslinger:	mudslinger.in
 
 autokeys:	${AUTOKEYS}
 
-${AUTOKEYS}:	${KEYHEADERS}
+${AUTOKEYS}:	${KEYHEADERS} Makefile.am
 	for k in ${AUTOKEYS}; do \
 		cp $${k}.hdr $${k}; \
-		dd if=/dev/zero of=$${k} bs=32k count=64 \
+		dd if=/dev/zero of=$${k} bs=1M count=2 \
 			conv=notrunc oflag=append; done

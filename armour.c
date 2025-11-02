@@ -636,6 +636,8 @@ int km_test_legacy(void)
         if (flg == ERR_BADDEVICE && getuid() != 0) {
             fprintf(stderr, "Skipping \"%s\" (after %d keys) - possibly requires root privileges\n", keypath, (n_legacy - 1));
             goto skip_jail;
+        } else if (flg != ERR_NOERROR) {
+            fprintf(stderr, "Failed to decrypt %s (errno=%d)\n", keypath, flg);
         }
         CM_ASSERT_EQUAL(ERR_NOERROR, flg);
 
