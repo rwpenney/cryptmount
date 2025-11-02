@@ -379,10 +379,10 @@ static int do_devsetup(const km_pw_context_t *pw_ctxt,
                        bound_tgtdefn_t *boundtgt, char **mntdev)
 {   enum { BUFFMIN=1024 };
     uint8_t *key = NULL;
-    int buffpos, blklen, readonly, isloop = 0, killloop = 0,
-        keylen = 0, eflag = ERR_NOERROR;
+    int blklen, readonly, isloop = 0, killloop = 0, keylen = 0,
+        numopts = 0, eflag = ERR_NOERROR;
     int64_t devlen = 0, fslen = 0;
-    size_t dpsize;
+    size_t dpsize, buffpos;
     char *dmparams = NULL;
     const char *tgtdev = NULL;
     const tgtdefn_t *tgt = NULL;
@@ -428,15 +428,23 @@ static int do_devsetup(const km_pw_context_t *pw_ctxt,
     dpsize = 2 * keylen + BUFFMIN;
     dmparams = (char*)sec_realloc(dmparams, dpsize);
     buffpos = snprintf(dmparams, dpsize, "%s ",
-                        (tgt->cipher != NULL ?  tgt->cipher
-                                             : CM_DEFAULT_CIPHER));
+                       (tgt->cipher != NULL ? tgt->cipher
+                                            : CM_DEFAULT_CIPHER));
     buffpos += mk_key_string(key, (size_t)keylen, dmparams + buffpos);
     buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),
-                          " %" PRId64 " %s %" PRId64,
-                          tgt->ivoffset, tgtdev, tgt->start);
+                        " %" PRId64 " %s %" PRId64,
+                        tgt->ivoffset, tgtdev, tgt->start);
+    if (tgt->sectorsize > 0) numopts += 1;
+    if ((tgt->flags & FLG_TRIM) != 0) numopts += 1;
+    buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),
+                        " %d", numopts);
+    if (tgt->sectorsize > 0) {
+        buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),
+                            " sector_size:%d", tgt->sectorsize);
+    }
     if ((tgt->flags & FLG_TRIM) != 0) {
-      buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),
-                            " 1 allow_discards");
+        buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),
+                            " allow_discards");
     }
 
     /* Setup device-mapper target: */
