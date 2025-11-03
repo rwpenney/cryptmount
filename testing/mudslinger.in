@@ -1360,8 +1360,11 @@ function test_luks_compat() {
     if which cryptsetup 1>&3; then true; else test_fail "cryptsetup not available"; return; fi
     if ${CM} --key-managers 2>/dev/null | grep -q luks; then true; else test_fail "No LUKS support"; return; fi
 
-    echo -n "keyslot0-password" > ${TMPDIR}/keymat0
+    echo -n "qxgq-xnjc69k" > ${TMPDIR}/keymat0
+    echo -n "944ef64d6254e8e95c5012a4" > ${TMPDIR}/keymat1
+    echo -n "hr3r5-drbypz " > ${TMPDIR}/keymat2
     echo -n "${PASSWD}" > ${TMPDIR}/keymat
+
     for CipherLen in aes,128 twofish-xts-plain64,256 serpent-cbc-essiv:sha256,96
     do
         tupelize $CipherLen cipher len
@@ -1372,7 +1375,9 @@ function test_luks_compat() {
         if dd_sync if=/dev/zero of=${LOOPDEV} bs=1M count=1 conv=notrunc 2>/dev/null; then true; else test_fail "purging"; return; fi
         cryptsetup --batch-mode --cipher ${cipher} --key-size ${len} luksFormat "${LOOPDEV}" ${TMPDIR}/keymat0 1>&3 2>&3
         sync
-        cryptsetup --key-file ${TMPDIR}/keymat0 --cipher ${cipher} luksAddKey --new-key-slot 2 "${LOOPDEV}" ${TMPDIR}/keymat 1>&3 2>&3
+        cryptsetup --key-file ${TMPDIR}/keymat0 --cipher ${cipher} luksAddKey "${LOOPDEV}" ${TMPDIR}/keymat1 1>&3 2>&3
+        cryptsetup --key-file ${TMPDIR}/keymat1 --cipher ${cipher} luksAddKey "${LOOPDEV}" ${TMPDIR}/keymat2 1>&3 2>&3
+        cryptsetup --key-file ${TMPDIR}/keymat2 --cipher ${cipher} luksAddKey "${LOOPDEV}" ${TMPDIR}/keymat 1>&3 2>&3
         sync; wait_udev
         cryptsetup --key-file ${TMPDIR}/keymat luksOpen "${LOOPDEV}" "${TMPTGT}" 1>&3 2>&3
         sync; wait_udev
@@ -1397,7 +1402,7 @@ EOF
         if ${CM} --config-dir ${TMPDIR} --newpassword "${PASSWD}" --generate-key 16 target${idx} 2>&3; then test_fail "re-formatting"; fi
         sync; wait_udev
     done
-    rm ${TMPDIR}/keymat0 ${TMPDIR}/keymat
+    rm ${TMPDIR}/keymat0 ${TMPDIR}/keymat1 ${TMPDIR}/keymat2 ${TMPDIR}/keymat
     test_pass
 };
 

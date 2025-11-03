@@ -11,7 +11,8 @@ clean-local:
 	-rm -f ${AUTOKEYS}
 
 dist-hook:
-	mkdir ${distdir}/keys; cp -p ${srcdir}/keys/[0-9]* ${distdir}/keys/
+	mkdir "${distdir}/keys"; cp -p "${srcdir}/keys"/[0-9]* "${distdir}/keys/"
+	for k in ${AUTOKEYS}; do if test -f "${distdir}/$${k}"; then rm "${distdir}/$${k}"; fi; done
 
 mudslinger:	mudslinger.in
 	sed -e 's,@PKG_VERSION@,$(PACKAGE_VERSION),g' $< > $@

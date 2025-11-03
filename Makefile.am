@@ -68,7 +68,7 @@ clean-local:
 	-rm -f splint.log
 
 dist-hook:
-	sed -e "s,^\(Version:\s*\)[0-9].*,\1${VERSION}," cryptmount.spec > cm_spec.new; cmp -q cryptmount.spec cm_spec.new || mv cm_spec.new cryptmount.spec; rm -f cm_spec.new
+	sed -e "s,^\(Version:\s*\)[0-9].*,\1${VERSION}," cryptmount.spec > cm_spec.new; cmp -s cryptmount.spec cm_spec.new || mv cm_spec.new cryptmount.spec; rm -f cm_spec.new
 
 pedantic:	CFLAGS = -Wall -W -pedantic -g
 pedantic:	${bin_PROGRAMS}

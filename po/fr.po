@@ -107,10 +107,10 @@ msgid "Failed to extract LUKS key for \"%s\" (errno=%d)\n"
 msgstr "Extraction de la clef LUKS a echouée pour la cible \"%s\" (errno=%d)\n"
 
 #: armour-luks.c:366
-#, fuzzy, c-format
-#| msgid "Failed to extract LUKS key for \"%s\" (errno=%d)\n"
+#, c-format
 msgid "Failed to get LUKS volume key for \"%s\" (errno=%d)\n"
-msgstr "Extraction de la clef LUKS a echouée pour la cible \"%s\" (errno=%d)\n"
+msgstr ""
+"Extraction de la clef LUKS a echouée pour le volume \"%s\" (errno=%d)\n"
 
 #: armour-luks.c:408
 #, c-format
