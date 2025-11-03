@@ -341,7 +341,7 @@ static int kmluks_get_key(bound_tgtdefn_t *boundtgt,
     }
 
     /* Extract cipher-algorithm parameters from LUKS header: */
-    tgt->sectorsize = crypt_get_sector_size(luks_ctxt);
+    boundtgt->sectorsize = crypt_get_sector_size(luks_ctxt);
     delta = (crypt_get_data_offset(luks_ctxt) - tgt->start);
     if (delta >= 0) {
         tgt->start += delta;

@@ -16,6 +16,7 @@ very helpful in testing and improving cryptmount:
     Pierre Ayoub        (identifying gettext po/Makevars issue)
     Carl Banks          (idea behind --safetynet option)
     László Böszörményi  (debian-specific packaging)
+    Paul Donohue        (handling of LUKS detached headers)
     Raphaël Droz        (advice on use of libcryptsetup)
     Piotr Dziwinski     (patch for --status option)
     Harald Dunkel       (debian chroot-installation testing)

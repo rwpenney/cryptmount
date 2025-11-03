@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cryptmount 6.0-1\n"
 "Report-Msgid-Bugs-To: cryptmount@rwpenney.uk\n"
-"POT-Creation-Date: 2025-11-02 13:46+0000\n"
+"POT-Creation-Date: 2025-11-03 08:00+0000\n"
 "PO-Revision-Date: 2022-09-11 20:18+0200\n"
 "Last-Translator: Helge Kreutzmann <debian@helgefjell.de>\n"
 "Language-Team: German <debian-l10n-german@lists.debian.org>\n"
@@ -26,22 +26,22 @@ msgstr "Auslesen des Schlüssels für »%s« schlug fehl.\n"
 msgid "Key-writing failed for \"%s\"\n"
 msgstr "Schreiben des Schlüssels für »%s« schlug fehl.\n"
 
-#: armour.c:358
+#: armour.c:359
 #, c-format
 msgid "Failed to open keyfile \"%s\" for target \"%s\"\n"
 msgstr "Öffnen der Schlüsseldatei »%s« für Ziel »%s« schlug fehl.\n"
 
-#: armour.c:366
+#: armour.c:367
 #, c-format
 msgid "Missing keyfile for target \"%s\"\n"
 msgstr "Schlüsseldatei für Ziel »%s« fehlt.\n"
 
-#: armour.c:393
+#: armour.c:394
 #, c-format
 msgid "Missing output keyfile for target \"%s\"\n"
 msgstr "Schlüsselausgabedatei für Ziel »%s« fehlt.\n"
 
-#: armour.c:788
+#: armour.c:789
 #, c-format
 msgid "Specification for target \"%s\" contains non-absolute pathname\n"
 msgstr "Die Zielangabe für »%s« enthält eine nicht-absolute Pfadangabe.\n"
@@ -101,7 +101,7 @@ msgstr ""
 msgid "Failed to acquire privileges for LUKS container\n"
 msgstr "Erlangen von Privilegien für LUKS-Container schlug fehl.\n"
 
-#: armour-luks.c:327 armour-luks.c:419
+#: armour-luks.c:327 armour-luks.c:421
 #, c-format
 msgid "Failed to initialize device for LUKS keyfile\n"
 msgstr "Initialisieren eines Gerätes für LUKS-Schlüsseldatei schlug fehl.\n"
@@ -111,28 +111,28 @@ msgstr "Initialisieren eines Gerätes für LUKS-Schlüsseldatei schlug fehl.\n"
 msgid "Failed to extract LUKS key for \"%s\" (errno=%d)\n"
 msgstr "Auslesen des LUKS-Schlüssels für »%s« schlug fehl (errno=%d).\n"
 
-#: armour-luks.c:364
+#: armour-luks.c:366
 #, c-format
 msgid "Failed to get LUKS volume key for \"%s\" (errno=%d)\n"
 msgstr "Auslesen des LUKS-VolumenSchlüssels für »%s« schlug fehl (errno=%d).\n"
 
-#: armour-luks.c:406
+#: armour-luks.c:408
 #, c-format
 msgid "Formatting \"%s\", will probably destroy all existing data"
 msgstr ""
 "Formatiere »%s«, dies wird wahrscheinlich alle bestehenden Daten zerstören."
 
-#: armour-luks.c:435
+#: armour-luks.c:437
 #, c-format
 msgid "Failed to create LUKS header for \"%s\"\n"
 msgstr "Erstellen eines neuen LUKS-Headers für »%s« schlug fehl.\n"
 
-#: armour-luks.c:445
+#: armour-luks.c:447
 #, c-format
 msgid "Failed to create LUKS key for \"%s\"\n"
 msgstr "Erstellen eines neuen LUKS-Schlüssels für »%s« schlug fehl.\n"
 
-#: armour-luks.c:458
+#: armour-luks.c:460
 #, c-format
 msgid "Setting password on LUKS keyslot-%u\n"
 msgstr "Setze Passwort für den LUKS-Schlüsselplatz »%u«\n"
@@ -216,37 +216,37 @@ msgstr "Konnte Größe von »%s« nicht ermitteln.\n"
 msgid "Bad device-mapper start/length"
 msgstr "Falsche(r) device-mapper-Beginn/Länge."
 
-#: cryptmount.c:447
+#: cryptmount.c:455
 #, c-format
 msgid "Device-mapper target-creation failed for \"%s\"\n"
 msgstr "Erstellen des device-mapper-Ziels für »%s« schlug fehl.\n"
 
-#: cryptmount.c:487 cryptmount.c:724
+#: cryptmount.c:495 cryptmount.c:732
 #, c-format
 msgid "Target \"%s\" does not appear to be configured\n"
 msgstr "Ziel »%s« scheint unkonfiguriert zu sein.\n"
 
-#: cryptmount.c:505
+#: cryptmount.c:513
 #, c-format
 msgid "Cannot stat \"%s\"\n"
 msgstr "Kann Status für »%s« nicht abfragen.\n"
 
-#: cryptmount.c:513
+#: cryptmount.c:521
 #, c-format
 msgid "Failed to remove device-mapper target \"%s\"\n"
 msgstr "Entfernen des device-mapper-Ziels »%s« schlug fehl.\n"
 
-#: cryptmount.c:545
+#: cryptmount.c:553
 #, c-format
 msgid "Target \"%s\" is already mounted\n"
 msgstr "Ziel »%s« ist bereits eingehängt.\n"
 
-#: cryptmount.c:604
+#: cryptmount.c:612
 #, c-format
 msgid "Target \"%s\" does not appear to be mounted\n"
 msgstr "Ziel »%s« scheint noch nicht eingehängt zu sein.\n"
 
-#: cryptmount.c:614
+#: cryptmount.c:622
 #, c-format
 msgid "Only \"%s\" can unmount \"%s\"\n"
 msgstr "Nur »%s« kann »%s« aushängen.\n"
@@ -254,125 +254,125 @@ msgstr "Nur »%s« kann »%s« aushängen.\n"
 #. TRANSLATORS: the following expands to include
 #. the *numerical* user-identity in place of '%lu',
 #. e.g. giving 'only user-16 can unmount "target"':
-#: cryptmount.c:620
+#: cryptmount.c:628
 #, c-format
 msgid "Only user-%lu can unmount \"%s\"\n"
 msgstr "Nur der Benutzer mit der ID »%lu« kann »%s« aushängen.\n"
 
-#: cryptmount.c:665
+#: cryptmount.c:673
 #, c-format
 msgid "Target \"%s\" is already configured\n"
 msgstr "Ziel »%s« ist bereits konfiguriert.\n"
 
-#: cryptmount.c:689 cryptmount.c:744
+#: cryptmount.c:697 cryptmount.c:752
 #, c-format
 msgid "Crypto-swap is not supported by this installation of cryptmount\n"
 msgstr ""
 "Crypto-swap wird von dieser cryptmount-Installation nicht unterstützt.\n"
 
-#: cryptmount.c:776
+#: cryptmount.c:784
 #, c-format
 msgid "Key-file for \"%s\" isn't password-protected\n"
 msgstr "Schlüsseldatei für »%s« ist nicht passwortgeschützt.\n"
 
-#: cryptmount.c:802 cryptmount.c:923
+#: cryptmount.c:810 cryptmount.c:931
 #, c-format
 msgid "Cannot open \"%s\" for writing\n"
 msgstr "Kann »%s« nicht zum Schreiben öffnen.\n"
 
-#: cryptmount.c:817
+#: cryptmount.c:825
 #, c-format
 msgid "Retiring old key (%s -> %s) failed\n"
 msgstr "Ausmustern des alten Schlüssels (%s -> %s) schlug fehl.\n"
 
-#: cryptmount.c:825
+#: cryptmount.c:833
 #, c-format
 msgid "Installing new key (%s -> %s) failed\n"
 msgstr "Installation des neuen Schlüssels (%s -> %s) schlug fehl.\n"
 
-#: cryptmount.c:832
+#: cryptmount.c:840
 #, c-format
 msgid "Backup of previous key is in \"%s\"\n"
 msgstr "Eine Sicherheitskopie des vorherigen Schlüssels ist in »%s«.\n"
 
-#: cryptmount.c:872 cryptmount.c:1548
+#: cryptmount.c:880 cryptmount.c:1556
 #, c-format
 msgid "Target name \"%s\" is not recognized\n"
 msgstr "Zielname »%s« wurde nicht erkannt.\n"
 
-#: cryptmount.c:878
+#: cryptmount.c:886
 #, c-format
 msgid "Bad key-length parameter"
 msgstr "Falscher Schlüssellängen-Parameter"
 
-#: cryptmount.c:890
+#: cryptmount.c:898
 #, c-format
 msgid "Key-file \"%s\" already exists for target \"%s\"\n"
 msgstr "Schlüsseldatei »%s« existiert für das Ziel »%s« bereits.\n"
 
-#: cryptmount.c:900
+#: cryptmount.c:908
 #, c-format
 msgid "Generating random key; please be patient...\n"
 msgstr "Erstelle zufälligen Schlüssel; bitte warten Sie …\n"
 
-#: cryptmount.c:904
+#: cryptmount.c:912
 #, c-format
 msgid "Failed to generate new key\n"
 msgstr "Generieren des neuen Schlüssels schlug fehl\n"
 
-#: cryptmount.c:937
+#: cryptmount.c:945
 #, c-format
 msgid "Installation of new keyfile \"%s\" failed"
 msgstr "Installation der neuen Schlüsseldatei »%s« schlug fehl."
 
-#: cryptmount.c:1072
+#: cryptmount.c:1080
 #, c-format
 msgid "Only root can use option \"%s\"\n"
 msgstr "Nur root kann die Option »%s« verwenden.\n"
 
-#: cryptmount.c:1085
+#: cryptmount.c:1093
 #, c-format
 msgid "Only root can configure \"%s\"\n"
 msgstr "Nur root kann »%s« konfigurieren.\n"
 
-#: cryptmount.c:1149
+#: cryptmount.c:1157
 #, c-format
 msgid "Cannot find key-manager to match target \"%s\"\n"
 msgstr "Kann keinen für das Ziel »%s« passenden Schlüsselmanager finden.\n"
 
-#: cryptmount.c:1416
+#: cryptmount.c:1424
 #, c-format
 msgid "Multiple operating modes not supported\n"
 msgstr "Mehrere Betriebsmodi werden nicht unterstützt\n"
 
-#: cryptmount.c:1471
+#: cryptmount.c:1479
 #, c-format
 msgid "Memory-locking failed...\n"
 msgstr "Sperren des Arbeitsspeichers schlug fehl …\n"
 
-#: cryptmount.c:1499
+#: cryptmount.c:1507
 #, c-format
 msgid "Bad file-descriptor (%d)\n"
 msgstr "Fehlerhafter Dateideskriptor (%d)\n"
 
-#: cryptmount.c:1509
+#: cryptmount.c:1517
 #, c-format
 msgid "Security failure\n"
 msgstr "Sicherheitsfehler\n"
 
-#: cryptmount.c:1528
+#: cryptmount.c:1536
 #, c-format
 msgid "Trailing command-line arguments given with '--all' option\n"
 msgstr ""
 "Abschließende Befehlszeilen-Argumente; wurden zusammen mit der Option »--"
 "all« angegeben.\n"
 
-#: cryptmount.c:1560
+#: cryptmount.c:1568
 #, c-format
 msgid "Target security failure for \"%s\"\n"
 msgstr "Sicherheitsfehler für Ziel »%s«.\n"
 
-#: cryptmount.c:1569
+#: cryptmount.c:1577
 #, c-format
 msgid "No targets specified\n"
 msgstr "Keine Ziele angegeben.\n"

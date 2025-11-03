@@ -3,6 +3,7 @@ ChangeLog for cryptmount (https://github.com/rwpenney/cryptmount)
 02Nov25	- Improved error traps in LUKS key extraction
 	Increased default LUKS key and hash sizes to 256 bits
 	Rebuilt legacy LUKS ripemd160/twofish test key from v4.1 on Debian-7 VM
+	Merged PaulSD patch to fix LUKS detached-header sector-size bug
 
 20Oct25	- Added support for LUKS detached headers
 	Updated gettext configuration (to v0.23.1)

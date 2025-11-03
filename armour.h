@@ -105,6 +105,9 @@ typedef struct bound_tgtdefn
 
     const keymanager_t *keymgr;
     void *km_data;
+
+    /*! Block-device sector size, typically multiple of 512 <=4096, or 0 if unknown */
+    unsigned sectorsize;
 } bound_tgtdefn_t;
 
 

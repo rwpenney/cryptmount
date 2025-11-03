@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cryptmount 4.0-1\n"
 "Report-Msgid-Bugs-To: cryptmount@rwpenney.uk\n"
-"POT-Creation-Date: 2025-11-02 13:46+0000\n"
+"POT-Creation-Date: 2025-11-03 08:00+0000\n"
 "PO-Revision-Date: 2006-04-21 07:51+0100\n"
 "Last-Translator: RW Penney <cryptmount@rwpenney.uk>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -26,22 +26,22 @@ msgstr "Extraction de la clef pour \"%s\" a echouée\n"
 msgid "Key-writing failed for \"%s\"\n"
 msgstr "Ecriture de la clef pour \"%s\" a echouée\n"
 
-#: armour.c:358
+#: armour.c:359
 #, c-format
 msgid "Failed to open keyfile \"%s\" for target \"%s\"\n"
 msgstr "Ouverture du fichier \"%s\" pour la cible \"%s\" a echouée\n"
 
-#: armour.c:366
+#: armour.c:367
 #, c-format
 msgid "Missing keyfile for target \"%s\"\n"
 msgstr "Pas de fichier-clef pour la cible \"%s\"\n"
 
-#: armour.c:393
+#: armour.c:394
 #, c-format
 msgid "Missing output keyfile for target \"%s\"\n"
 msgstr "Pas de fichier-clef pour la cible \"%s\"\n"
 
-#: armour.c:788
+#: armour.c:789
 #, c-format
 msgid "Specification for target \"%s\" contains non-absolute pathname\n"
 msgstr ""
@@ -96,7 +96,7 @@ msgstr "Mauvais fichier-clef (openssl-compat, ofs=%u,idx=%u)\n"
 msgid "Failed to acquire privileges for LUKS container\n"
 msgstr "Échec de l'acquisition des privilèges pour le fichier-clef LUKS\n"
 
-#: armour-luks.c:327 armour-luks.c:419
+#: armour-luks.c:327 armour-luks.c:421
 #, c-format
 msgid "Failed to initialize device for LUKS keyfile\n"
 msgstr "Échec de l'initialisation des appareils pour le fichier-clef LUKS\n"
@@ -106,28 +106,28 @@ msgstr "Échec de l'initialisation des appareils pour le fichier-clef LUKS\n"
 msgid "Failed to extract LUKS key for \"%s\" (errno=%d)\n"
 msgstr "Extraction de la clef LUKS a echouée pour la cible \"%s\" (errno=%d)\n"
 
-#: armour-luks.c:364
+#: armour-luks.c:366
 #, fuzzy, c-format
 #| msgid "Failed to extract LUKS key for \"%s\" (errno=%d)\n"
 msgid "Failed to get LUKS volume key for \"%s\" (errno=%d)\n"
 msgstr "Extraction de la clef LUKS a echouée pour la cible \"%s\" (errno=%d)\n"
 
-#: armour-luks.c:406
+#: armour-luks.c:408
 #, c-format
 msgid "Formatting \"%s\", will probably destroy all existing data"
 msgstr "Formatage de \"%s\" va detruire tous donnés sur ce conteneur"
 
-#: armour-luks.c:435
+#: armour-luks.c:437
 #, c-format
 msgid "Failed to create LUKS header for \"%s\"\n"
 msgstr "Génération d'en-tête LUKS pour \"%s\" a echouée\n"
 
-#: armour-luks.c:445
+#: armour-luks.c:447
 #, c-format
 msgid "Failed to create LUKS key for \"%s\"\n"
 msgstr "Génération de clef LUKS pour \"%s\" a echouée\n"
 
-#: armour-luks.c:458
+#: armour-luks.c:460
 #, c-format
 msgid "Setting password on LUKS keyslot-%u\n"
 msgstr ""
@@ -211,37 +211,37 @@ msgstr "Mesurage de la taille du \"%s\" a echoué\n"
 msgid "Bad device-mapper start/length"
 msgstr "Mauvais debut/taille pour device-mapper"
 
-#: cryptmount.c:447
+#: cryptmount.c:455
 #, c-format
 msgid "Device-mapper target-creation failed for \"%s\"\n"
 msgstr "Création de la cible device-mapper pour \"%s\" a echouée\n"
 
-#: cryptmount.c:487 cryptmount.c:724
+#: cryptmount.c:495 cryptmount.c:732
 #, c-format
 msgid "Target \"%s\" does not appear to be configured\n"
 msgstr "La cible \"%s\" n'a pas été configurée\n"
 
-#: cryptmount.c:505
+#: cryptmount.c:513
 #, c-format
 msgid "Cannot stat \"%s\"\n"
 msgstr "Ne pas pouvoir stat \"%s\"\n"
 
-#: cryptmount.c:513
+#: cryptmount.c:521
 #, c-format
 msgid "Failed to remove device-mapper target \"%s\"\n"
 msgstr "Destruction de la cible device-mapper \"%s\" a echouée\n"
 
-#: cryptmount.c:545
+#: cryptmount.c:553
 #, c-format
 msgid "Target \"%s\" is already mounted\n"
 msgstr "La cible \"%s\" est déjà montée\n"
 
-#: cryptmount.c:604
+#: cryptmount.c:612
 #, c-format
 msgid "Target \"%s\" does not appear to be mounted\n"
 msgstr "La cible \"%s\" n'est pas montée\n"
 
-#: cryptmount.c:614
+#: cryptmount.c:622
 #, c-format
 msgid "Only \"%s\" can unmount \"%s\"\n"
 msgstr "Seulement utilisateur \"%s\" peut démonter \"%s\"\n"
@@ -249,123 +249,123 @@ msgstr "Seulement utilisateur \"%s\" peut démonter \"%s\"\n"
 #. TRANSLATORS: the following expands to include
 #. the *numerical* user-identity in place of '%lu',
 #. e.g. giving 'only user-16 can unmount "target"':
-#: cryptmount.c:620
+#: cryptmount.c:628
 #, c-format
 msgid "Only user-%lu can unmount \"%s\"\n"
 msgstr "Seulement utilisateur-%lu peut démonter \"%s\"\n"
 
-#: cryptmount.c:665
+#: cryptmount.c:673
 #, c-format
 msgid "Target \"%s\" is already configured\n"
 msgstr "La cible \"%s\" est déjà configurée\n"
 
-#: cryptmount.c:689 cryptmount.c:744
+#: cryptmount.c:697 cryptmount.c:752
 #, c-format
 msgid "Crypto-swap is not supported by this installation of cryptmount\n"
 msgstr ""
 "Pagination chiffrée n'est pas possible avec cet installation de cryptmount\n"
 
-#: cryptmount.c:776
+#: cryptmount.c:784
 #, c-format
 msgid "Key-file for \"%s\" isn't password-protected\n"
 msgstr "Le fichier-clef pour \"%s\" n'est pas protèger par mot de passe\n"
 
-#: cryptmount.c:802 cryptmount.c:923
+#: cryptmount.c:810 cryptmount.c:931
 #, c-format
 msgid "Cannot open \"%s\" for writing\n"
 msgstr "Ne pas pouvoir ecrire à \"%s\"\n"
 
-#: cryptmount.c:817
+#: cryptmount.c:825
 #, c-format
 msgid "Retiring old key (%s -> %s) failed\n"
 msgstr "Retraitment de vielle fichier-clef (%s -> %s) a echouée\n"
 
-#: cryptmount.c:825
+#: cryptmount.c:833
 #, c-format
 msgid "Installing new key (%s -> %s) failed\n"
 msgstr "Installation de nouvelle fichier-clef (%s -> %s) a echouée\n"
 
-#: cryptmount.c:832
+#: cryptmount.c:840
 #, c-format
 msgid "Backup of previous key is in \"%s\"\n"
 msgstr "Une sauvegarde de l'ancienne clef est dans \"%s\"\n"
 
-#: cryptmount.c:872 cryptmount.c:1548
+#: cryptmount.c:880 cryptmount.c:1556
 #, c-format
 msgid "Target name \"%s\" is not recognized\n"
 msgstr "Nom de cible \"%s\" n'est pas reconnu\n"
 
-#: cryptmount.c:878
+#: cryptmount.c:886
 #, c-format
 msgid "Bad key-length parameter"
 msgstr "Mauvaise paramètre pour la taille de la clef"
 
-#: cryptmount.c:890
+#: cryptmount.c:898
 #, c-format
 msgid "Key-file \"%s\" already exists for target \"%s\"\n"
 msgstr "Le fichier-clef \"%s\" existe déjà pour la cible \"%s\"\n"
 
-#: cryptmount.c:900
+#: cryptmount.c:908
 #, c-format
 msgid "Generating random key; please be patient...\n"
 msgstr "Veuillez attendre pendant la création d'une clef aléatoire...\n"
 
-#: cryptmount.c:904
+#: cryptmount.c:912
 #, c-format
 msgid "Failed to generate new key\n"
 msgstr "Génération de nouvelle clef a echouée\n"
 
-#: cryptmount.c:937
+#: cryptmount.c:945
 #, c-format
 msgid "Installation of new keyfile \"%s\" failed"
 msgstr "Installation de novelle fichier-clef \"%s\" a echouée"
 
-#: cryptmount.c:1072
+#: cryptmount.c:1080
 #, c-format
 msgid "Only root can use option \"%s\"\n"
 msgstr "Seulement le super-utilisateur peut utiliser \"%s\"\n"
 
-#: cryptmount.c:1085
+#: cryptmount.c:1093
 #, c-format
 msgid "Only root can configure \"%s\"\n"
 msgstr "Seulement le super-utilisateur peut configurer \"%s\"\n"
 
-#: cryptmount.c:1149
+#: cryptmount.c:1157
 #, c-format
 msgid "Cannot find key-manager to match target \"%s\"\n"
 msgstr "Ne peut pas trouver un diriger-clef pour la cible \"%s\"\n"
 
-#: cryptmount.c:1416
+#: cryptmount.c:1424
 #, c-format
 msgid "Multiple operating modes not supported\n"
 msgstr ""
 
-#: cryptmount.c:1471
+#: cryptmount.c:1479
 #, c-format
 msgid "Memory-locking failed...\n"
 msgstr "Verrouillage de la memoire a echoué...\n"
 
-#: cryptmount.c:1499
+#: cryptmount.c:1507
 #, c-format
 msgid "Bad file-descriptor (%d)\n"
 msgstr "Maivais descripteur de fichier (%d)\n"
 
-#: cryptmount.c:1509
+#: cryptmount.c:1517
 #, c-format
 msgid "Security failure\n"
 msgstr "Echec de securité\n"
 
-#: cryptmount.c:1528
+#: cryptmount.c:1536
 #, c-format
 msgid "Trailing command-line arguments given with '--all' option\n"
 msgstr "Arguments donnés après option '--all'\n"
 
-#: cryptmount.c:1560
+#: cryptmount.c:1568
 #, c-format
 msgid "Target security failure for \"%s\"\n"
 msgstr "Echec de securité pour cible \"%s\"\n"
 
-#: cryptmount.c:1569
+#: cryptmount.c:1577
 #, c-format
 msgid "No targets specified\n"
 msgstr "Pas de cible donnée\n"

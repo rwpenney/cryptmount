@@ -4,7 +4,7 @@
 #
 Summary:	Let ordinary users mount an encrypted file system
 Name:		cryptmount
-Version:	6.3.4
+Version:	6.3.5
 Release:	1%{?dist}
 License:	GPL
 URL:		https://github.com/rwpenney/cryptmount

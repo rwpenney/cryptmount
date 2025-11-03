@@ -424,7 +424,7 @@ static int do_devsetup(const km_pw_context_t *pw_ctxt,
         goto bail_out;
     }
 
-    /* Setup device-mapper crypt table (CIPHER KEY IV_OFFSET DEV START): */
+    /* Setup device-mapper crypt table (CIPHER KEY IV_OFFSET DEV START [OPTS]): */
     dpsize = 2 * keylen + BUFFMIN;
     dmparams = (char*)sec_realloc(dmparams, dpsize);
     buffpos = snprintf(dmparams, dpsize, "%s ",
@@ -434,13 +434,13 @@ static int do_devsetup(const km_pw_context_t *pw_ctxt,
     buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),
                         " %" PRId64 " %s %" PRId64,
                         tgt->ivoffset, tgtdev, tgt->start);
-    if (tgt->sectorsize > 0) numopts += 1;
+    if (boundtgt->sectorsize > 0) numopts += 1;
     if ((tgt->flags & FLG_TRIM) != 0) numopts += 1;
     buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),
                         " %d", numopts);
-    if (tgt->sectorsize > 0) {
+    if (boundtgt->sectorsize > 0) {
         buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),
-                            " sector_size:%d", tgt->sectorsize);
+                            " sector_size:%u", boundtgt->sectorsize);
     }
     if ((tgt->flags & FLG_TRIM) != 0) {
         buffpos += snprintf(dmparams + buffpos, (dpsize - buffpos),

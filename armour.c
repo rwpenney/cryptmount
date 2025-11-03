@@ -286,6 +286,7 @@ bound_tgtdefn_t *alloc_boundtgt(const tgtdefn_t *tgt)
     bound->tgt = clone_tgtdefn(tgt);
     bound->keymgr = NULL;
     bound->km_data = NULL;
+    bound->sectorsize = 0;
 
     return bound;
 }

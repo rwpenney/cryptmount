@@ -154,7 +154,6 @@ typedef struct tgtdefn
     unsigned flags;         /*!< Configuration switches */
 
     char *dev;              /*!< Device node or raw file */
-    int sectorsize;         /*!< Sector size (Multiple of 512 <=4096, or -1) */
     int64_t start, length;  /*!< Starting sector + num of sectors (or 0, -1) */
     char *dir;              /*!< Mount-point */
     char *fstype;           /*!< Filesystem type */
