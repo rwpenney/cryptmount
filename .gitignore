@@ -1,5 +1,6 @@
 # cryptmount source artefacts to be ignored by 'git'
 
+*~
 aclocal.m4
 autom4te.cache/
 compile
@@ -8,6 +9,8 @@ config.guess
 config.sub
 cryptmount
 install-sh
+m4/
+missing
 stamp-h?
 tags
 .depend
