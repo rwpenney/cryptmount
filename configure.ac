@@ -232,8 +232,8 @@ AC_SUBST(DOXYGEN_DOCDIR)
 dnl --------
 dnl systemd vs sysv boot support
 dnl
-if test -d "/lib/systemd/system"; then default_sysd_unitdir="/lib/systemd/system";
-else default_sysd_unitdir="/usr/lib/systemd/system"; fi
+if test -d "/usr/lib/systemd/system"; then default_sysd_unitdir="/usr/lib/systemd/system";
+else default_sysd_unitdir="/lib/systemd/system"; fi
 AC_ARG_WITH([systemd-unit-dir],
     AS_HELP_STRING([--with-systemd-unit-dir], [directory for systemd unit files]),
     [CM_SYSD_UNITDIR="${withval}"],
