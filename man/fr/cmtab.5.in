@@ -389,7 +389,7 @@ Il y en a aussi un cible qui represent une partition de pagination.
         keyformat=openssl                   # utiliser OpenSSL pour chiffrage de la clef
         keyhash=md5 keycipher=bf\-cbc        # chiffrage du fichier de la clef
     }
-        
+
     subset {
         dev=/dev/sdb63
         startsector=512 numsectors=16384    # utiliser une partie d'une partition
@@ -449,7 +449,7 @@ Une nouvelle clef de d\['e]chiffrage sera lu du /dev/random chaque fois la cible
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-est (C)Copyright 2005-2025, RW Penney
+est (C)Copyright 2005-2026, RW Penney
 .br
 et il n'y a point de garantie.
 Les termes de sa licence sont d\['e]crits dans le fichier "COPYING"

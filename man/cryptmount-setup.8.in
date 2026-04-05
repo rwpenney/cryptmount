@@ -39,7 +39,7 @@ For more advanced options, please see the manual page for
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-is (C)Copyright 2005-2025, RW Penney
+is (C)Copyright 2005-2026, RW Penney
 .br
 and is supplied with NO WARRANTY.
 Licencing terms are as described in the file "COPYING"

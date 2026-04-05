@@ -1,6 +1,6 @@
 /*
  *  Methods for encryption/security mechanisms for cryptmount
- *  (C)Copyright 2005-2025, RW Penney
+ *  (C)Copyright 2005-2026, RW Penney
  */
 
 /*
@@ -864,5 +864,5 @@ int cm_mutex_unlock(void)
 /** @} */
 
 /*
- *  (C)Copyright 2005-2025, RW Penney
+ *  (C)Copyright 2005-2026, RW Penney
  */

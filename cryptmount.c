@@ -1,6 +1,6 @@
 /*
  *  cryptmount - a utility for user-level mounting of encrypted filesystems
- *  (C)Copyright 2005-2025, RW Penney
+ *  (C)Copyright 2005-2026, RW Penney
  */
 
 /*
@@ -1596,5 +1596,5 @@ int main(int argc, char *argv[])
 }
 
 /*
- *  (C)Copyright 2005-2025, RW Penney
+ *  (C)Copyright 2005-2026, RW Penney
  */

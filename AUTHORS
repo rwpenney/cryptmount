@@ -29,6 +29,7 @@ very helpful in testing and improving cryptmount:
     Helge Kreutzmann    (updating German translations)
     Holger Müller       (RH spec-file, Makefile.in patches, LARGEFILE testing)
     Björn Nilsson       (suggestions for /dev/disk/by-id in documentation)
+    ninetailedtori      (refinements of systemd path defaults)
     Dan O'Huiginn       (patch for Debian examples directory)
     Sebastian Rasmussen (patches for readonly loopback devices)
     Petter Reinholdtsen (patches for /etc/init.d dependencies)

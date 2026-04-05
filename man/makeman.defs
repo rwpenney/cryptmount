@@ -27,4 +27,3 @@ cryptmount.8:	cryptmount.8.in ${top_builddir}/config.status
 cryptmount-setup.8:	cryptmount-setup.8.in ${top_builddir}/config.status
 	@echo "Preparing $@ from $<"
 	@sed ${mantransform} $< > $@
-

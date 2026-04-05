@@ -81,7 +81,7 @@ cr\['e]er une clef de d\['e]chiffrage pour un nouveau syst\[`e]me de fichiers,
 utilisant une clef existante d'un autre syst\[`e]me de fichiers.
 .TP
 .B \-f \-\-config\-fd "\fInum\fP"
-lire les information des cibles d'un descripteur de fichier num\['e]ro 
+lire les information des cibles d'un descripteur de fichier num\['e]ro
 .IR num\fP
 en place du fichier de configuration de defaut.
 Cette option est reserv\['e]e seulement pour le super-utilisateur.
@@ -321,7 +321,7 @@ L'auteur accueille les suggestions
 .\" --------------------------------
 .SH COPYRIGHT NOTICE
 .B cryptmount
-est (C)Copyright 2005-2025, RW Penney
+est (C)Copyright 2005-2026, RW Penney
 .br
 et il n'y a point de garantie.
 Les termes de sa licence sont d\['e]crits dans le fichier "COPYING"

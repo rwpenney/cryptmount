@@ -1,6 +1,6 @@
 /*
  *  Methods for LUKS-related key-management for cryptmount
- *  (C)Copyright 2005-2025, RW Penney
+ *  (C)Copyright 2005-2026, RW Penney
  */
 
 /*
@@ -98,7 +98,7 @@ static void kmluks_splitmode(const char *fullname, char **cipher, char **mode)
 
         if (divpos > 0) {
             *cipher = (char*)malloc(divpos + 1);
-            strncpy(*cipher, fullname, divpos); 
+            strncpy(*cipher, fullname, divpos);
             (*cipher)[divpos] = '\0';
         }
 
@@ -551,5 +551,5 @@ keymanager_t *kmluks_gethandle()
 /**  @} */
 
 /*
- *  (C)Copyright 2005-2025, RW Penney
+ *  (C)Copyright 2005-2026, RW Penney
  */

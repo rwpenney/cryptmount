@@ -62,7 +62,7 @@ Encrypted filesystem on a remote host using "cryptmount"
 
     8. Create the filesystem (must be same as defined in the "cmtab" entry)
         # mkfs.ext4 /dev/mapper/luser_data
-        # chown luser.luser 
+        # chown luser.luser
 
     9. Finalize:
         # cryptmount --release luser_data
@@ -70,8 +70,8 @@ Encrypted filesystem on a remote host using "cryptmount"
    10. Mount encrypted filesystem in order to set appropriate ownership:
         # cryptmount luser_data
         # chown luser.luser /home/luser/enc_remote
-   
-   11. Release all resources:     
+
+   11. Release all resources:
         # cryptmount -u luser_data
         # fusermount -u mnt/remote
 

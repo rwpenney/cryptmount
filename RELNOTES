@@ -1,6 +1,6 @@
-		    Release notes for cryptmount-6.3
+                    Release notes for cryptmount-6.4
 
-			RW Penney, July 2024
+                        RW Penney, April 2026
 
 Introduction
 ============
@@ -24,6 +24,24 @@ the system administrator whenever the system is booted.
 cryptmount also provides an aid to the system manager in allowing easier
 control over the configuration and mounting of encrypted filesystems,
 especially within system start-up scripts.
+
+
+Summary of new features in cryptmount-6.4
+=========================================
+
+This (beta) release offers the following improvements:
+
+  * Improved support for detached headers in LUKS filesystems
+
+  * Improved compatibility with recent gettext installations
+
+It has been tested on the following systems:
+
+  * Arch Linux (early-April-2026) (x86_64)
+
+  * Debian GNU/Linux 13.4 ("trixie") (amd64)
+
+  * Ubuntu 26.04 ("resolute", early-April-2026) (x86_64)
 
 
 Summary of new features in cryptmount-6.3
@@ -512,7 +530,7 @@ It has been tested on the following systems:
   * Debian GNU/Linux 4.0 ("etch") (x86, amd64)
 
   * Debian GNU/Linux 3.1 ("sarge") (x86)
-  
+
   * FedoraCore-7 (x86)
 
   * FedoraCore-5 (x86)
@@ -540,7 +558,7 @@ It has been tested on the following systems:
   * Debian GNU/Linux 4.0 ("etch") (x86, amd64)
 
   * Debian GNU/Linux 3.1 ("sarge") (x86)
-  
+
   * FedoraCore-7 (x86)
 
   * FedoraCore-5 (x86)
@@ -572,9 +590,9 @@ This (stable) release focuses on extended functionality and improved internal st
 It has been tested on the following systems:
 
   * Debian GNU/Linux 4.0 ("etch") (x86, amd64)
-  
+
   * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
-  
+
   * OpenSuSE Linux 10.2 OSS (x86)
 
   * FedoraCore-5 (x86)
@@ -594,7 +612,7 @@ This (stable) release focuses on extensions in functionality, including:
 It has been tested on the following systems:
 
   * Debian GNU/Linux 3.1 ("sarge") (x86, kernel-2.6)
-  
+
   * Ubuntu 6.06.1 ("dapper drake") (x86)
   	(may need patching of 'dd' and creation of extra /dev/loop? nodes)
 
@@ -759,7 +777,7 @@ This (beta) release focuses on improvements in robustness, portability
 and documentation, including:
 
   * improved support for systems with glibc built against kernel-2.4 headers
-  
+
   * addition of mechanisms for updating /etc/mtab on (un)mounting filing
     systems, so the programs such as df can operate normally on filesystems
     controlled by cryptmount
@@ -809,7 +827,7 @@ Summary of new features in cryptmount-0.0.2
 This (alpha) release of cryptmount improves general robustness and documentation as follows:
 
   * a basic manual-page has been written
-  
+
   * a locking mechanism has been added, to ensure that only the
     (non-root) user that mounted a filing system can unmount it
 
