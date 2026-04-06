@@ -1,12 +1,12 @@
 Source: cryptmount
 Section: admin
-Priority: optional
 Maintainer: RW Penney <cryptmount@rwpenney.uk>
 Homepage: https://github.com/rwpenney/cryptmount
-Build-Depends: automake, debhelper-compat (= 12), libcryptsetup-dev (>= 2.2),
-            libdevmapper-dev, libgcrypt20-dev (>= 1.8), pkgconf
+Build-Depends: automake, debhelper-compat (= 12), gettext (>= 0.23),
+            libcryptsetup-dev (>= 2.4), libdevmapper-dev,
+            libgcrypt20-dev (>= 1.10), pkgconf
 Rules-Requires-Root: binary-targets
-Standards-Version: 4.7.2
+Standards-Version: 4.7.4
 
 Package: cryptmount
 Architecture: linux-any

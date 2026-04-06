@@ -1,3 +1,13 @@
+cryptmount (6.4.0-1) unstable; urgency=low
+
+  * New upstream release
+    - Improved support for LUKS detached headers
+    - Updated gettext configuration
+    - Safer default systemd installation paths
+  * Updated to Debian Standards Version 4.7.4
+
+ -- RW Penney <cryptmount@rwpenney.uk>  Tue, 07 Apr 2026 09:00:00 +0000
+
 cryptmount (6.3.0-1) unstable; urgency=low
 
   * New upstream release

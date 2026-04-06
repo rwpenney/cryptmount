@@ -4,7 +4,7 @@
 #
 Summary:	Let ordinary users mount an encrypted file system
 Name:		cryptmount
-Version:	6.4-beta
+Version:	6.4.0
 Release:	1%{?dist}
 License:	GPL
 URL:		https://github.com/rwpenney/cryptmount
@@ -103,6 +103,8 @@ fi
 
 
 %changelog
+* Mon Apr 06 2026 RW Penney <cryptmount@rwpenney.uk> - 6.4.0
+    -- Improved support for LUKS detached headers
 * Sun May 25 2025 RW Penney <cryptmount@rwpenney.uk> - 6.3.1
     -- Updated to prefer systemd and fix build on Rocky-9
 * Sun Jul 28 2024 RW Penney <cryptmount@rwpenney.uk> - 6.3.0

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cryptmount 4.0-1\n"
 "Report-Msgid-Bugs-To: cryptmount@rwpenney.uk\n"
-"POT-Creation-Date: 2026-04-05 09:23+0100\n"
+"POT-Creation-Date: 2026-04-06 06:07+0100\n"
 "PO-Revision-Date: 2006-04-21 07:51+0100\n"
 "Last-Translator: RW Penney <cryptmount@rwpenney.uk>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -44,7 +44,7 @@ msgstr "Pas de fichier-clef pour la cible \"%s\"\n"
 #: armour.c:789
 #, c-format
 msgid "Specification for target \"%s\" contains non-absolute pathname\n"
-msgstr ""
+msgstr "Spécification pour la cible \"%s\" contient un chemin non absolu\n"
 
 #: armour-builtin.c:282 armour-gcry.c:552 armour-gcry.c:707
 #, c-format
@@ -130,7 +130,7 @@ msgstr "Génération de clef LUKS pour \"%s\" a echouée\n"
 #: armour-luks.c:460
 #, c-format
 msgid "Setting password on LUKS keyslot-%u\n"
-msgstr ""
+msgstr "Definition du mot de passe pour LUKS keyslot-%u\n"
 
 #: cryptmount.c:126
 msgid ""
@@ -338,7 +338,7 @@ msgstr "Ne peut pas trouver un diriger-clef pour la cible \"%s\"\n"
 #: cryptmount.c:1424
 #, c-format
 msgid "Multiple operating modes not supported\n"
-msgstr ""
+msgstr "Plusiers modes de fonctionnement n'est pas possible\n"
 
 #: cryptmount.c:1479
 #, c-format
@@ -421,22 +421,22 @@ msgstr "Echec de configuration près de %s:%d\n"
 #: utils.c:316
 #, c-format
 msgid "Unable to allocate memory\n"
-msgstr ""
+msgstr "Impossible d'allouer de la mémoire\n"
 
 #: utils.c:439
 #, c-format
 msgid "Too few random-number sources found\n"
-msgstr ""
+msgstr "Pas assez de sources des nombres aléatoires\n"
 
 #: utils.c:498
 #, c-format
 msgid "Cannot read stdin"
-msgstr ""
+msgstr "Impossible de lire stdin"
 
 #: utils.c:510
 #, c-format
 msgid "Failed to turn off keyboard echoing on terminal\n"
-msgstr ""
+msgstr "Echec de désactiver écho du clavier\n"
 
 #: utils.c:540
 #, c-format
@@ -471,7 +471,7 @@ msgstr "Etes vous sûr? (Tappez \"%s\" pour continuer): "
 #: utils.c:602
 #, c-format
 msgid "Cannot read stdin\n"
-msgstr ""
+msgstr "Impossible de lire stdin\n"
 
 #: sysinit/setupscript.sh.in:41
 #, sh-format
@@ -490,7 +490,7 @@ msgstr ""
 #: sysinit/setupscript.sh.in:64
 #, sh-format
 msgid "No LUKS support available - using built-in key manager"
-msgstr ""
+msgstr "LUKS n'est pas disponible - utilisant diriger-clef basique"
 
 #: sysinit/setupscript.sh.in:123
 #, sh-format
@@ -716,7 +716,7 @@ msgstr "Formatage du système de fichier chiffré..."
 #: sysinit/setupscript.sh.in:309
 #, sh-format
 msgid "cryptmount setup script"
-msgstr ""
+msgstr "configuration de cryptmount"
 
 #: sysinit/setupscript.sh.in:311
 #, sh-format

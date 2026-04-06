@@ -29,7 +29,7 @@ especially within system start-up scripts.
 Summary of new features in cryptmount-6.4
 =========================================
 
-This (beta) release offers the following improvements:
+This (stable) release offers the following improvements:
 
   * Improved support for detached headers in LUKS filesystems
 
@@ -39,9 +39,21 @@ It has been tested on the following systems:
 
   * Arch Linux (early-April-2026) (x86_64)
 
-  * Debian GNU/Linux 13.4 ("trixie") (amd64)
+  * Debian GNU/Linux 14.x ("forky"/"testing", early-April-2026) (amd64)
+
+  * Debian GNU/Linux 13.4 ("trixie") (amd64, arm64)
+
+  * Debian GNU/Linux 12.13 ("bookworm") (amd64)
+
+  * Fedora 43 (x86_64)
+
+  * Fedora 41 (x86_64)
+
+  * openSUSE Leap 16.0 (x86_64)
 
   * Ubuntu 26.04 ("resolute", early-April-2026) (x86_64)
+
+  * Ubuntu 20.04 ("focal") (x86_64)
 
 
 Summary of new features in cryptmount-6.3
