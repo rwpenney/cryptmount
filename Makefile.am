@@ -27,11 +27,13 @@ localedir=$(datadir)/locale
 AM_CPPFLAGS += -DLOCALEDIR=\"$(localedir)\"
 EXTRA_DIST = config.rpath mkinstalldirs cmtab.example \
 	INSTALL.md README.md README.sshfs RELNOTES cryptmount.spec \
-	debian/changelog debian/control \
-	debian/copyright debian/docs \
-	debian/rules debian/cryptmount.lintian-overrides \
-	debian/postinst debian/postrm debian/watch debian/source/format \
-	debian/upstream/signing-key.asc
+	debian/changelog debian/clean debian/control debian/copyright \
+	debian/cryptmount.lintian-overrides debian/docs \
+	debian/patches/init.d-script.patch debian/patches/series \
+	debian/postinst debian/postrm debian/preinst \
+	debian/rules debian/source/format \
+	debian/upstream/metadata debian/upstream/signing-key.asc \
+	debian/watch
 
 SUBDIRS = man po sysinit testing
 

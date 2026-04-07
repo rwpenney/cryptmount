@@ -52,7 +52,7 @@ fi
 echo "Building Debian version ${PSEUDO_VERSION} from ${SRCPKG} ..."
 
 
-DEBFILES="changelog control copyright \
+DEBFILES="changelog clean control copyright \
             docs cryptmount.lintian-overrides \
             rules preinst postinst postrm watch \
             patches/ source/ upstream/"
