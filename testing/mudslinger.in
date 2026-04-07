@@ -1564,7 +1564,8 @@ function test_residues() {
 
 
 # Prepare log-file:
-logfile="mudslinger-@PKG_VERSION@-`date +'%H%M:%d%b%y'`.log"
+hosthash=$(uname -a | sha256sum | cut -c 1-8)
+logfile="mudslinger-@PKG_VERSION@-$(date +'%y%m%d')-${hosthash}.log"
 exec 3> ${logfile}
 chgrp --reference=$0 ${logfile} || true
 cat >&3 <<EOF
