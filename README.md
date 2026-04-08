@@ -26,7 +26,7 @@ cryptmount has been tested on a wide variety of GNU/Linux platforms including:
 CentOS, [Debian](https://packages.debian.org/stable/cryptmount), Fedora,
 [Gentoo](https://packages.gentoo.org/packages/sys-fs/cryptmount),
 [Mageia](https://madb.mageia.org/package/show/source/1/application/0/release/cauldron/name/cryptmount),
-[Ubuntu](https://packages.ubuntu.com/noble/cryptmount) etc.
+[Ubuntu](https://packages.ubuntu.com/resolute/cryptmount) etc.
 
 For the most recent source-bundles of cryptmount, please see
 [GitHub](https://github.com/rwpenney/cryptmount/releases),

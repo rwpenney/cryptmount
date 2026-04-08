@@ -103,7 +103,11 @@ quilt refresh
 
 cd "${TMPDIR}"
 cp ${SRCPKG} ${TMPDIR}/${PACKAGE}_${PSEUDO_VERSION}.orig.tar.gz
-test -e ${SRCPKG}.sig && cp ${SRCPKG}.sig ${TMPDIR}/${PACKAGE}_${PSEUDO_VERSION}.orig.tar.gz.sig
+for sfx in asc sig; do
+    test -e ${SRCPKG}.${sfx} || continue
+    cp ${SRCPKG}.${sfx} ${TMPDIR}/${PACKAGE}_${PSEUDO_VERSION}.orig.tar.gz.${sfx}
+    break
+done
 dpkg-source -b ${TMPDIR}/${PACKAGE}-${PSEUDO_VERSION}
 
 cd "${DEBDIR}"
