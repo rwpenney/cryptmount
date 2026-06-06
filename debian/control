@@ -4,7 +4,7 @@ Maintainer: RW Penney <cryptmount@rwpenney.uk>
 Homepage: https://github.com/rwpenney/cryptmount
 Build-Depends: automake, debhelper-compat (= 13), gettext (>= 0.23),
             libcryptsetup-dev, libdevmapper-dev,
-            libgcrypt20-dev, pkgconf
+            libgcrypt20-dev, mount, pkgconf
 Rules-Requires-Root: binary-targets
 Standards-Version: 4.7.4
 
